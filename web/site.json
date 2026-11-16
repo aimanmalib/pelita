@@ -1,0 +1,22 @@
+{
+  "_about": "Site settings read by web/js/app.js. Chain RPCs, explorers, billers and selectors come from config/chains.json, which deploy/ serves at /config/chains.json. Change values here, not in code.",
+  "snapshot_url": "data/snapshot.json",
+  "chains_url": "config/chains.json",
+  "poll_seconds": 30,
+  "stale_after_seconds": 600,
+  "default_lang": "en",
+  "langs": [
+    "en",
+    "ms"
+  ],
+  "gauge_chain": "lasna",
+  "dark_table_rows": 12,
+  "dark_grid_max": 240,
+  "median_fee_wei": null,
+  "links": {
+    "repo": "https://github.com/aimanmalib/pelita",
+    "measured": "https://github.com/aimanmalib/pelita/blob/main/docs/measured.md",
+    "video": null
+  },
+  "gauge_fill_wei": "100000000000000000"
+}

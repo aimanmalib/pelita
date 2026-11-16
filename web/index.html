@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="meta.title">Pelita · Keeps reactive contracts lit.</title>
+<meta name="description" data-i18n-attr="content:meta.description" content="Pelita refuels a reactive contract the moment it runs dry.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#14100c">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Pelita · Keeps reactive contracts lit.">
+<meta property="og:description" content="Pelita refuels a reactive contract the moment it runs dry.">
+<link rel="icon" href="brand/logo-64.png" type="image/png">
+<link rel="preload" href="fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/site.css">
+<script type="module" src="js/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <a class="brand" href="#main"><span data-lamp="lit"></span><span>Pelita</span></a>
+  <nav class="nav" aria-label="Sections">
+    <a href="#fleet" data-i18n="nav.fleet">Fleet</a>
+    <a href="#try" data-i18n="nav.try">Try it</a>
+    <a href="#gauge" data-i18n="nav.gauge">Fuel gauge</a>
+    <a href="#dark" data-i18n="nav.dark">Dark list</a>
+    <a href="#how" data-i18n="nav.how">How it works</a>
+  </nav>
+  <button class="lang" type="button" id="lang" data-i18n="lang.switch" data-i18n-attr="aria-label:lang.switchLabel" aria-label="Baca dalam Bahasa Melayu">BM</button>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-art" aria-hidden="true"><span data-lamp="lit" data-lamp-class="hero-lamp"></span></div>
+    <div class="hero-text">
+    <p class="tag" data-i18n="hero.tag">Testnet · Reactive Lasna and Base Sepolia</p>
+    <h1 id="hero-title" data-i18n="hero.title">Keeps reactive contracts lit.</h1>
+    <p class="lede" data-i18n="hero.lede">Pelita refuels a reactive contract the moment it runs dry.</p>
+    </div>
+    <dl class="stats" id="stats">
+      <div class="stat stat-lit"><dt data-i18n="stat.lit">lit</dt><dd data-k="lit">–</dd></div>
+      <div class="stat stat-dark"><dt data-i18n="stat.dark">dark</dt><dd data-k="dark">–</dd></div>
+      <div class="stat"><dt data-i18n="stat.last">last relight</dt><dd data-k="last">–</dd></div>
+      <div class="stat"><dt data-i18n="stat.relights">relights</dt><dd data-k="relights">–</dd></div>
+      <div class="stat"><dt data-i18n="stat.tank">Keeper tank</dt><dd data-k="tank">–</dd></div>
+    </dl>
+    <p class="fresh" id="fresh" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="band" id="fleet" aria-labelledby="fleet-title">
+    <h2 id="fleet-title" data-i18n="fleet.title">Fleet</h2>
+    <p class="intro" data-i18n="fleet.lede">Each lamp is a contract Pelita watches.</p>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section class="band" id="try" aria-labelledby="try-title">
+    <h2 id="try-title" data-i18n="try.title">Try it yourself</h2>
+    <p class="intro" data-i18n="try.lede">Put the demo lamp out with one command on Base Sepolia.</p>
+    <div class="cmd" id="cmd">
+      <pre><code id="cmd-text"></code></pre>
+      <button type="button" class="btn ghost" id="copy" data-i18n="try.copy" hidden>Copy</button>
+    </div>
+    <p class="note" id="cooldown"></p>
+    <h3 data-i18n="try.watch">What you are watching</h3>
+    <ol class="steps">
+      <li data-i18n="try.s1"></li>
+      <li data-i18n="try.s2"></li>
+      <li data-i18n="try.s3"></li>
+      <li data-i18n="try.s4"></li>
+    </ol>
+  </section>
+
+  <section class="band" id="gauge" aria-labelledby="gauge-title">
+    <h2 id="gauge-title" data-i18n="gauge.title">Fuel gauge</h2>
+    <p class="intro" data-i18n="gauge.lede">Paste the address of a reactive contract on Lasna.</p>
+    <form class="gauge-form" id="gauge-form" novalidate>
+      <label for="gauge-addr" data-i18n="gauge.label">Contract address on Lasna</label>
+      <div class="row">
+        <input id="gauge-addr" name="address" inputmode="text" autocomplete="off" spellcheck="false" data-i18n-attr="placeholder:gauge.placeholder" placeholder="0x…" aria-describedby="gauge-msg">
+        <button type="submit" class="btn" id="gauge-btn" data-i18n="gauge.read">Read</button>
+      </div>
+      <p class="msg" id="gauge-msg" role="status" aria-live="polite"></p>
+    </form>
+    <div class="gauge-out" id="gauge-out" hidden></div>
+  </section>
+
+  <section class="band" id="dark" aria-labelledby="dark-title">
+    <h2 id="dark-title" data-i18n="dark.title">The dark list</h2>
+    <p class="intro" data-i18n="dark.lede">Reactive contracts on Lasna that ran out of fuel.</p>
+    <p class="always" data-i18n-html="dark.always">Anyone can relight any of these. <code>depositTo</code> needs no permission.</p>
+    <dl class="agg" id="agg"></dl>
+    <div class="lampgrid" id="lampgrid" aria-hidden="true"></div>
+    <div class="table-wrap"><table class="darktable" id="darktable"></table></div>
+    <button type="button" class="btn ghost" id="dark-more" hidden></button>
+    <p class="note" id="dark-asof"></p>
+  </section>
+
+  <section class="band" id="how" aria-labelledby="how-title">
+    <h2 id="how-title" data-i18n="how.title">How it works</h2>
+    <figure class="diagram">
+      <ol class="flow">
+        <li><span data-lamp="dark"></span><span data-i18n="how.d1">Contract runs dry</span></li>
+        <li><svg class="node-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg><span data-i18n="how.d2">System contract logs it</span></li>
+        <li class="accent"><svg class="node-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg><span data-i18n="how.d3">Keeper reacts</span></li>
+        <li class="accent"><svg class="node-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 4 6 7 6 11a6 6 0 0 1-12 0c0-4 3-7 6-11z"/></svg><span data-i18n="how.d4">Debt paid + refill</span></li>
+        <li><span data-lamp="lit"></span><span data-i18n="how.d5">Lit again</span></li>
+      </ol>
+      <figcaption data-i18n="how.d6">On Base Sepolia: callback to the Tank</figcaption>
+    </figure>
+    <div class="cols">
+      <div>
+        <h3 data-i18n="how.cost">Cost</h3>
+        <p data-i18n="how.costPending">The cost per relight is measured on chain.</p>
+      </div>
+      <div>
+        <h3 data-i18n="how.limits">Honest limits</h3>
+        <ul class="limits">
+          <li data-i18n="how.l1"></li>
+          <li data-i18n="how.l2"></li>
+          <li data-i18n="how.l3"></li>
+          <li data-i18n="how.l4"></li>
+        </ul>
+      </div>
+      <div>
+        <h3 data-i18n="how.links">Read more</h3>
+        <ul class="links" id="links"></ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span data-lamp="lit"></span>
+  <p><span data-i18n="foot.built">Built during the Reactive Omni Buildathon.</span> <span data-i18n="foot.privacy">No wallet, no cookies, no analytics.</span></p>
+</footer>
+</body>
+</html>
