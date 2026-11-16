@@ -1,0 +1,19 @@
+{
+  "_about": "Pelita's own events, read by ops/indexer.py. Topic = keccak256 of the signature (computed with `cast keccak`); tests/test_events_config.py checks every signature still matches src/*.sol. Reason codes mirror the constants in src/.",
+  "keeper": {
+    "WentDark(uint256,address,uint256)": "0x6aa407b0d47ebfb6ee8253c926e3693a433c59e15311b55919f645a932295268",
+    "GaveUp(uint256,address,uint8)": "0xc432b3e687365454eae929648bf87c45d0744ff46afb550613b4c18ecbdc60f8",
+    "Refueled(uint256,address,uint256,uint256,uint256)": "0x6222049514ff18fc44cce15aa27021d5c62df3b0f552942d1a13ede3c7344692",
+    "RefuelRequested(uint256,address,uint256,uint256)": "0x7cba640e3bc0279fbf8076a56bc7201d4ed0c984ee61b75ea78e12d9b27de501",
+    "Relit(uint256,address,uint256)": "0x2d6d5e486d8b886630e84d1fb84aa8c37d95470168a0d2570ceceb9af2b64dd2",
+    "LowTank(uint256)": "0x24e16f88eda8ab342f0b5dd43bfbd9fa325d3518961b553e904bce379b8b8c49"
+  },
+  "tank": {
+    "Refueled(uint256,address,uint256,uint256,uint256,uint256,uint256)": "0x8a6a3e9b88dd0866f81816ed0c7ada7b1c12de861487872534f80f2875d3f42b",
+    "Skipped(uint256,address,uint8)": "0x451f6c4aebcec5b0829e8edf8ffd3beca371d621cad02d40849bbdf4fe3b4522"
+  },
+  "reasons": {
+    "GaveUp": {"1": "daily cap reached", "2": "debt above max owed", "3": "keeper tank below floor", "4": "call failed"},
+    "Skipped": {"1": "not owed", "2": "debt above max owed", "3": "tank limit", "4": "call failed", "5": "paused"}
+  }
+}
