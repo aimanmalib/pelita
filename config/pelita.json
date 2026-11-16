@@ -31,7 +31,10 @@
     "beacon_max_beats_per_window": 40,
     "beacon_window_seconds": 86400,
     "flicker_beats_before_dark": 3,
-    "flicker_callback_gas": 100000
+    "flicker_callback_gas": 100000,
+    "flicker_fund": "0.05",
+    "lantern_fund": "0.00001",
+    "_fund_note": "Demo contracts are funded once, at creation, and never topped up: they must go dark. Starting values; tuned from measured fees in P2b and recorded in docs/decisions/."
   },
   "series": {
     "lasna_outages": 30,
@@ -41,7 +44,11 @@
   },
   "funds": {
     "first_lreact_swap_eth": "0.01",
-    "base_sepolia_target_eth": "0.3"
+    "base_sepolia_target_eth": "0.3",
+    "keeper_fund": "12",
+    "tank_fund": "0.02",
+    "max_swap_eth": "0.25",
+    "_note": "deploy.sh tops the Keeper (lREACT) and Tank (ETH) up to these balances with a plain transfer (RT-5). funds.sh tukar refuses more than max_swap_eth in one faucet call."
   },
   "alerts": {
     "ward_dark_minutes": 10,
@@ -63,5 +70,16 @@
   "census": {
     "since_utc": "2026-11-04T04:18:00Z",
     "_since_note": "One day before the event opened; matches the window measured before the build. Census and indexer start here unless --from-block is given."
+  },
+  "deploy": {
+    "verifiers": {
+      "lasna": {
+        "verifier": "sourcify"
+      },
+      "base-sepolia": {
+        "verifier": "blockscout",
+        "verifier_url": "https://base-sepolia.blockscout.com/api/"
+      }
+    }
   }
 }
