@@ -32,6 +32,13 @@ appear in argv, logs or the repository (PRD 4.10).
 - **deploy-your-own.sh** deploys Keeper and Tank only into `deployments/own/`, with the user's keystore name; Foundry
   asks for the password.
 
+- **Measurement pairs by `refTx`, not by time.** `scripts/measure/series.py record` reads each demo ward's outages,
+  the Keeper's events with their receipts, the Tank's callbacks and the Beacon/Lantern counts. An outage and a reaction
+  are the same incident only when the reactive transaction's `refTx` is the outage transaction; a destination callback
+  joins its request through `seq`. `report.py` writes `docs/measured.md` from `docs/evidence/*.json` only; a
+  measurement without evidence is a `<<TBD>>` slot naming the command, and a missed target is printed as "not met".
+  Latency targets and series sizes live in `config/pelita.json` `series`.
+
 ## Rollback
 
 The scripts only add contracts. Funds come back with `withdraw(to, amount)` on Keeper and Tank (owner only).

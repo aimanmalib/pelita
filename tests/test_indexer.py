@@ -222,12 +222,12 @@ class EventsConfigTest(unittest.TestCase):
         import re
 
         declared = set()
-        for path in (ROOT / "src").glob("*.sol"):
+        for path in (ROOT / "src").glob("**/*.sol"):
             text = re.sub(r"\s+", " ", path.read_text())
             for name, args in re.findall(r"event (\w+)\(([^)]*)\);", text):
                 types = [a.strip().split(" ")[0] for a in args.split(",") if a.strip()]
                 declared.add(f"{name}({','.join(types)})")
-        for role in ("keeper", "tank"):
+        for role in ("keeper", "tank", "demo"):
             for sig, topic in EVENTS[role].items():
                 self.assertIn(sig, declared)
                 self.assertRegex(topic, r"^0x[0-9a-f]{64}$")

@@ -12,8 +12,23 @@
     "Refueled(uint256,address,uint256,uint256,uint256,uint256,uint256)": "0x8a6a3e9b88dd0866f81816ed0c7ada7b1c12de861487872534f80f2875d3f42b",
     "Skipped(uint256,address,uint8)": "0x451f6c4aebcec5b0829e8edf8ffd3beca371d621cad02d40849bbdf4fe3b4522"
   },
+  "demo": {
+    "Beat(uint256,uint256)": "0xc419c96c78a72385d2431b7135a30707de0715c30e32ef75e7eb9d802137253d",
+    "Lit(uint256,uint256,uint256)": "0x07eeb4a2326294686b668aac64b1e63a1fe78f8aeff97e8b4950bef4e9bd6936"
+  },
   "reasons": {
-    "GaveUp": {"1": "daily cap reached", "2": "debt above max owed", "3": "keeper tank below floor", "4": "call failed"},
-    "Skipped": {"1": "not owed", "2": "debt above max owed", "3": "tank limit", "4": "call failed", "5": "paused"}
+    "GaveUp": {
+      "1": "daily cap reached",
+      "2": "debt above max owed",
+      "3": "keeper tank below floor",
+      "4": "call failed"
+    },
+    "Skipped": {
+      "1": "not owed",
+      "2": "debt above max owed",
+      "3": "tank limit",
+      "4": "call failed",
+      "5": "paused"
+    }
   }
 }

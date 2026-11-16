@@ -40,7 +40,9 @@
     "lasna_outages": 30,
     "base_sepolia_outages": 15,
     "base_sepolia_outages_if_primary": 30,
-    "control_dark_hours": 24
+    "control_dark_hours": 24,
+    "lasna_median_target_s": 5,
+    "base_sepolia_median_target_s": 10
   },
   "funds": {
     "first_lreact_swap_eth": "0.01",
