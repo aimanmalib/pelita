@@ -1,5 +1,5 @@
 /* Pelita site. Rupa dikunci (PRD §4.1): warm dark, ONE amber accent, lamp glyph per contract (amber = lit, grey = dark).
-   All colours live in the tokens below; no backdrop-filter, no animated filter/blur (WebKit). */
+   All colours live in the tokens below. No glass effects and no animated blur: they crash WebKit.
 @font-face { font-family: "Newsreader"; src: url("../fonts/newsreader.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
 @font-face { font-family: "Public Sans"; src: url("../fonts/public-sans.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
 @font-face { font-family: "Plex Mono"; src: url("../fonts/ibm-plex-mono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
