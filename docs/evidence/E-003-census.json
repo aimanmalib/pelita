@@ -1,0 +1,893 @@
+{
+ "evidence": "E-003",
+ "what": "Census of contracts that went dark for unpaid debt (BlacklistContract) and were lit again (WhitelistContract), read without a key. Lasna: eth_getLogs on the system contract; Base Sepolia: Blockscout logs API on the callback proxy.",
+ "measured_at_utc": "2026-11-16T23:04:18Z",
+ "repeat": {
+  "lasna": "python3 scripts/census.py --chain lasna --from-block 7487143 --to-block 8524855",
+  "base-sepolia": "python3 scripts/census.py --chain base-sepolia --from-block 54220056 --to-block 59740702"
+ },
+ "h8_check": "ops/indexer.py ran once against the live chains; scripts/census.py over the same block ranges produced output identical to the indexer snapshot for both chains (compared as parsed JSON).",
+ "h8_equal": {
+  "lasna": true,
+  "base-sepolia": true
+ },
+ "since_utc": "2026-11-04T04:18:00Z",
+ "chains": {
+  "lasna": {
+   "chain_id": 5318007,
+   "source": "eth_getLogs",
+   "address": "0x8888888888888888888888888888888888888888",
+   "from_block": 7487143,
+   "to_block": 8524855,
+   "as_of_ts": 1794870011,
+   "outages": 154,
+   "contracts": 116,
+   "contracts_dark_twice_or_more": 19,
+   "recovered": 57,
+   "lit_without_dark_in_range": 0,
+   "still_dark": 97,
+   "recovery_seconds": {
+    "count": 57,
+    "min": 1,
+    "median": 2464,
+    "max": 159491
+   },
+   "dark_age_seconds": {
+    "count": 97,
+    "min": 2822,
+    "median": 225010,
+    "max": 844505
+   },
+   "dark_per_day": {
+    "2026-11-07": 3,
+    "2026-11-08": 6,
+    "2026-11-09": 8,
+    "2026-11-10": 9,
+    "2026-11-11": 24,
+    "2026-11-12": 16,
+    "2026-11-13": 4,
+    "2026-11-14": 27,
+    "2026-11-15": 35,
+    "2026-11-16": 22
+   },
+   "dark": [
+    {
+     "address": "0xb91dcb220556b7fd3c55558860400b2b0a7044fc",
+     "since_block": 7730002,
+     "since_ts": 1794025506,
+     "dark_seconds": 844505,
+     "outages": 1
+    },
+    {
+     "address": "0x7689b19793f167fcb68e9acdc6bc2f658d673243",
+     "since_block": 7743001,
+     "since_ts": 1794039300,
+     "dark_seconds": 830711,
+     "outages": 1
+    },
+    {
+     "address": "0x94dd282755e5583253df2eba9557dcad78de451b",
+     "since_block": 7850001,
+     "since_ts": 1794152631,
+     "dark_seconds": 717380,
+     "outages": 1
+    },
+    {
+     "address": "0xe4a0bf147c9c8390ea4e7c915e7801606c171909",
+     "since_block": 7854287,
+     "since_ts": 1794157161,
+     "dark_seconds": 712850,
+     "outages": 1
+    },
+    {
+     "address": "0x6818e87ee5ac613f90848ad54a31bbec825647c9",
+     "since_block": 7856076,
+     "since_ts": 1794159062,
+     "dark_seconds": 710949,
+     "outages": 1
+    },
+    {
+     "address": "0xb899f2e139c227b78b10d09b70d10b7a63bb4b8a",
+     "since_block": 7928248,
+     "since_ts": 1794235506,
+     "dark_seconds": 634505,
+     "outages": 1
+    },
+    {
+     "address": "0x46a5b6cd612787afa02424b73d02dfa6641863a5",
+     "since_block": 7929105,
+     "since_ts": 1794236429,
+     "dark_seconds": 633582,
+     "outages": 1
+    },
+    {
+     "address": "0xc2a97f743ab0a9ceadc576f89a3575ffc1926503",
+     "since_block": 7929340,
+     "since_ts": 1794236679,
+     "dark_seconds": 633332,
+     "outages": 1
+    },
+    {
+     "address": "0x8ceba647e643ee72c9fc378245affc56cd901b25",
+     "since_block": 7935155,
+     "since_ts": 1794242825,
+     "dark_seconds": 627186,
+     "outages": 1
+    },
+    {
+     "address": "0xe5213387beb36e4d75020689c5694bc449122f16",
+     "since_block": 7938966,
+     "since_ts": 1794246849,
+     "dark_seconds": 623162,
+     "outages": 2
+    },
+    {
+     "address": "0xca4ca86bef02a7d3244119f7788a170fa4c58746",
+     "since_block": 7980472,
+     "since_ts": 1794290874,
+     "dark_seconds": 579137,
+     "outages": 1
+    },
+    {
+     "address": "0x2f48c06cfea23bc3ec702691d0d3af01a06aa4cd",
+     "since_block": 7997827,
+     "since_ts": 1794309380,
+     "dark_seconds": 560631,
+     "outages": 1
+    },
+    {
+     "address": "0xb66459ce2711987c07048ac9570fcbc8aec73820",
+     "since_block": 7998740,
+     "since_ts": 1794310355,
+     "dark_seconds": 559656,
+     "outages": 1
+    },
+    {
+     "address": "0x675a63b8c8e56edf2e4d4b796d6296f485ee8707",
+     "since_block": 8001283,
+     "since_ts": 1794313059,
+     "dark_seconds": 556952,
+     "outages": 1
+    },
+    {
+     "address": "0x3f6a1d1f9782cf24b106e7839f0ca420cdf7f5c2",
+     "since_block": 8004340,
+     "since_ts": 1794316295,
+     "dark_seconds": 553716,
+     "outages": 1
+    },
+    {
+     "address": "0x1ea6b4babcf4964e5e0004209b0b94bf89bf2c74",
+     "since_block": 8007480,
+     "since_ts": 1794319631,
+     "dark_seconds": 550380,
+     "outages": 1
+    },
+    {
+     "address": "0xf7b321a7b453ed399e0845cbb8cb76c06b2f2807",
+     "since_block": 8013769,
+     "since_ts": 1794326353,
+     "dark_seconds": 543658,
+     "outages": 1
+    },
+    {
+     "address": "0x77be935e39274963e18e32567e980387aaaae6b8",
+     "since_block": 8015819,
+     "since_ts": 1794328567,
+     "dark_seconds": 541444,
+     "outages": 1
+    },
+    {
+     "address": "0xb7336850b04ffec251d5a6c00cfd37bc50e99fc0",
+     "since_block": 8043136,
+     "since_ts": 1794357619,
+     "dark_seconds": 512392,
+     "outages": 1
+    },
+    {
+     "address": "0x1dc6e2ee4aaa58f6f52a9cd28bc78e506a5eafea",
+     "since_block": 8050133,
+     "since_ts": 1794365034,
+     "dark_seconds": 504977,
+     "outages": 1
+    },
+    {
+     "address": "0x5a3c11170de808df89319bc00abbb5729e708b8e",
+     "since_block": 8060001,
+     "since_ts": 1794375504,
+     "dark_seconds": 494507,
+     "outages": 1
+    },
+    {
+     "address": "0xc69ce40839d589b5ccca09d9d5d1828e32e52df1",
+     "since_block": 8070002,
+     "since_ts": 1794386134,
+     "dark_seconds": 483877,
+     "outages": 1
+    },
+    {
+     "address": "0xaf3f54df5cd9874ef9afec72e43812487241db3a",
+     "since_block": 8070166,
+     "since_ts": 1794386308,
+     "dark_seconds": 483703,
+     "outages": 1
+    },
+    {
+     "address": "0xbc18ffc65562ae24be55f2a3f8eae78f72e47c39",
+     "since_block": 8071481,
+     "since_ts": 1794387699,
+     "dark_seconds": 482312,
+     "outages": 1
+    },
+    {
+     "address": "0x77ac7e395910da2681373346b7beb44d60c1f5eb",
+     "since_block": 8080001,
+     "since_ts": 1794396741,
+     "dark_seconds": 473270,
+     "outages": 1
+    },
+    {
+     "address": "0x742b11be7b23d57134f50c4f34b167e01527a05d",
+     "since_block": 8085399,
+     "since_ts": 1794402516,
+     "dark_seconds": 467495,
+     "outages": 1
+    },
+    {
+     "address": "0x566303736b53eb46928f3bbaab51a5ad4f96367b",
+     "since_block": 8088690,
+     "since_ts": 1794406043,
+     "dark_seconds": 463968,
+     "outages": 1
+    },
+    {
+     "address": "0x41ce76e7095f0de9df0d44ef10264822ebae39d8",
+     "since_block": 8092395,
+     "since_ts": 1794410016,
+     "dark_seconds": 459995,
+     "outages": 1
+    },
+    {
+     "address": "0x566c1da9725e0b667825f08b8d3f67019049ba58",
+     "since_block": 8094543,
+     "since_ts": 1794412308,
+     "dark_seconds": 457703,
+     "outages": 1
+    },
+    {
+     "address": "0xafd8ed98dfb5952bf6ff90e93108b43ed53364d3",
+     "since_block": 8094915,
+     "since_ts": 1794412705,
+     "dark_seconds": 457306,
+     "outages": 1
+    },
+    {
+     "address": "0x80b56204d8860a6b46c08decd9f01dd1881f9dc6",
+     "since_block": 8100001,
+     "since_ts": 1794418117,
+     "dark_seconds": 451894,
+     "outages": 1
+    },
+    {
+     "address": "0x5fa52de23aa1a37b14a1232cd32aecc801e4fac6",
+     "since_block": 8112801,
+     "since_ts": 1794431736,
+     "dark_seconds": 438275,
+     "outages": 1
+    },
+    {
+     "address": "0xc4b7ee9ff37906b519ed2b7dcf3a1399806c6dd5",
+     "since_block": 8114301,
+     "since_ts": 1794433336,
+     "dark_seconds": 436675,
+     "outages": 1
+    },
+    {
+     "address": "0x50491aeb35b82531f3b93de363c0568fedc212c2",
+     "since_block": 8121201,
+     "since_ts": 1794440653,
+     "dark_seconds": 429358,
+     "outages": 2
+    },
+    {
+     "address": "0x2b9705c7c4d065b73ba27bcdcacac7cf2de97bd9",
+     "since_block": 8135701,
+     "since_ts": 1794455992,
+     "dark_seconds": 414019,
+     "outages": 1
+    },
+    {
+     "address": "0xe1d13bfd8cccd433d708f1982ae39935873fd627",
+     "since_block": 8150001,
+     "since_ts": 1794471161,
+     "dark_seconds": 398850,
+     "outages": 1
+    },
+    {
+     "address": "0x0804f3b9ff9c0e676d784ce69a6939ad37d434e8",
+     "since_block": 8151001,
+     "since_ts": 1794472216,
+     "dark_seconds": 397795,
+     "outages": 1
+    },
+    {
+     "address": "0xa2e6f1d03e43193085f4d986f3c786e8029ad109",
+     "since_block": 8152001,
+     "since_ts": 1794473279,
+     "dark_seconds": 396732,
+     "outages": 2
+    },
+    {
+     "address": "0x97fcd301f901f130c9e8aa77b92cc8c1be091949",
+     "since_block": 8153401,
+     "since_ts": 1794474755,
+     "dark_seconds": 395256,
+     "outages": 2
+    },
+    {
+     "address": "0x325b2cdff5f39f8dda79fd5c2465706c620d64e8",
+     "since_block": 8159801,
+     "since_ts": 1794481594,
+     "dark_seconds": 388417,
+     "outages": 1
+    },
+    {
+     "address": "0x3bf03269659d207d0a372649c9f44fc55f28d2c7",
+     "since_block": 8167001,
+     "since_ts": 1794489248,
+     "dark_seconds": 380763,
+     "outages": 1
+    },
+    {
+     "address": "0xa6a01b55237edaa4da353f2411cbb9a2b45f61fb",
+     "since_block": 8177001,
+     "since_ts": 1794500033,
+     "dark_seconds": 369978,
+     "outages": 1
+    },
+    {
+     "address": "0xf922ee47ee224134a10347597adec29fbc517bc4",
+     "since_block": 8178001,
+     "since_ts": 1794501096,
+     "dark_seconds": 368915,
+     "outages": 1
+    },
+    {
+     "address": "0x4fd4bdf962b60723e4716625005b110f4efbbb30",
+     "since_block": 8192901,
+     "since_ts": 1794517036,
+     "dark_seconds": 352975,
+     "outages": 1
+    },
+    {
+     "address": "0xceef48496eaf65c5f650747fed32cefa4b981f25",
+     "since_block": 8210001,
+     "since_ts": 1794535173,
+     "dark_seconds": 334838,
+     "outages": 2
+    },
+    {
+     "address": "0xe833e4f2c26239c3eb213e711323efde6f503547",
+     "since_block": 8270001,
+     "since_ts": 1794599064,
+     "dark_seconds": 270947,
+     "outages": 1
+    },
+    {
+     "address": "0xf818d158b2b95f6dbe1b627eff678ab6931e8123",
+     "since_block": 8270001,
+     "since_ts": 1794599064,
+     "dark_seconds": 270947,
+     "outages": 1
+    },
+    {
+     "address": "0x5172abc70e6944703b88902134d4d4ef1b81ff2f",
+     "since_block": 8300701,
+     "since_ts": 1794631639,
+     "dark_seconds": 238372,
+     "outages": 1
+    },
+    {
+     "address": "0x3e78d91c042e9b08e726e8069f9f05099f5efe9a",
+     "since_block": 8313336,
+     "since_ts": 1794645001,
+     "dark_seconds": 225010,
+     "outages": 1
+    },
+    {
+     "address": "0xf49e2017ac86aa9ef3e59f3b5946ba06211bb293",
+     "since_block": 8317001,
+     "since_ts": 1794648889,
+     "dark_seconds": 221122,
+     "outages": 2
+    },
+    {
+     "address": "0xd51327726a0119138fa9ecb7f50e88f0ed2d4116",
+     "since_block": 8321481,
+     "since_ts": 1794653652,
+     "dark_seconds": 216359,
+     "outages": 1
+    },
+    {
+     "address": "0x7031551cbd111edf0d077378c6aeff147abeef38",
+     "since_block": 8326901,
+     "since_ts": 1794659419,
+     "dark_seconds": 210592,
+     "outages": 1
+    },
+    {
+     "address": "0xe9393939bca7d559077c8f8835f600b38e959747",
+     "since_block": 8330002,
+     "since_ts": 1794662716,
+     "dark_seconds": 207295,
+     "outages": 1
+    },
+    {
+     "address": "0xe981ae5051b0e9b25b650b72ec1864b289f6f3ec",
+     "since_block": 8341201,
+     "since_ts": 1794674612,
+     "dark_seconds": 195399,
+     "outages": 2
+    },
+    {
+     "address": "0x3b32b8449efc9e8af42fb11a2dc6e05ddfd83606",
+     "since_block": 8342005,
+     "since_ts": 1794675469,
+     "dark_seconds": 194542,
+     "outages": 5
+    },
+    {
+     "address": "0x9b65abf5db625ca365cdce686ada38cab2dec5c4",
+     "since_block": 8343871,
+     "since_ts": 1794677457,
+     "dark_seconds": 192554,
+     "outages": 3
+    },
+    {
+     "address": "0x6576a88a50ac8594f236a928b1eb79eb80bf2228",
+     "since_block": 8346201,
+     "since_ts": 1794679940,
+     "dark_seconds": 190071,
+     "outages": 1
+    },
+    {
+     "address": "0x8b5ce36db58cddb43f65fdb249a2ed33ecb46437",
+     "since_block": 8350001,
+     "since_ts": 1794683971,
+     "dark_seconds": 186040,
+     "outages": 1
+    },
+    {
+     "address": "0xb78d73defcccd42f3a6bbca4e05af9149320c3c9",
+     "since_block": 8378674,
+     "since_ts": 1794714326,
+     "dark_seconds": 155685,
+     "outages": 5
+    },
+    {
+     "address": "0xcc0c0837dabbbfcf4138073aa46feaf092c0a031",
+     "since_block": 8379340,
+     "since_ts": 1794715030,
+     "dark_seconds": 154981,
+     "outages": 1
+    },
+    {
+     "address": "0xa72942db7adfd8d9125f6925f1c68783408eef63",
+     "since_block": 8379377,
+     "since_ts": 1794715068,
+     "dark_seconds": 154943,
+     "outages": 1
+    },
+    {
+     "address": "0x137b672ef4db83d1d42a01bc6c55cbc4d5ec2b4c",
+     "since_block": 8383001,
+     "since_ts": 1794718918,
+     "dark_seconds": 151093,
+     "outages": 1
+    },
+    {
+     "address": "0xdb1b1f290dc129af5d2d5d01de0eebf5a60babbd",
+     "since_block": 8384001,
+     "since_ts": 1794719981,
+     "dark_seconds": 150030,
+     "outages": 2
+    },
+    {
+     "address": "0x079dedbfda9b15f20f001913d549900aafa9d82f",
+     "since_block": 8384101,
+     "since_ts": 1794720087,
+     "dark_seconds": 149924,
+     "outages": 1
+    },
+    {
+     "address": "0xc49a351d8a3685d989a75ebdc2046f2613ce9f5a",
+     "since_block": 8384201,
+     "since_ts": 1794720193,
+     "dark_seconds": 149818,
+     "outages": 2
+    },
+    {
+     "address": "0xe86a5e5d1bcc4c1bf68aecaa8d3763bf475e8ae0",
+     "since_block": 8384428,
+     "since_ts": 1794720435,
+     "dark_seconds": 149576,
+     "outages": 7
+    },
+    {
+     "address": "0x5b6a6de5a62fd49934cf8f401ba35c28f3e09ab4",
+     "since_block": 8390001,
+     "since_ts": 1794726380,
+     "dark_seconds": 143631,
+     "outages": 1
+    },
+    {
+     "address": "0x14d5bcdd6d00398ab5c26a8f88507db149669992",
+     "since_block": 8392525,
+     "since_ts": 1794729065,
+     "dark_seconds": 140946,
+     "outages": 1
+    },
+    {
+     "address": "0x57af7934a2f3be503ef7b3c9a0ced26d95205f77",
+     "since_block": 8392601,
+     "since_ts": 1794729145,
+     "dark_seconds": 140866,
+     "outages": 1
+    },
+    {
+     "address": "0x48f51bceb964e4dda2c76dcd3a3adf73e1c2cdaa",
+     "since_block": 8393949,
+     "since_ts": 1794730579,
+     "dark_seconds": 139432,
+     "outages": 1
+    },
+    {
+     "address": "0xcadf0dba082241bd9385241203788ccc19da3eaf",
+     "since_block": 8394001,
+     "since_ts": 1794730634,
+     "dark_seconds": 139377,
+     "outages": 2
+    },
+    {
+     "address": "0x5a9f48a2686245eb7418b5a15af2d4a431251d02",
+     "since_block": 8404471,
+     "since_ts": 1794741767,
+     "dark_seconds": 128244,
+     "outages": 1
+    },
+    {
+     "address": "0x4d09cdd490c1ce48bcb6da5c1a6bf41e2f5e853d",
+     "since_block": 8408840,
+     "since_ts": 1794746415,
+     "dark_seconds": 123596,
+     "outages": 1
+    },
+    {
+     "address": "0xdf554201dec784f0541fa5fc884240c73113e334",
+     "since_block": 8419753,
+     "since_ts": 1794757993,
+     "dark_seconds": 112018,
+     "outages": 1
+    },
+    {
+     "address": "0x4f93f4e22f90f1f66c4e56db10d8a2990035a09e",
+     "since_block": 8420754,
+     "since_ts": 1794759060,
+     "dark_seconds": 110951,
+     "outages": 1
+    },
+    {
+     "address": "0xba3d68460d1ebbfa7e236aca1a7cd0bfe398b436",
+     "since_block": 8432838,
+     "since_ts": 1794771900,
+     "dark_seconds": 98111,
+     "outages": 1
+    },
+    {
+     "address": "0x1ad42b72f76be45be36daa04292d5e1397e902b7",
+     "since_block": 8442701,
+     "since_ts": 1794782359,
+     "dark_seconds": 87652,
+     "outages": 1
+    },
+    {
+     "address": "0x773e81e5fd38fc53d8d65d489dc7d6851ef9882b",
+     "since_block": 8446043,
+     "since_ts": 1794785909,
+     "dark_seconds": 84102,
+     "outages": 1
+    },
+    {
+     "address": "0x5586542be6d66c03c9afd1da274ee7c710a7db45",
+     "since_block": 8462199,
+     "since_ts": 1794803059,
+     "dark_seconds": 66952,
+     "outages": 1
+    },
+    {
+     "address": "0x80e7c5958626daae7e5be8a99f2e30b2226c7f74",
+     "since_block": 8499001,
+     "since_ts": 1794842469,
+     "dark_seconds": 27542,
+     "outages": 1
+    },
+    {
+     "address": "0xc56bffdc6d87222128e60d617221aec584e9f643",
+     "since_block": 8499039,
+     "since_ts": 1794842508,
+     "dark_seconds": 27503,
+     "outages": 1
+    },
+    {
+     "address": "0x0f70a79d1a0dfcb61005af03084d3bed0e71e932",
+     "since_block": 8500429,
+     "since_ts": 1794844003,
+     "dark_seconds": 26008,
+     "outages": 1
+    },
+    {
+     "address": "0x62165175d37017b5470f00ade1c48ab691a9dc84",
+     "since_block": 8501125,
+     "since_ts": 1794844738,
+     "dark_seconds": 25273,
+     "outages": 1
+    },
+    {
+     "address": "0x482c1d07d6525ba86dcfe2f62faea9801aa11f0d",
+     "since_block": 8501288,
+     "since_ts": 1794844911,
+     "dark_seconds": 25100,
+     "outages": 1
+    },
+    {
+     "address": "0xe7a2eee0791f80681993ae250901e5baec2d8568",
+     "since_block": 8501311,
+     "since_ts": 1794844936,
+     "dark_seconds": 25075,
+     "outages": 1
+    },
+    {
+     "address": "0x00d5d6ed946f34598aee4180f3f1f50840e9e633",
+     "since_block": 8501735,
+     "since_ts": 1794845394,
+     "dark_seconds": 24617,
+     "outages": 1
+    },
+    {
+     "address": "0x3d7cb286ddf3d1c20da45dd9d20efb5c35725da9",
+     "since_block": 8501735,
+     "since_ts": 1794845394,
+     "dark_seconds": 24617,
+     "outages": 1
+    },
+    {
+     "address": "0x239e5c5042ce8520502ebb00c6d9991134de58c4",
+     "since_block": 8503422,
+     "since_ts": 1794847205,
+     "dark_seconds": 22806,
+     "outages": 1
+    },
+    {
+     "address": "0x74797ad794c71d7f58d0a0109192fc83aab5fe3a",
+     "since_block": 8504201,
+     "since_ts": 1794848049,
+     "dark_seconds": 21962,
+     "outages": 2
+    },
+    {
+     "address": "0x035570bddb0fac4cb065e6900ea800aae5174a7a",
+     "since_block": 8505471,
+     "since_ts": 1794849402,
+     "dark_seconds": 20609,
+     "outages": 1
+    },
+    {
+     "address": "0x7924ec9a5805d8ecd79f9fe6f4e7510a9bf2685b",
+     "since_block": 8509978,
+     "since_ts": 1794854205,
+     "dark_seconds": 15806,
+     "outages": 1
+    },
+    {
+     "address": "0x780f37d9b634936e26e3c5610ddaaaedfebcb998",
+     "since_block": 8518031,
+     "since_ts": 1794862777,
+     "dark_seconds": 7234,
+     "outages": 1
+    },
+    {
+     "address": "0x7b8111cdf7001721469c584fa9613369f0e7ac1e",
+     "since_block": 8519001,
+     "since_ts": 1794863807,
+     "dark_seconds": 6204,
+     "outages": 9
+    },
+    {
+     "address": "0x90104e9200e95d46e85c2bdb14d223a60ec5d31a",
+     "since_block": 8520001,
+     "since_ts": 1794864868,
+     "dark_seconds": 5143,
+     "outages": 1
+    },
+    {
+     "address": "0x56ec8ee8c1693508dec7a08876831f1ccd2e0286",
+     "since_block": 8521339,
+     "since_ts": 1794866282,
+     "dark_seconds": 3729,
+     "outages": 1
+    },
+    {
+     "address": "0x923d57a0763f90a91a1ef23e096711eb278932ff",
+     "since_block": 8521701,
+     "since_ts": 1794866669,
+     "dark_seconds": 3342,
+     "outages": 2
+    },
+    {
+     "address": "0x11a3ec11f98b45d7e88eab9d7621ab422b22f8f7",
+     "since_block": 8522191,
+     "since_ts": 1794867189,
+     "dark_seconds": 2822,
+     "outages": 1
+    }
+   ]
+  },
+  "base-sepolia": {
+   "chain_id": 84532,
+   "source": "blockscout",
+   "address": "0x476F44b11F5C942c58f4c8E3d0300E5710743585",
+   "from_block": 54220056,
+   "to_block": 59740702,
+   "as_of_ts": 1794870009,
+   "outages": 21,
+   "contracts": 21,
+   "contracts_dark_twice_or_more": 0,
+   "recovered": 4,
+   "lit_without_dark_in_range": 0,
+   "still_dark": 17,
+   "recovery_seconds": {
+    "count": 4,
+    "min": 2,
+    "median": 963.5,
+    "max": 4704
+   },
+   "dark_age_seconds": {
+    "count": 17,
+    "min": 11496,
+    "median": 440489,
+    "max": 634979
+   },
+   "dark_per_day": {
+    "2026-11-09": 2,
+    "2026-11-10": 5,
+    "2026-11-11": 2,
+    "2026-11-12": 1,
+    "2026-11-13": 2,
+    "2026-11-14": 4,
+    "2026-11-15": 2,
+    "2026-11-16": 3
+   },
+   "dark": [
+    {
+     "address": "0xe5213387beb36e4d75020689c5694bc449122f16",
+     "since_block": 56565810,
+     "since_ts": 1794235030,
+     "dark_seconds": 634979,
+     "outages": 1
+    },
+    {
+     "address": "0x11f163d82ba0be90dca99113b44cf1cfa719bee2",
+     "since_block": 56629130,
+     "since_ts": 1794247694,
+     "dark_seconds": 622315,
+     "outages": 1
+    },
+    {
+     "address": "0x2f48c06cfea23bc3ec702691d0d3af01a06aa4cd",
+     "since_block": 56937568,
+     "since_ts": 1794309382,
+     "dark_seconds": 560627,
+     "outages": 1
+    },
+    {
+     "address": "0xd89544bc7054229e1f3e34e8c8df1c84697e682e",
+     "since_block": 56942444,
+     "since_ts": 1794310357,
+     "dark_seconds": 559652,
+     "outages": 1
+    },
+    {
+     "address": "0x675a63b8c8e56edf2e4d4b796d6296f485ee8707",
+     "since_block": 56955969,
+     "since_ts": 1794313062,
+     "dark_seconds": 556947,
+     "outages": 1
+    },
+    {
+     "address": "0xefa6f7c7b4225a08c5b0e40cf6862f1a5d79e58f",
+     "since_block": 56969427,
+     "since_ts": 1794315754,
+     "dark_seconds": 554255,
+     "outages": 1
+    },
+    {
+     "address": "0xececbacab0429915459e2874100b994e8dc3d222",
+     "since_block": 57033462,
+     "since_ts": 1794328561,
+     "dark_seconds": 541448,
+     "outages": 1
+    },
+    {
+     "address": "0xb240d3a7ef597967d38360d9cc376f8e3504bc98",
+     "since_block": 57178762,
+     "since_ts": 1794357621,
+     "dark_seconds": 512388,
+     "outages": 1
+    },
+    {
+     "address": "0x41e6356d32eb00a73e92da3ed42a9f79e29b90e7",
+     "since_block": 57538259,
+     "since_ts": 1794429520,
+     "dark_seconds": 440489,
+     "outages": 1
+    },
+    {
+     "address": "0xa2e6f1d03e43193085f4d986f3c786e8029ad109",
+     "since_block": 57751184,
+     "since_ts": 1794472105,
+     "dark_seconds": 397904,
+     "outages": 1
+    },
+    {
+     "address": "0x5d1e393d11a339a84d4c9ba39e087f00f45103bc",
+     "since_block": 58385994,
+     "since_ts": 1794599067,
+     "dark_seconds": 270942,
+     "outages": 1
+    },
+    {
+     "address": "0x8bf43cc4ef75d5decbf6d90496526b879e880266",
+     "since_block": 58385996,
+     "since_ts": 1794599068,
+     "dark_seconds": 270941,
+     "outages": 1
+    },
+    {
+     "address": "0x0880e110103156af8c9df5a2e929eb96cd7a1d74",
+     "since_block": 58636073,
+     "since_ts": 1794649083,
+     "dark_seconds": 220926,
+     "outages": 1
+    },
+    {
+     "address": "0x155611ac1eedd111d645f0de9637e5f6fff815f9",
+     "since_block": 58733685,
+     "since_ts": 1794668605,
+     "dark_seconds": 201404,
+     "outages": 1
+    },
+    {
+     "address": "0xdbacf3cd9face330b91897f9523f068cf6764bd8",
+     "since_block": 59015133,
+     "since_ts": 1794724895,
+     "dark_seconds": 145114,
+     "outages": 1
+    },
+    {
+     "address": "0x17e5544f98a5d2073edc2e29410d6b099305ed6f",
+     "since_block": 59404787,
+     "since_ts": 1794802826,
+     "dark_seconds": 67183,
+     "outages": 1
+    },
+    {
+     "address": "0xea00d1184f5439bd3717253b6687319de602aaa0",
+     "since_block": 59683221,
+     "since_ts": 1794858513,
+     "dark_seconds": 11496,
+     "outages": 1
+    }
+   ]
+  }
+ }
+}

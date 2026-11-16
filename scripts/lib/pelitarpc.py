@@ -49,3 +49,24 @@ class Client:
         if "error" in reply:
             raise RpcError(str(reply["error"].get("message", reply["error"])))
         return reply["result"]
+
+    def batch(self, url, calls):
+        """One JSON-RPC batch request; `calls` = [(method, params)]. Results in call order; any error raises."""
+        if not calls:
+            return []
+        body = []
+        for method, params in calls:
+            self._id += 1
+            body.append({"jsonrpc": "2.0", "id": self._id, "method": method, "params": params})
+        _, _, text = self.request(url, body)
+        replies = json.loads(text)
+        if not isinstance(replies, list):
+            raise RpcError(str(replies.get("error", replies)))
+        by_id = {r.get("id"): r for r in replies}
+        out = []
+        for item in body:
+            reply = by_id.get(item["id"])
+            if reply is None or "error" in reply:
+                raise RpcError(str((reply or {}).get("error", "missing batch reply")))
+            out.append(reply["result"])
+        return out

@@ -5,9 +5,19 @@
     "low_mark": "3"
   },
   "wards": {
-    "lasna": {"refill": "0.05", "max_owed": "0.1", "daily_cap": 10},
-    "base-sepolia": {"refill": "0.0002", "max_owed": "0.001", "daily_cap": 10},
-    "demo": {"daily_cap": 20}
+    "lasna": {
+      "refill": "0.05",
+      "max_owed": "0.1",
+      "daily_cap": 10
+    },
+    "base-sepolia": {
+      "refill": "0.0002",
+      "max_owed": "0.001",
+      "daily_cap": 10
+    },
+    "demo": {
+      "daily_cap": 20
+    }
   },
   "destinations": {
     "base-sepolia": {
@@ -37,11 +47,21 @@
     "ward_dark_minutes": 10,
     "base_tank_min_refills": 10,
     "rpc_failures_before_warn": 5,
-    "max_per_kind_per_day": 1
+    "max_per_kind_per_day": 1,
+    "text": {
+      "tank_low": "Pelita: tangki rendah ({detail}). Kenapa: Keeper tidak dapat menyalakan kontrak bila minyak habis. Buat: ulang langkah faucet (Baki KAU).",
+      "ward_dark": "Pelita: kontrak dijaga {address} ({chain}) padam lebih {minutes} minit. Kenapa: Pelita gagal menyalakannya ({reason}). Buat: semak tangki dan had harian; tiada tindakan jika ini kontrak kawalan.",
+      "keeper_debt": "Pelita: Keeper sendiri berhutang {debt} di Lasna. Kenapa: tanpa minyak Keeper berhenti menjaga semua kontrak. Buat: isi tangki Keeper sekarang (faucet, Baki KAU).",
+      "rpc_failures": "Pelita: pengindeks gagal {count} kali berturut ({error}). Kenapa: RPC atau Blockscout tidak menjawab; laman memapar data lama. Buat: tiada jika ia pulih sendiri; jika berterusan sehari, semak state/larian.jsonl."
+    }
   },
   "indexer": {
     "interval_seconds": 120,
     "filters_interval_seconds": 1800,
     "snapshot_max_age_seconds": 300
+  },
+  "census": {
+    "since_utc": "2026-11-04T04:18:00Z",
+    "_since_note": "One day before the event opened; matches the window measured before the build. Census and indexer start here unless --from-block is given."
   }
 }
