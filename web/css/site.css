@@ -1,5 +1,5 @@
-/* Pelita site. Rupa dikunci (PRD §4.1): warm dark, ONE amber accent, lamp glyph per contract (amber = lit, grey = dark).
-   All colours live in the tokens below. No glass effects and no animated blur: they crash WebKit.
+/* Pelita site. Locked look: warm dark, ONE amber accent, lamp glyph per contract (amber = lit, grey = dark).
+   All colours live in the tokens below. No glass effects and no animated blur: they crash WebKit. */
 @font-face { font-family: "Newsreader"; src: url("../fonts/newsreader.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
 @font-face { font-family: "Public Sans"; src: url("../fonts/public-sans.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
 @font-face { font-family: "Plex Mono"; src: url("../fonts/ibm-plex-mono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
@@ -104,7 +104,7 @@ main { padding: 0 var(--gutter); }
   .hero-lamp { position: relative; width: min(100%, 20rem); height: auto; }
   .stats, .fresh { grid-column: 1 / -1; }
 }
-.tag { display: inline-block; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0.3rem 0.8rem; }
+.tag { display: inline-block; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 0.9rem; padding: 0.3rem 0.8rem; }
 .hero h1 { font-size: clamp(2.6rem, 1.6rem + 5.2vw, 5.6rem); font-weight: 400; margin-top: 1.4rem; max-width: 14ch; }
 .lede { font-size: clamp(1.15rem, 1rem + 0.6vw, 1.4rem); color: var(--muted); margin-top: 1.2rem; max-width: 40ch; }
 .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; margin: clamp(2.5rem, 5vw, 3.5rem) 0 0; background: var(--line-soft); border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; }

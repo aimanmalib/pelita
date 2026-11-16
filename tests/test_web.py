@@ -90,6 +90,13 @@ class NoThirdParty(unittest.TestCase):
         self.assertFalse("backdrop-filter" in css, "backdrop-filter in site.css")
         self.assertFalse(re.search(r"filter\s*:\s*blur", css), "filter: blur in site.css")
 
+    def test_stylesheet_comments_are_closed(self):
+        css = read(WEB / "css" / "site.css")
+        self.assertEqual(css.count("/*"), css.count("*/"))
+        live = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+        for needed in ("@font-face", "--amber:", ".glyph.is-dark"):
+            self.assertIn(needed, live)
+
     def test_local_assets_exist(self):
         css = read(WEB / "css" / "site.css")
         for rel in re.findall(r'url\("\.\./([^"]+)"\)', css):
