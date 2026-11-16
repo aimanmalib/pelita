@@ -1,0 +1,46 @@
+{
+  "_about": "Values that may change without touching code. Amounts are in ether units of each chain's native coin (lREACT on Lasna, ETH on destinations). Starting values; they are tuned from measured fees and the change is recorded in docs/decisions/.",
+  "keeper": {
+    "self_floor": "0.3",
+    "low_mark": "3"
+  },
+  "wards": {
+    "lasna": {"refill": "0.05", "max_owed": "0.1", "daily_cap": 10},
+    "base-sepolia": {"refill": "0.0002", "max_owed": "0.001", "daily_cap": 10},
+    "demo": {"daily_cap": 20}
+  },
+  "destinations": {
+    "base-sepolia": {
+      "callback_gas": 400000,
+      "tank_self_floor": "0.001",
+      "tank_max_per_refuel": "0.002"
+    }
+  },
+  "demo": {
+    "beacon_cooldown_seconds": 600,
+    "beacon_max_beats_per_window": 40,
+    "beacon_window_seconds": 86400,
+    "flicker_beats_before_dark": 3
+  },
+  "series": {
+    "lasna_outages": 30,
+    "base_sepolia_outages": 15,
+    "base_sepolia_outages_if_primary": 30,
+    "control_dark_hours": 24
+  },
+  "funds": {
+    "first_lreact_swap_eth": "0.01",
+    "base_sepolia_target_eth": "0.3"
+  },
+  "alerts": {
+    "ward_dark_minutes": 10,
+    "base_tank_min_refills": 10,
+    "rpc_failures_before_warn": 5,
+    "max_per_kind_per_day": 1
+  },
+  "indexer": {
+    "interval_seconds": 120,
+    "filters_interval_seconds": 1800,
+    "snapshot_max_age_seconds": 300
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "_about": "Chain facts Pelita reads and writes. Every value is re-read on-chain by scripts/spike/readonly.sh (docs/evidence/E-001-chain-facts.json). Only chains with active=true are used.",
+  "user_agent": "pelita-indexer/1",
+  "topics": {
+    "BlacklistContract(address)": "0x930136576d6bd679046e0c2e6212ce4cacec0401db71e9a27f906d2bab5e08f3",
+    "WhitelistContract(address)": "0xc91181be4112cf78026ec1c30b4f5ecac00faa44c8d5e9523e08325cf186d8a7",
+    "PaymentFailure(address,uint256)": "0xade428889ac75005bd70004e1b1e262be6bf4f97bad5827315a7d58261a6dac7",
+    "CallbackFailure(address,bytes)": "0xc8313f695443128e273f1edfcec40b94b7deea8dfbeafd0043290d6601d999db"
+  },
+  "selectors": {
+    "debt(address)": "0x9b6c56ec",
+    "reserves(address)": "0xd66bd524",
+    "depositTo(address)": "0xb760faf9",
+    "coverDebt()": "0x7a90b990",
+    "pay(uint256)": "0xc290d691",
+    "trigger": "0xcebbda8d"
+  },
+  "chains": {
+    "lasna": {
+      "name": "Reactive Lasna",
+      "chain_id": 5318007,
+      "aktif": true,
+      "reactive": true,
+      "rpc": "https://lasna-rpc.rnk.dev/",
+      "biller": "0x8888888888888888888888888888888888888888",
+      "explorer": "https://lasna.reactscan.net",
+      "explorer_tx": "https://lasna.reactscan.net/tx/",
+      "get_logs_max_blocks": 30000,
+      "native_symbol": "lREACT",
+      "fees": {"gas_price_coeff_per_1000": 1000, "extra_gas": 100000, "max_charge_gas": 50000, "gas_price_gwei": 100}
+    },
+    "base-sepolia": {
+      "name": "Base Sepolia",
+      "chain_id": 84532,
+      "aktif": true,
+      "reactive": false,
+      "rpc": "https://sepolia.base.org",
+      "biller": "0x476F44b11F5C942c58f4c8E3d0300E5710743585",
+      "explorer": "https://base-sepolia.blockscout.com",
+      "explorer_tx": "https://base-sepolia.blockscout.com/tx/",
+      "blockscout_api": "https://base-sepolia.blockscout.com/api",
+      "get_logs_max_blocks": 200,
+      "native_symbol": "ETH",
+      "lreact_faucet": "0x2afaFD298b23b62760711756088F75B7409f5967",
+      "fees": {"gas_price_coeff_per_1000": 1100, "extra_gas": 80000, "max_charge_gas": 50000, "gas_price_gwei": 0.006}
+    },
+    "unichain-sepolia": {
+      "name": "Unichain Sepolia",
+      "chain_id": 1301,
+      "aktif": false,
+      "reactive": false,
+      "rpc": "https://sepolia.unichain.org",
+      "biller": "0x775c9B990ADe401060B78D0e98684eEf8d2466C1",
+      "explorer": "https://unichain-sepolia.blockscout.com",
+      "explorer_tx": "https://unichain-sepolia.blockscout.com/tx/",
+      "blockscout_api": "https://unichain-sepolia.blockscout.com/api",
+      "get_logs_max_blocks": 1000,
+      "native_symbol": "ETH",
+      "fees": {"gas_price_coeff_per_1000": 1100, "extra_gas": 80000, "max_charge_gas": 50000}
+    },
+    "ethereum-sepolia": {
+      "name": "Ethereum Sepolia",
+      "chain_id": 11155111,
+      "aktif": false,
+      "reactive": false,
+      "rpc": "https://ethereum-sepolia-rpc.publicnode.com",
+      "biller": "0xAa14d9Cd0f788Ca23d11805986C1d8bd035D23b4",
+      "explorer": "https://eth-sepolia.blockscout.com",
+      "explorer_tx": "https://eth-sepolia.blockscout.com/tx/",
+      "blockscout_api": "https://eth-sepolia.blockscout.com/api",
+      "native_symbol": "ETH",
+      "lreact_faucet": "0x9b9BB25f1A81078C544C829c5EB7822d747Cf434",
+      "fees": {"gas_price_coeff_per_1000": 1100, "extra_gas": 150000, "max_charge_gas": 50000}
+    }
+  }
+}
