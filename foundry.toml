@@ -11,3 +11,8 @@ optimizer_runs = 200
 
 [fmt]
 line_length = 120
+
+[invariant]
+runs = 128
+depth = 64
+fail_on_revert = true

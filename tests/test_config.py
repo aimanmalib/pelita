@@ -82,3 +82,22 @@ class PelitaConfigTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DemoConfigTest(unittest.TestCase):
+    """The demo unit tests use the same limits as config/pelita.json, so they test what will be deployed."""
+
+    def test_demo_limits_are_sane(self):
+        demo = load("pelita.json")["demo"]
+        self.assertGreater(demo["beacon_max_beats_per_window"], 0)
+        self.assertGreater(demo["beacon_window_seconds"], 0)
+        self.assertGreaterEqual(demo["beacon_cooldown_seconds"], 0)
+        self.assertGreater(demo["flicker_callback_gas"], 0)
+
+    def test_demo_test_constants_match_config(self):
+        demo = load("pelita.json")["demo"]
+        source = (ROOT / "test" / "demo" / "Demo.t.sol").read_text(encoding="utf-8")
+        consts = dict(re.findall(r"uint256 constant (COOLDOWN|MAX_BEATS|WINDOW) = (\d+);", source))
+        self.assertEqual(int(consts["COOLDOWN"]), demo["beacon_cooldown_seconds"])
+        self.assertEqual(int(consts["MAX_BEATS"]), demo["beacon_max_beats_per_window"])
+        self.assertEqual(int(consts["WINDOW"]), demo["beacon_window_seconds"])

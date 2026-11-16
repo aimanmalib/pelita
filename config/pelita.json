@@ -20,7 +20,8 @@
     "beacon_cooldown_seconds": 600,
     "beacon_max_beats_per_window": 40,
     "beacon_window_seconds": 86400,
-    "flicker_beats_before_dark": 3
+    "flicker_beats_before_dark": 3,
+    "flicker_callback_gas": 100000
   },
   "series": {
     "lasna_outages": 30,
