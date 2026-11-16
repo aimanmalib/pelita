@@ -7,7 +7,7 @@ answered by a stub so the fuel gauge is tested without the network. Checks: no c
 no horizontal overflow, language toggle swaps every text, gauge validates and reads. Screenshots go to
 $AUTOPILOT_BUKTI_DIR (or out/web-smoke/).
 
-Host tool (Playwright); run through ~/ops/autopilot/bin/ujian-pelayar.sh:
+Host tool (Playwright), not part of the offline gate:
     python3 scripts/web-smoke.py [--snapshot FILE] [--url https://pelita.sasateguh.com/]
 """
 import argparse

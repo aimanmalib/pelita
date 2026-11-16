@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render brand/logo.svg to brand/logo-512.png and brand/logo-64.png with headless Chromium.
 
-Host tool (needs Playwright); run through ~/ops/autopilot/bin/ujian-pelayar.sh. Not part of the offline gate.
+Host tool (needs Playwright). Not part of the offline gate.
 """
 import pathlib
 import sys
