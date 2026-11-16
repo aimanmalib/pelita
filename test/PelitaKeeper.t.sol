@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.29;
 
-import {Test} from "forge-std/Test.sol";
+import {Test, Vm} from "forge-std/Test.sol";
 import {IReactive} from "reactive-lib/interfaces/IReactive.sol";
 import {AbstractPayer} from "reactive-lib/base/AbstractPayer.sol";
 import {PelitaKeeper} from "../src/PelitaKeeper.sol";
@@ -129,6 +129,15 @@ contract PelitaKeeperTest is Test {
         keeper.protect(LASNA, stranger, 1, 1, 0);
         vm.expectRevert(PelitaKeeper.DailyCapOutOfRange.selector);
         keeper.protect(LASNA, stranger, 1, 1, 51);
+    }
+
+    /// @dev Boundary: refill == MAX_REFILL and dailyCap at both ends of 1..50 are accepted.
+    function test_Protect_AcceptsBoundaryValues() public {
+        keeper.protect(LASNA, stranger, 1 ether, 1, 50);
+        assertEq(keeper.ward(LASNA, stranger).dailyCap, 50);
+        assertEq(keeper.ward(LASNA, stranger).refill, 1 ether);
+        keeper.protect(LASNA, address(0xBEEF), 1, 1, 1);
+        assertEq(keeper.ward(LASNA, address(0xBEEF)).dailyCap, 1);
     }
 
     function test_Protect_RevertsWhenAlreadyProtected() public {
@@ -272,6 +281,17 @@ contract PelitaKeeperTest is Test {
         assertEq(keeper.ward(LASNA, ward).used, 0);
     }
 
+    /// @dev Boundary: only `owed > maxOwed` gives up (PRD §4.3); debt exactly at maxOwed is still refuelled.
+    function test_Local_RefuelsWhenDebtEqualsMaxOwed() public {
+        sys.setDebt(ward, 0.1 ether);
+        vm.expectEmit(address(keeper));
+        emit Refueled(LASNA, ward, 0.15 ether, 0.1 ether, 777);
+        _darkLocal();
+        assertEq(sys.depositCalls(), 1);
+        assertEq(sys.deposited(ward), 0.15 ether);
+        assertEq(keeper.ward(LASNA, ward).used, 1);
+    }
+
     function test_GaveUp3_TankBelowAmountPlusFloor() public {
         sys.setDebt(ward, 0.01 ether);
         keeper.withdraw(payable(stranger), address(keeper).balance - (0.3 ether + 0.06 ether - 1));
@@ -322,6 +342,18 @@ contract PelitaKeeperTest is Test {
         vm.expectEmit(address(keeper));
         emit LowTank(3 ether - 0.05 ether);
         _darkLocal();
+    }
+
+    /// @dev Boundary: LowTank fires only when balance is strictly below the mark.
+    function test_LowTank_NotEmittedWhenBalanceEqualsMark() public {
+        keeper.withdraw(payable(stranger), 7 ether - 0.05 ether);
+        vm.recordLogs();
+        _darkLocal();
+        assertEq(address(keeper).balance, 3 ether);
+        Vm.Log[] memory logs = vm.getRecordedLogs();
+        for (uint256 i; i < logs.length; ++i) {
+            assertTrue(logs[i].topics[0] != LowTank.selector);
+        }
     }
 
     function test_Local_WhitelistTopicIgnored() public {
