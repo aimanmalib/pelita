@@ -15,6 +15,16 @@
     "pay(uint256)": "0xc290d691",
     "trigger": "0xcebbda8d"
   },
+  "s1_observed_pairs": [
+    {
+      "blacklisting": "0xdd47f2809b29b44541abfd75a9f6837104f2f272de08da183780e9a2709367ec",
+      "reaction": "0x1c4305f76b7fa63fdc6d707e7aa504b7e2644f6a32251d4cc18978324aa12b3d"
+    },
+    {
+      "blacklisting": "0x1de05002ac789e8928a74b1699e3b9ba2f4be25c7dfd5c1591c00f42b22871c7",
+      "reaction": "0xd1822ffd893d27e5bcf0efa2abdd937414adc0d634fd5fb846fb0a7dc2d1aa50"
+    }
+  ],
   "chains": {
     "lasna": {
       "name": "Reactive Lasna",
@@ -27,7 +37,12 @@
       "explorer_tx": "https://lasna.reactscan.net/tx/",
       "get_logs_max_blocks": 30000,
       "native_symbol": "lREACT",
-      "fees": {"gas_price_coeff_per_1000": 1000, "extra_gas": 100000, "max_charge_gas": 50000, "gas_price_gwei": 100}
+      "fees": {
+        "gas_price_coeff_per_1000": 1000,
+        "extra_gas": 100000,
+        "max_charge_gas": 50000,
+        "gas_price_gwei": 100
+      }
     },
     "base-sepolia": {
       "name": "Base Sepolia",
@@ -39,10 +54,15 @@
       "explorer": "https://base-sepolia.blockscout.com",
       "explorer_tx": "https://base-sepolia.blockscout.com/tx/",
       "blockscout_api": "https://base-sepolia.blockscout.com/api",
-      "get_logs_max_blocks": 200,
+      "get_logs_max_blocks": 201,
       "native_symbol": "ETH",
       "lreact_faucet": "0x2afaFD298b23b62760711756088F75B7409f5967",
-      "fees": {"gas_price_coeff_per_1000": 1100, "extra_gas": 80000, "max_charge_gas": 50000, "gas_price_gwei": 0.006}
+      "fees": {
+        "gas_price_coeff_per_1000": 1100,
+        "extra_gas": 80000,
+        "max_charge_gas": 50000,
+        "gas_price_gwei": 0.006
+      }
     },
     "unichain-sepolia": {
       "name": "Unichain Sepolia",
@@ -54,9 +74,13 @@
       "explorer": "https://unichain-sepolia.blockscout.com",
       "explorer_tx": "https://unichain-sepolia.blockscout.com/tx/",
       "blockscout_api": "https://unichain-sepolia.blockscout.com/api",
-      "get_logs_max_blocks": 1000,
+      "get_logs_max_blocks": 1001,
       "native_symbol": "ETH",
-      "fees": {"gas_price_coeff_per_1000": 1100, "extra_gas": 80000, "max_charge_gas": 50000}
+      "fees": {
+        "gas_price_coeff_per_1000": 1100,
+        "extra_gas": 80000,
+        "max_charge_gas": 50000
+      }
     },
     "ethereum-sepolia": {
       "name": "Ethereum Sepolia",
@@ -70,7 +94,11 @@
       "blockscout_api": "https://eth-sepolia.blockscout.com/api",
       "native_symbol": "ETH",
       "lreact_faucet": "0x9b9BB25f1A81078C544C829c5EB7822d747Cf434",
-      "fees": {"gas_price_coeff_per_1000": 1100, "extra_gas": 150000, "max_charge_gas": 50000}
+      "fees": {
+        "gas_price_coeff_per_1000": 1100,
+        "extra_gas": 150000,
+        "max_charge_gas": 50000
+      }
     }
   }
 }

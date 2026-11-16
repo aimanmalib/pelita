@@ -1,0 +1,495 @@
+{
+  "id": "E-001",
+  "title": "Chain facts re-read from the chains",
+  "measured_at_utc": "2026-11-16T21:01:33+00:00",
+  "method": "scripts/spike/readonly.sh: JSON-RPC reads only (eth_chainId, eth_call, eth_getCode, eth_getLogs, receipts); topics and selectors recomputed with cast keccak / cast sig.",
+  "summary": {
+    "checks": 44,
+    "failed": 0,
+    "failed_on_active_chains": 0
+  },
+  "checks": [
+    {
+      "check": "topic BlacklistContract(address)",
+      "expected": "0x930136576d6bd679046e0c2e6212ce4cacec0401db71e9a27f906d2bab5e08f3",
+      "measured": "0x930136576d6bd679046e0c2e6212ce4cacec0401db71e9a27f906d2bab5e08f3",
+      "ok": true
+    },
+    {
+      "check": "topic WhitelistContract(address)",
+      "expected": "0xc91181be4112cf78026ec1c30b4f5ecac00faa44c8d5e9523e08325cf186d8a7",
+      "measured": "0xc91181be4112cf78026ec1c30b4f5ecac00faa44c8d5e9523e08325cf186d8a7",
+      "ok": true
+    },
+    {
+      "check": "topic PaymentFailure(address,uint256)",
+      "expected": "0xade428889ac75005bd70004e1b1e262be6bf4f97bad5827315a7d58261a6dac7",
+      "measured": "0xade428889ac75005bd70004e1b1e262be6bf4f97bad5827315a7d58261a6dac7",
+      "ok": true
+    },
+    {
+      "check": "topic CallbackFailure(address,bytes)",
+      "expected": "0xc8313f695443128e273f1edfcec40b94b7deea8dfbeafd0043290d6601d999db",
+      "measured": "0xc8313f695443128e273f1edfcec40b94b7deea8dfbeafd0043290d6601d999db",
+      "ok": true
+    },
+    {
+      "check": "selector debt(address)",
+      "expected": "0x9b6c56ec",
+      "measured": "0x9b6c56ec",
+      "ok": true
+    },
+    {
+      "check": "selector reserves(address)",
+      "expected": "0xd66bd524",
+      "measured": "0xd66bd524",
+      "ok": true
+    },
+    {
+      "check": "selector depositTo(address)",
+      "expected": "0xb760faf9",
+      "measured": "0xb760faf9",
+      "ok": true
+    },
+    {
+      "check": "selector coverDebt()",
+      "expected": "0x7a90b990",
+      "measured": "0x7a90b990",
+      "ok": true
+    },
+    {
+      "check": "selector pay(uint256)",
+      "expected": "0xc290d691",
+      "measured": "0xc290d691",
+      "ok": true
+    },
+    {
+      "check": "lasna chain_id",
+      "expected": 5318007,
+      "measured": 5318007,
+      "ok": true
+    },
+    {
+      "check": "lasna biller has code",
+      "expected": true,
+      "measured": true,
+      "ok": true
+    },
+    {
+      "check": "lasna fee gas_price_coeff_per_1000",
+      "expected": 1000,
+      "measured": 1000,
+      "ok": true
+    },
+    {
+      "check": "lasna fee extra_gas",
+      "expected": 100000,
+      "measured": 100000,
+      "ok": true
+    },
+    {
+      "check": "lasna fee max_charge_gas",
+      "expected": 50000,
+      "measured": 50000,
+      "ok": true
+    },
+    {
+      "check": "lasna gas price gwei",
+      "expected": 100,
+      "measured": 100.0,
+      "ok": true
+    },
+    {
+      "check": "lasna eth_getLogs 30000 blocks accepted",
+      "expected": true,
+      "measured": true,
+      "ok": true
+    },
+    {
+      "check": "lasna eth_getLogs one block over the cap refused",
+      "expected": false,
+      "measured": false,
+      "ok": true
+    },
+    {
+      "check": "base-sepolia chain_id",
+      "expected": 84532,
+      "measured": 84532,
+      "ok": true
+    },
+    {
+      "check": "base-sepolia biller has code",
+      "expected": true,
+      "measured": true,
+      "ok": true
+    },
+    {
+      "check": "base-sepolia fee gas_price_coeff_per_1000",
+      "expected": 1100,
+      "measured": 1100,
+      "ok": true
+    },
+    {
+      "check": "base-sepolia fee extra_gas",
+      "expected": 80000,
+      "measured": 80000,
+      "ok": true
+    },
+    {
+      "check": "base-sepolia fee max_charge_gas",
+      "expected": 50000,
+      "measured": 50000,
+      "ok": true
+    },
+    {
+      "check": "base-sepolia gas price gwei",
+      "expected": 0.006,
+      "measured": 0.006,
+      "ok": true
+    },
+    {
+      "check": "base-sepolia lREACT faucet has code",
+      "expected": true,
+      "measured": true,
+      "ok": true
+    },
+    {
+      "check": "base-sepolia eth_getLogs 201 blocks accepted",
+      "expected": true,
+      "measured": true,
+      "ok": true
+    },
+    {
+      "check": "base-sepolia eth_getLogs one block over the cap refused",
+      "expected": false,
+      "measured": false,
+      "ok": true
+    },
+    {
+      "check": "unichain-sepolia chain_id",
+      "expected": 1301,
+      "measured": 1301,
+      "ok": true
+    },
+    {
+      "check": "unichain-sepolia biller has code",
+      "expected": true,
+      "measured": true,
+      "ok": true
+    },
+    {
+      "check": "unichain-sepolia fee gas_price_coeff_per_1000",
+      "expected": 1100,
+      "measured": 1100,
+      "ok": true
+    },
+    {
+      "check": "unichain-sepolia fee extra_gas",
+      "expected": 80000,
+      "measured": 80000,
+      "ok": true
+    },
+    {
+      "check": "unichain-sepolia fee max_charge_gas",
+      "expected": 50000,
+      "measured": 50000,
+      "ok": true
+    },
+    {
+      "check": "unichain-sepolia eth_getLogs 1001 blocks accepted",
+      "expected": true,
+      "measured": true,
+      "ok": true
+    },
+    {
+      "check": "unichain-sepolia eth_getLogs one block over the cap refused",
+      "expected": false,
+      "measured": false,
+      "ok": true
+    },
+    {
+      "check": "ethereum-sepolia chain_id",
+      "expected": 11155111,
+      "measured": 11155111,
+      "ok": true
+    },
+    {
+      "check": "ethereum-sepolia biller has code",
+      "expected": true,
+      "measured": true,
+      "ok": true
+    },
+    {
+      "check": "ethereum-sepolia fee gas_price_coeff_per_1000",
+      "expected": 1100,
+      "measured": 1100,
+      "ok": true
+    },
+    {
+      "check": "ethereum-sepolia fee extra_gas",
+      "expected": 150000,
+      "measured": 150000,
+      "ok": true
+    },
+    {
+      "check": "ethereum-sepolia fee max_charge_gas",
+      "expected": 50000,
+      "measured": 50000,
+      "ok": true
+    },
+    {
+      "check": "ethereum-sepolia lREACT faucet has code",
+      "expected": true,
+      "measured": true,
+      "ok": true
+    },
+    {
+      "check": "trigger selector on the newest blacklisting",
+      "expected": "0xcebbda8d",
+      "measured": "0xcebbda8d",
+      "ok": true
+    },
+    {
+      "check": "blacklisting tx: PaymentFailure then BlacklistContract",
+      "expected": [
+        "0xade428889ac75005bd70004e1b1e262be6bf4f97bad5827315a7d58261a6dac7",
+        "0x930136576d6bd679046e0c2e6212ce4cacec0401db71e9a27f906d2bab5e08f3"
+      ],
+      "measured": [
+        "0xade428889ac75005bd70004e1b1e262be6bf4f97bad5827315a7d58261a6dac7",
+        "0x930136576d6bd679046e0c2e6212ce4cacec0401db71e9a27f906d2bab5e08f3"
+      ],
+      "ok": true
+    },
+    {
+      "check": "Lasna RPC CORS reflects the page origin",
+      "expected": "https://pelita.sasateguh.com",
+      "measured": "https://pelita.sasateguh.com",
+      "ok": true
+    },
+    {
+      "check": "S1 reaction 0x1c4305f7 refTx = blacklisting",
+      "expected": "0xdd47f2809b29b44541abfd75a9f6837104f2f272de08da183780e9a2709367ec",
+      "measured": "0xdd47f2809b29b44541abfd75a9f6837104f2f272de08da183780e9a2709367ec",
+      "ok": true
+    },
+    {
+      "check": "S1 reaction 0xd1822ffd refTx = blacklisting",
+      "expected": "0x1de05002ac789e8928a74b1699e3b9ba2f4be25c7dfd5c1591c00f42b22871c7",
+      "measured": "0x1de05002ac789e8928a74b1699e3b9ba2f4be25c7dfd5c1591c00f42b22871c7",
+      "ok": true
+    }
+  ],
+  "readings": {
+    "chains": {
+      "lasna": {
+        "rpc": "https://lasna-rpc.rnk.dev/",
+        "chain_id": {
+          "ok": true,
+          "value": 5318007
+        },
+        "block": {
+          "ok": true,
+          "value": 8518140
+        },
+        "gas_price_wei": {
+          "ok": true,
+          "value": 100000000000
+        },
+        "biller_code_bytes": {
+          "ok": true,
+          "value": 239
+        },
+        "fee_gas_price_coeff_per_1000": {
+          "ok": true,
+          "value": 1000
+        },
+        "fee_extra_gas": {
+          "ok": true,
+          "value": 100000
+        },
+        "fee_max_charge_gas": {
+          "ok": true,
+          "value": 50000
+        },
+        "logs_at_cap": {
+          "ok": true,
+          "value": 1636
+        },
+        "logs_over_cap": {
+          "ok": false,
+          "error": "RpcError: getLogs request exceeded max allowed range"
+        }
+      },
+      "base-sepolia": {
+        "rpc": "https://sepolia.base.org",
+        "chain_id": {
+          "ok": true,
+          "value": 84532
+        },
+        "block": {
+          "ok": true,
+          "value": 59705177
+        },
+        "gas_price_wei": {
+          "ok": true,
+          "value": 6000000
+        },
+        "biller_code_bytes": {
+          "ok": true,
+          "value": 218
+        },
+        "fee_gas_price_coeff_per_1000": {
+          "ok": true,
+          "value": 1100
+        },
+        "fee_extra_gas": {
+          "ok": true,
+          "value": 80000
+        },
+        "fee_max_charge_gas": {
+          "ok": true,
+          "value": 50000
+        },
+        "faucet_code_bytes": {
+          "ok": true,
+          "value": 1534
+        },
+        "logs_at_cap": {
+          "ok": true,
+          "value": 0
+        },
+        "logs_over_cap": {
+          "ok": false,
+          "error": "HTTPError: HTTP Error 413: Payload Too Large"
+        }
+      },
+      "unichain-sepolia": {
+        "rpc": "https://sepolia.unichain.org",
+        "chain_id": {
+          "ok": true,
+          "value": 1301
+        },
+        "block": {
+          "ok": true,
+          "value": 68010480
+        },
+        "gas_price_wei": {
+          "ok": true,
+          "value": 1500000
+        },
+        "biller_code_bytes": {
+          "ok": true,
+          "value": 218
+        },
+        "fee_gas_price_coeff_per_1000": {
+          "ok": true,
+          "value": 1100
+        },
+        "fee_extra_gas": {
+          "ok": true,
+          "value": 80000
+        },
+        "fee_max_charge_gas": {
+          "ok": true,
+          "value": 50000
+        },
+        "logs_at_cap": {
+          "ok": true,
+          "value": 0
+        },
+        "logs_over_cap": {
+          "ok": false,
+          "error": "HTTPError: HTTP Error 400: Bad Request"
+        }
+      },
+      "ethereum-sepolia": {
+        "rpc": "https://ethereum-sepolia-rpc.publicnode.com",
+        "chain_id": {
+          "ok": true,
+          "value": 11155111
+        },
+        "block": {
+          "ok": true,
+          "value": 12149851
+        },
+        "gas_price_wei": {
+          "ok": true,
+          "value": 19
+        },
+        "biller_code_bytes": {
+          "ok": true,
+          "value": 218
+        },
+        "fee_gas_price_coeff_per_1000": {
+          "ok": true,
+          "value": 1100
+        },
+        "fee_extra_gas": {
+          "ok": true,
+          "value": 150000
+        },
+        "fee_max_charge_gas": {
+          "ok": true,
+          "value": 50000
+        },
+        "faucet_code_bytes": {
+          "ok": true,
+          "value": 776
+        }
+      }
+    },
+    "lasna_extras": {
+      "latest_blacklisting": {
+        "tx": "0x15e1b117eb6d086ed3576ffc5877059eebf37c743185179b31662f05fcecd802",
+        "block": 8518031,
+        "selector": "0xcebbda8d",
+        "to": "0x8888888888888888888888888888888888888888",
+        "topics_in_order": [
+          "0xade428889ac75005bd70004e1b1e262be6bf4f97bad5827315a7d58261a6dac7",
+          "0x930136576d6bd679046e0c2e6212ce4cacec0401db71e9a27f906d2bab5e08f3"
+        ]
+      },
+      "cors_allow_origin": "https://pelita.sasateguh.com",
+      "s1_pairs": [
+        {
+          "blacklisting": "0xdd47f2809b29b44541abfd75a9f6837104f2f272de08da183780e9a2709367ec",
+          "reaction": "0x1c4305f76b7fa63fdc6d707e7aa504b7e2644f6a32251d4cc18978324aa12b3d",
+          "reaction_block": 6230002,
+          "status": 1,
+          "refChainId": "0x512577",
+          "refTx": "0xdd47f2809b29b44541abfd75a9f6837104f2f272de08da183780e9a2709367ec",
+          "refEventIndex": "0x8",
+          "rnkTxType": "r",
+          "blacklisting_block": 6230001
+        },
+        {
+          "blacklisting": "0x1de05002ac789e8928a74b1699e3b9ba2f4be25c7dfd5c1591c00f42b22871c7",
+          "reaction": "0xd1822ffd893d27e5bcf0efa2abdd937414adc0d634fd5fb846fb0a7dc2d1aa50",
+          "reaction_block": 7730003,
+          "status": 1,
+          "refChainId": "0x512577",
+          "refTx": "0x1de05002ac789e8928a74b1699e3b9ba2f4be25c7dfd5c1591c00f42b22871c7",
+          "refEventIndex": "0x6",
+          "rnkTxType": "r",
+          "blacklisting_block": 7730002
+        }
+      ]
+    }
+  },
+  "constants": {
+    "topics": {
+      "BlacklistContract(address)": "0x930136576d6bd679046e0c2e6212ce4cacec0401db71e9a27f906d2bab5e08f3",
+      "WhitelistContract(address)": "0xc91181be4112cf78026ec1c30b4f5ecac00faa44c8d5e9523e08325cf186d8a7",
+      "PaymentFailure(address,uint256)": "0xade428889ac75005bd70004e1b1e262be6bf4f97bad5827315a7d58261a6dac7",
+      "CallbackFailure(address,bytes)": "0xc8313f695443128e273f1edfcec40b94b7deea8dfbeafd0043290d6601d999db"
+    },
+    "selectors": {
+      "debt(address)": "0x9b6c56ec",
+      "reserves(address)": "0xd66bd524",
+      "depositTo(address)": "0xb760faf9",
+      "coverDebt()": "0x7a90b990",
+      "pay(uint256)": "0xc290d691"
+    }
+  }
+}
