@@ -73,7 +73,8 @@ class NginxAndContextTest(unittest.TestCase):
 
     def test_snapshot_is_no_store_and_html_no_transform(self):
         conf = (ROOT / "deploy" / "nginx.conf").read_text(encoding="utf-8")
-        data = re.search(r"location /data/ \{[^}]*\}", conf).group(0)
+        # ^~: without it the `\.json$` regex location wins and /data/snapshot.json is a 404 (first deploy, 17 Nov).
+        data = re.search(r"location \^~ /data/ \{[^}]*\}", conf).group(0)
         self.assertIn('"no-store"', data)
         self.assertEqual(conf.count("no-cache, no-transform"), 2)
 
