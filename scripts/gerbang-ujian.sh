@@ -7,7 +7,7 @@ FOUNDRY_BIN="${FOUNDRY_BIN:-$HOME/.foundry/bin}"
 forge="$FOUNDRY_BIN/forge"
 [ -x "$forge" ] || forge="$(command -v forge)"
 
-for f in scripts/*.sh scripts/spike/*.sh; do bash -n "$f"; done
+for f in scripts/*.sh scripts/spike/*.sh deploy/*.sh; do bash -n "$f"; done
 "$forge" fmt --check
 "$forge" build --quiet
 "$forge" test --no-match-path 'test/fork/*' -q 2>&1 | tail -n 5

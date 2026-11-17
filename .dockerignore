@@ -1,0 +1,11 @@
+# The site image needs only these paths (deploy/Dockerfile). Everything else stays out of the build context.
+*
+!web/
+!brand/
+!config/chains.json
+!deploy/rendered/
+# Never in an image, even if a rule above is widened later.
+state/
+dalaman/
+.env*
+**/.env*

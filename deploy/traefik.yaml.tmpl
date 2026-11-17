@@ -1,0 +1,34 @@
+# Route for the Pelita site. deploy/deploy.sh fills @DOMAIN@, @CERT_RESOLVER@ and @CONTAINER@ from deploy/site.env
+# and copies the result into the proxy's dynamic configuration folder. Undo: delete that file.
+# HTML is sent with `no-transform`, so the CDN in front does not compress it: `compress` here does (floor lowered
+# so the small JSON files count too). Plain http redirects to https.
+http:
+  routers:
+    pelita:
+      entryPoints: [https]
+      rule: Host(`@DOMAIN@`)
+      service: pelita-svc
+      middlewares: [pelita-compress]
+      tls:
+        certResolver: @CERT_RESOLVER@
+      priority: 100
+    pelita-http:
+      entryPoints: [http]
+      rule: Host(`@DOMAIN@`)
+      service: pelita-svc
+      middlewares: [pelita-https]
+      priority: 100
+  middlewares:
+    pelita-compress:
+      compress:
+        minResponseBodyBytes: 256
+        excludedContentTypes: [image/png, image/jpeg, image/webp, font/woff2]
+    pelita-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+  services:
+    pelita-svc:
+      loadBalancer:
+        servers:
+          - url: http://@CONTAINER@:8080
