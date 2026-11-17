@@ -17,7 +17,6 @@ import http.server
 import json
 import os
 import pathlib
-import re
 import sys
 import threading
 import time
@@ -74,6 +73,8 @@ def rpc_stub(route):
 
 LANG = {n: json.loads((ROOT / "web" / "lang" / f"{n}.json").read_text(encoding="utf-8")) for n in ("en", "ms")}
 GAUGE_KEYS = [k for k in LANG["en"] if k.startswith("gauge.") or k in ("fleet.dark", "fleet.lit")]
+# Texts every gauge reading draws, whatever the contract state (gauge.js render()).
+GAUGE_READING_KEYS = ["gauge.debt", "gauge.reserves", "gauge.balance", "gauge.left", "gauge.fill", "gauge.own"]
 
 
 def overflow(page, when, problems):
@@ -111,14 +112,16 @@ def check(page, label, shots, errors):
         .filter(e => /^[a-z]+\\.[A-Za-z0-9]+$/.test(e.textContent.trim())).map(e => e.dataset.i18n)""")
     if leftover:
         problems.append(f"untranslated keys {leftover}")
-    gauge_ms = page.text_content("#gauge-out") or ""
-    stale = [
-        k
-        for k in GAUGE_KEYS
-        if LANG["en"][k] != LANG["ms"][k] and re.search(rf"\b{re.escape(LANG['en'][k])}\b", gauge_ms)
-    ]
+    # Per element, exact match: text_content() of the whole box glues nodes together, so a regex over it never fires.
+    gauge_ms = page.eval_on_selector_all(
+        "#gauge-out dt, #gauge-out dd, #gauge-out p, #gauge-out .pill", "els => els.map(e => e.textContent.trim())"
+    )
+    stale = [k for k in GAUGE_KEYS if LANG["en"][k] != LANG["ms"][k] and LANG["en"][k] in gauge_ms]
     if stale:
         problems.append(f"gauge reading still in English after switching: {stale}")
+    missing = [k for k in GAUGE_READING_KEYS if LANG["ms"][k] not in gauge_ms]
+    if missing:
+        problems.append(f"gauge reading lacks BM text after switching: {missing}")
     if LANG["ms"]["dark.colDebt"] != page.text_content("#darktable th:last-child").strip():
         problems.append("dark table debt column not translated")
     overflow(page, "in BM", problems)
