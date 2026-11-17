@@ -4,6 +4,7 @@ import importlib.util
 import json
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -101,6 +102,28 @@ class NginxAndContextTest(unittest.TestCase):
         for k in ("CONTAINER", "HOLDER", "IMAGE"):
             self.assertTrue(env[k].startswith("pelita-"), k)
         self.assertRegex(env["BASE_IMAGE"], r"@sha256:[0-9a-f]{64}$")
+
+
+    def test_host_proxy_values_stay_out_of_the_repository(self):
+        keys = ("NETWORK", "PROXY_CONTAINER", "PROXY_DYNAMIC_DIR", "CERT_RESOLVER")
+        site = uptime.site_env(ROOT / "deploy" / "site.env")
+        for k in keys:
+            self.assertNotIn(k, site)
+        example = uptime.site_env(ROOT / "deploy" / "host.env.example")
+        self.assertEqual(sorted(example), sorted(keys))
+
+    def test_deploy_refuses_without_host_values(self):
+        home = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, home)
+        env = {"PATH": "/usr/bin:/bin", "HOME": str(home), "PELITA_HOST_ENV": str(home / "missing.env")}
+        r = subprocess.run(["bash", str(ROOT / "deploy" / "deploy.sh"), "--status"], env=env, capture_output=True, text=True)
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("host.env.example", r.stderr)
+        (home / "partial.env").write_text("NETWORK=proxy\n", encoding="utf-8")
+        env["PELITA_HOST_ENV"] = str(home / "partial.env")
+        r = subprocess.run(["bash", str(ROOT / "deploy" / "deploy.sh"), "--status"], env=env, capture_output=True, text=True)
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("PROXY_CONTAINER is empty", r.stderr)
 
 
 class UptimeTest(unittest.TestCase):

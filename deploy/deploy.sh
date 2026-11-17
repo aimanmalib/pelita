@@ -3,11 +3,18 @@
 #   deploy/deploy.sh             build HEAD from a clean `git archive`, run it, install the route, verify
 #   deploy/deploy.sh --rollback  run the previous image again (kept by the stopped holder container)
 #   deploy/deploy.sh --status    container, deployed commit, whether the served files match HEAD, public code
-# Values: deploy/site.env. Deploy tags: state/deploy/ (not tracked). Live data: state/public/ mounted at /data.
+# Values: deploy/site.env (site) + $PELITA_HOST_ENV (host proxy, outside the repo). Deploy tags: state/deploy/ (not tracked). Live data: state/public/ mounted at /data.
 set -euo pipefail
 DEPLOY=$(cd "$(dirname "$0")" && pwd); ROOT=$(dirname "$DEPLOY")
 # shellcheck disable=SC1091
 . "$DEPLOY/site.env"
+HOST_ENV=${PELITA_HOST_ENV:-$HOME/.config/pelita/host.env}
+[ -r "$HOST_ENV" ] || { echo "  ✗ host values missing: $HOST_ENV (copy deploy/host.env.example and fill it in)" >&2; exit 1; }
+# shellcheck disable=SC1090
+. "$HOST_ENV"
+for k in NETWORK PROXY_CONTAINER PROXY_DYNAMIC_DIR CERT_RESOLVER; do
+  [ -n "${!k:-}" ] || { echo "  ✗ $k is empty in $HOST_ENV" >&2; exit 1; }
+done
 TAGS="$ROOT/state/deploy"; mkdir -p "$TAGS" "$ROOT/state/public"
 URL="https://$DOMAIN/"
 SERVED="web brand config/chains.json deploy"   # paths that end up in the image

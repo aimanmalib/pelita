@@ -14,6 +14,9 @@ phone sees it through Cloudflare (HTML `no-transform`, nothing injected, compres
 - **Image** (`deploy/Dockerfile`): nginx stable-alpine pinned by digest in `deploy/site.env`; `web/` at `/`, `brand/` at
   `/brand/`, `config/chains.json` at `/config/chains.json` (one source for chain data, ADR 0006). Built from a clean
   `git archive HEAD`; `.dockerignore` is an allow-list and repeats `state/`, `dalaman/`, `.env*`.
+- **Host values**: the proxy network, proxy container, route directory and certificate resolver describe the host, not the
+  project, so they live outside the repository (`~/.config/pelita/host.env`, keys in `deploy/host.env.example`);
+  `deploy.sh` stops with a clear message when one is missing.
 - **Container**: `pelita-web` on the shared proxy network, read-only root, tmpfs for nginx scratch, all capabilities dropped
   except the three nginx needs to drop to its worker user, 0.5 CPU, 64 MB, health check on `/healthz`. The live snapshot is a
   read-only directory mount (`state/public` → `/data`): the indexer replaces the file atomically, which a single-file mount
