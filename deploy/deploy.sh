@@ -56,7 +56,9 @@ case "${1:-}" in
     TAG=$(git -C "$ROOT" rev-parse --short=12 HEAD)-$(date -u +%Y%m%d%H%M)
     ctx=$(mktemp -d); trap 'rm -rf "$ctx"' EXIT
     git -C "$ROOT" archive HEAD | tar -x -C "$ctx"   # untracked and ignored files never reach the image
-    python3 "$DEPLOY/stamp.py" "$ctx" "$(git -C "$ROOT" rev-parse --short=12 HEAD:web)" || die "stamp failed"
+    # Asset version = hash of everything served (not web/ alone): a header or config change must also get new
+    # URLs, or the CDN keeps the old response for hours (17 Nov: wrong Content-Type kept after the fix).
+    python3 "$DEPLOY/stamp.py" "$ctx" "$(served_tree HEAD | cut -c1-12)" || die "stamp failed"
     "$HOME/bin/bina-imej.sh" -q --build-arg BASE_IMAGE="$BASE_IMAGE" -f "$ctx/deploy/Dockerfile" -t "$IMAGE:$TAG" "$ctx" >/dev/null \
       || die "image build failed"
     ok "image $IMAGE:$TAG built"
