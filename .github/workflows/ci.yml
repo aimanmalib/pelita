@@ -1,0 +1,27 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  gate:
+    name: format, build, tests, README links
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.8.7
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # The scripts look for Foundry in FOUNDRY_BIN; point it at wherever the action installed it.
+      - run: echo "FOUNDRY_BIN=$(dirname "$(command -v forge)")" >> "$GITHUB_ENV"
+      # Same script as the local gate. Fork tests (test/fork/) read live testnet state and are not run here.
+      - run: bash scripts/gerbang-ujian.sh

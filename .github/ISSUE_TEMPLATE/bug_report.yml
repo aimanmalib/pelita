@@ -1,0 +1,36 @@
+name: Bug report
+description: Something in the contracts, the scripts, the indexer or the page doesn't work
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where
+      options: [Keeper contract (Lasna), Tank contract (destination), Demo contracts, deploy.sh or deploy-your-own.sh, verify.sh, census or indexer, The page]
+    validations:
+      required: true
+  - type: input
+    id: chain
+    attributes:
+      label: Chain and contract address, if any
+  - type: input
+    id: tx
+    attributes:
+      label: Transaction hash, if any
+  - type: textarea
+    id: logs
+    attributes:
+      label: Command output (never paste a private key or keystore password)
+      render: text

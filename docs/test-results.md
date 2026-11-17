@@ -1,7 +1,7 @@
 # Test results
 
-Offline suite (CI and `scripts/gerbang-ujian.sh`): `forge fmt --check`, `forge build`, `forge test` without
-`test/fork/*`, and `python3 -m unittest`. Counts are printed by the commands themselves; this file records runs that
+Offline suite (CI in `.github/workflows/ci.yml` and `scripts/gerbang-ujian.sh`): `forge fmt --check`, `forge build`, `forge test` without
+`test/fork/*`, `python3 -m unittest` and `scripts/check-links.py`. Counts are printed by the commands themselves; this file records runs that
 CI cannot repeat.
 
 ## Fork tests (live state, read only)

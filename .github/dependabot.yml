@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Both submodules are pinned on purpose: reactive-lib-omni at v0.1.0 (the version the contracts were tested and
+  # verified against) and forge-std at the tag the tests use. A bump changes the deployed bytecode, so it is a
+  # deliberate change with its own pull request, not a robot one.
+  - package-ecosystem: gitsubmodule
+    directory: /
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: lib/reactive-lib-omni
+      - dependency-name: lib/forge-std
