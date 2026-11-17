@@ -20,6 +20,7 @@ get() {  # $1 path, $2 name: headers → $tmp/$2.h, decoded body → $tmp/$2.b; 
 header() { grep -i "^$2:" "$tmp/$1.h" | tail -1 | cut -d: -f2- | tr -d '\r' | sed 's/^ *//'; }
 
 c=$(get "" page); [ "$c" = 200 ] && pass "GET / 200" || bad "GET / = $c"
+case "$(header page content-type)" in text/html*) pass "HTML served as text/html" ;; *) bad "HTML Content-Type: '$(header page content-type)'" ;; esac
 enc=$(header page content-encoding); [ -n "$enc" ] && pass "HTML compressed ($enc)" || bad "HTML not compressed (no content-encoding)"
 case "$(header page cache-control)" in *no-transform*) pass "HTML Cache-Control has no-transform" ;; *) bad "HTML Cache-Control: '$(header page cache-control)'" ;; esac
 [ -n "$(header page content-security-policy)" ] && pass "CSP present" || bad "no Content-Security-Policy"
@@ -31,6 +32,10 @@ grep -qiE 'cloudflareinsights|beacon\.min\.js|googletagmanager|google-analytics|
 assets=$(grep -oE '(src|href)="[^":#]+"' "$tmp/page.b" | sed -E 's/^(src|href)="//; s/"$//' | sort -u)
 n=0; for a in $assets config/chains.json; do
   c=$(get "$a" asset); n=$((n + 1)); [ "$c" = 200 ] || bad "GET /$a = $c"
+  case "$a" in  # a module script or stylesheet with the wrong type is refused by the browser
+    *.js\?v=*) case "$(header asset content-type)" in *javascript*) ;; *) bad "/$a Content-Type: '$(header asset content-type)'" ;; esac ;;
+    *.css\?v=*) case "$(header asset content-type)" in text/css*) ;; *) bad "/$a Content-Type: '$(header asset content-type)'" ;; esac ;;
+  esac
 done; pass "$n linked files and config checked"
 
 c=$(get data/snapshot.json snap); [ "$c" = 200 ] && pass "snapshot 200" || bad "snapshot = $c"

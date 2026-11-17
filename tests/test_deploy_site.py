@@ -71,6 +71,11 @@ class NginxAndContextTest(unittest.TestCase):
             if "add_header" in block:
                 self.assertIn("include /etc/nginx/conf.d/pelita.headers;", block, block)
 
+    def test_no_types_block_replaces_the_mime_map(self):
+        # A `types {}` block in the server replaces nginx's whole MIME map: the page went out as a download (17 Nov).
+        conf = (ROOT / "deploy" / "nginx.conf").read_text(encoding="utf-8")
+        self.assertNotRegex(conf, r"\btypes\s*\{")
+
     def test_snapshot_is_no_store_and_html_no_transform(self):
         conf = (ROOT / "deploy" / "nginx.conf").read_text(encoding="utf-8")
         # ^~: without it the `\.json$` regex location wins and /data/snapshot.json is a 404 (first deploy, 17 Nov).
