@@ -3,7 +3,7 @@
 
 Words come from web/lang/en.json (hero.*) and the domain from deploy/site.env; colours from the :root tokens of
 web/css/site.css; the glyph from brand/logo.svg. Change those files, then run this again: nothing here holds copy.
-Host tool (needs Playwright): run it through ~/ops/autopilot/bin/ujian-pelayar.sh. Not part of the offline gate;
+Host tool (needs Playwright with Chromium installed). Not part of the offline gate;
 tests/test_web.py checks the committed PNG (size, dimensions, meta tags).
 """
 import html
