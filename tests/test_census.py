@@ -85,7 +85,8 @@ class CensusOverRecordingTest(unittest.TestCase):
         out = census.run(CHAINS, CFG, client(self.net), ["base-sepolia"], 0, last)["chains"]["base-sepolia"]
         bs = self.fx["base-sepolia"]["blockscout"]
         self.assertEqual(out["outages"], len(bs[CHAINS["topics"][census.DARK]]))
-        self.assertEqual(out["source"], "blockscout")
+        self.assertEqual(out["source"], "blockscout+eth_getLogs")
+        self.assertTrue(self.net.calls("eth_getLogs") == [], "a long range goes to Blockscout")
         self.assertLessEqual(out["recovered"], len(bs[CHAINS["topics"][census.LIT]]))
         self.assertEqual(out["still_dark"], len(out["dark"]))
 

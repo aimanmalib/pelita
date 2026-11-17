@@ -69,6 +69,7 @@
   "indexer": {
     "interval_seconds": 120,
     "filters_interval_seconds": 1800,
+    "blockscout_retry_seconds": 900,
     "snapshot_max_age_seconds": 300
   },
   "census": {

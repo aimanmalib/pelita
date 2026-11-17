@@ -18,10 +18,14 @@ PRD 4.5 and 4.6 ask for a key-less census of contracts that went dark (`scripts/
 - **Lasna** is read with `eth_getLogs` on the system contract in windows of `get_logs_max_blocks`. Logs carry
   `blockTimestamp: 0x0`, so each distinct block's time is read once. Lasna prunes old blocks ("block not found"); the
   date-to-block search treats a pruned block as older than the start date.
-- **Destinations** are read through the Blockscout logs API (the public RPC caps `eth_getLogs` at 201 blocks). Blockscout
-  indexes behind the RPC tip, so a destination is read only up to `tip - index_lag_blocks` (`config/chains.json`;
-  300 blocks on Base Sepolia, about one minute at the measured ~0.2 s per block). Events are de-duplicated by
-  `(transaction, logIndex)`.
+- **Destinations** are read with `eth_getLogs` on the chain's RPC when the range fits in `rpc_logs_max_windows` windows
+  of `get_logs_max_blocks` (`config/chains.json`; 20 × 201 blocks on Base Sepolia), and through the Blockscout logs
+  API only for a longer backfill (the first run from `census.since_utc`, or catching up after a long outage). The
+  range ends at `tip - index_lag_blocks` (300 blocks on Base Sepolia), because Blockscout indexes behind the RPC tip.
+  Events are de-duplicated by `(transaction, logIndex)`, so both sources give the same census (tested).
+  *Amended 17 Nov:* the first version called Blockscout on every 2-minute run; after a few runs the public API
+  answered `429 Too Many Requests` from this host and four runs in a row failed. The 2-minute steps (about 60 blocks)
+  now never call Blockscout.
 - **Start of the range** is `census.since_utc` in `config/pelita.json` (one day before the event opened, the same
   window as the pre-build measurement). `--from-block/--to-block` repeat any range.
 - **Fleet** comes from `deployments/<chain>.json` (`keeper` or `tank`, `deploy_block`, `wards[]` with `role`
@@ -30,8 +34,13 @@ PRD 4.5 and 4.6 ask for a key-less census of contracts that went dark (`scripts/
   against `src/*.sol`.
 - **Alerts** text lives in `config/pelita.json` (`alerts.text`). A kind is marked sent for the UTC day only when
   `notify.sh` returns 0, so a failed delivery is tried again next run. Control wards never alert.
-- **Failures.** Any RPC or HTTP error ends the run with exit code 1, a failed line in `state/larian.jsonl`, and the
-  previous snapshot left in place. No retry loop. The fifth failure in a row sends one warning.
+- **Failures.** An error while reading one chain's census (Blockscout's 429, a timeout) does not fail the run: the
+  snapshot keeps that chain's last good census with `stale: true`, `stale_since` and `error`, and the run line in
+  `state/larian.jsonl` lists it under `stale`. A failed Blockscout range is not tried again for
+  `indexer.blockscout_retry_seconds` (`config/pelita.json`, 900 s); a failed RPC range is tried on the next run. The
+  fifth stale run in a row for a chain sends one warning. Any other RPC or HTTP error (block number, fleet, filters)
+  ends the run with exit code 1, a failed line, and the previous snapshot left in place. No retry loop. The fifth
+  failure in a row sends one warning.
 
 - **Fields the page reads** (added with the schedule, 17 Nov): every fleet event carries `ts`, the block timestamp,
   read in one batch with the census block-time cache. `demo` holds the public Beacon (`chain`, `beacon`,

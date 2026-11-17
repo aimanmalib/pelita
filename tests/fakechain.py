@@ -5,8 +5,10 @@ the recording in tests/fixtures/census_chain.json; block timestamps outside it f
 Every request is kept in `requests` so tests can check headers and window sizes.
 """
 
+import io
 import json
 from pathlib import Path
+from urllib.error import HTTPError
 from urllib.parse import parse_qs, urlparse
 
 FIXTURE = Path(__file__).resolve().parent / "fixtures" / "census_chain.json"
@@ -42,6 +44,7 @@ class FakeNet:
         self.balances = {}  # (rpc url, address) -> wei
         self.extra_logs = {}  # rpc url -> list of logs for eth_getLogs on non-biller addresses
         self.fail = False
+        self.blockscout_status = 200  # 429 replays Blockscout's "Too many requests" (measured 17 Nov)
         self.by_rpc = {CHAINS["chains"][n]["rpc"]: n for n in ("lasna", "base-sepolia")}
 
     def calls(self, method):
@@ -65,6 +68,9 @@ class FakeNet:
         if self.fail:
             raise OSError("network down (test)")
         if req.full_url.startswith(CHAINS["chains"]["base-sepolia"]["blockscout_api"]):
+            if self.blockscout_status != 200:
+                body = io.BytesIO(b'{"message":"Too many requests"}')
+                raise HTTPError(req.full_url, self.blockscout_status, "Too Many Requests", {}, body)
             return _Resp(self._blockscout(req.full_url))
         name = self.by_rpc[req.full_url]
         if isinstance(body, list):
@@ -104,7 +110,7 @@ class FakeNet:
     def _logs(self, name, url, flt):
         lo, hi = int(flt["fromBlock"], 16), int(flt["toBlock"], 16)
         if flt["address"].lower() == CHAINS["chains"][name]["biller"].lower():
-            source = self.fx[name].get("logs", [])
+            source = self.fx[name].get("logs") or self._rpc_logs_from_blockscout(name)
         else:
             source = self.extra_logs.get(url, [])
         wanted = set(flt["topics"][0])
@@ -114,4 +120,20 @@ class FakeNet:
             if lo <= int(lg["blockNumber"], 16) <= hi
             and lg["topics"][0] in wanted
             and lg["address"].lower() == flt["address"].lower()
+        ]
+
+    def _rpc_logs_from_blockscout(self, name):
+        """The destination's recorded Blockscout rows in eth_getLogs form, so both sources agree."""
+        rows = self.fx[name].get("blockscout", {})
+        return [
+            {
+                "address": r["address"],
+                "blockNumber": r["blockNumber"],
+                "logIndex": r["logIndex"],
+                "transactionHash": r["transactionHash"],
+                "topics": [t for t in r["topics"] if t],
+                "removed": False,
+            }
+            for topic_rows in rows.values()
+            for r in topic_rows
         ]

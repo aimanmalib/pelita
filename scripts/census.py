@@ -2,7 +2,8 @@
 """Census of contracts that went dark for unpaid debt (read-only, no key).
 
 Lasna: eth_getLogs on the system contract, in windows no wider than the RPC allows.
-Destinations: the Blockscout logs API on the callback proxy (the public RPC caps eth_getLogs at a
+Destinations: eth_getLogs for short ranges (up to `rpc_logs_max_windows` windows of the RPC's cap),
+the Blockscout logs API on the callback proxy for long backfills (the public RPC caps eth_getLogs at a
 few hundred blocks). A BlacklistContract log means "went dark", WhitelistContract means "lit again".
 
 The summary is computed only from logs and block timestamps, never from the script's clock, so
@@ -125,12 +126,22 @@ class ChainReader:
 
     def fetch(self, first, last):
         """All dark/lit events in [first, last], oldest first."""
-        if self.chain.get("reactive"):
+        if self.uses_rpc(first, last):
             events = self._fetch_rpc(first, last)
         else:
             events = self._fetch_blockscout(first, last)
         events.sort(key=lambda e: (e["block"], e["log_index"]))
         return events
+
+    def uses_rpc(self, first, last):
+        """Lasna always; a destination when the range fits in `rpc_logs_max_windows` RPC windows.
+
+        The indexer's 2-minute steps stay on the chain's RPC; only a long backfill goes to Blockscout,
+        whose public API answers 429 when called every run (ADR 0004)."""
+        if self.chain.get("reactive"):
+            return True
+        span = last - first + 1
+        return span <= self.chain["get_logs_max_blocks"] * int(self.chain.get("rpc_logs_max_windows", 0))
 
     def _fetch_rpc(self, first, last):
         events = []
@@ -269,7 +280,7 @@ def census_result(chain, first, last, as_of, events, read_debts=None):
     `read_debts(addresses)` -> {address: wei}; called once with the still-dark addresses."""
     result = {
         "chain_id": chain["chain_id"],
-        "source": "eth_getLogs" if chain.get("reactive") else "blockscout",
+        "source": "eth_getLogs" if chain.get("reactive") else "blockscout+eth_getLogs",
         "address": chain["biller"],
         "from_block": first,
         "to_block": last,

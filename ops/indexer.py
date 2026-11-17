@@ -5,7 +5,7 @@ Each run: incremental dark/lit census per active chain (block cursor), fleet sta
 chain, Pelita's own events, rnk_getFilters at most every `filters_interval_seconds`; then an atomic
 write of state/public/snapshot.json and alerts through ~/bin/notify.sh, at most once a day per kind.
 An RPC failure marks the run failed in state/larian.jsonl and keeps the previous snapshot; there is no
-retry loop. After `rpc_failures_before_warn` failures in a row, one warning.
+retry loop. A census failure on one chain (Blockscout 429) only marks that chain `stale` in the snapshot. After `rpc_failures_before_warn` failures in a row, one warning.
 """
 
 import json
@@ -80,6 +80,38 @@ class Indexer:
         debts = census.debt_reader(reader, cs["cursor"], self.chains["selectors"])
         return census.census_result(reader.chain, cs["from_block"], cs["cursor"], as_of, cs["events"], debts)
 
+    def census_step(self, state, name, reader, latest):
+        """One chain's census. A failure (say Blockscout's 429) keeps that chain's last result, marked
+        `stale`, instead of failing the run; a failed Blockscout range waits `blockscout_retry_seconds`."""
+        stale = state["census_stale"].get(name)
+        now = int(self.now())
+        if stale and now < stale["retry_at"]:
+            return self.stale_view(state, name, stale)
+        cs = state["census"].get(name)
+        backfill = cs is None or not reader.uses_rpc(cs["cursor"] + 1, latest)
+        try:
+            result = self.update_census(state, name, reader, latest)
+        except FAILURES as err:
+            stale = stale or {"since": now, "runs": 0}
+            stale["runs"] += 1
+            stale["error"] = f"{type(err).__name__}: {err}"[:300]
+            wait = self.cfg["indexer"]["blockscout_retry_seconds"] if backfill and not reader.chain.get("reactive") else 0
+            stale["retry_at"] = now + wait
+            state["census_stale"][name] = stale
+            limit = self.cfg["alerts"]["rpc_failures_before_warn"]
+            if stale["runs"] == limit:
+                self.alert(state, "rpc_failures", "warn", count=limit, error=f"census {name}: {stale['error'][:100]}")
+            return self.stale_view(state, name, stale)
+        state["census_stale"].pop(name, None)
+        state["census_last"][name] = result
+        return result
+
+    @staticmethod
+    def stale_view(state, name, stale):
+        view = dict(state["census_last"].get(name) or {})
+        view.update(stale=True, stale_since=stale["since"], error=stale["error"])
+        return view
+
     # ---- fleet --------------------------------------------------------------------------------
     def update_fleet(self, state, name, chain, dep, reader, latest):
         fs = state["fleet"]
@@ -139,6 +171,8 @@ class Indexer:
     def load_state(self):
         state = read_json(self.state_path, {})
         state.setdefault("census", {})
+        state.setdefault("census_last", {})
+        state.setdefault("census_stale", {})
         state.setdefault("fleet", {"cursors": {}, "events": [], "dark_since": {}})
         state.setdefault("filters", {"checked_at": 0, "summary": None})
         state.setdefault("alerts", {})
@@ -153,7 +187,7 @@ class Indexer:
             chain = self.chains["chains"][name]
             reader = census.ChainReader(self.client, chain, self.chains["topics"])
             latest = reader.latest_block()
-            snap["census"][name] = self.update_census(state, name, reader, latest)
+            snap["census"][name] = self.census_step(state, name, reader, latest)
             if name in deployments:
                 snap["fleet"][name] = self.update_fleet(state, name, chain, deployments[name], reader, latest)
                 demo = fleet.read_demo(self.client, name, chain, self.chains["selectors"], deployments[name])
@@ -191,6 +225,9 @@ class Indexer:
             if snap["fleet"]:
                 self.check_fleet_alerts(state, snap["fleet"])
             record["ok"] = True
+            stale = sorted(n for n, c in snap["census"].items() if c.get("stale"))
+            if stale:
+                record["stale"] = stale
             rc = 0
         record["seconds"] = round(self.now() - started, 2)
         write_json_atomic(self.state_path, state)

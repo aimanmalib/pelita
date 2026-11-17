@@ -152,6 +152,73 @@ class FailureTest(IndexerCase):
         self.assertEqual(json.loads((self.root / "state" / "indexer.json").read_text())["failures"], 0)
 
 
+class BlockscoutLimitTest(IndexerCase):
+    """Blockscout's public API answered 429 to a call every 2 minutes (17 Nov); the indexer must not depend on it."""
+
+    BEFORE_LAST_EVENT = 59709000  # between the recorded Base Sepolia events at 59704821 and 59711222
+
+    def blockscout_calls(self):
+        return [r for r in self.net.requests if r["url"].startswith(BASE["blockscout_api"])]
+
+    def set_base_cursor(self, cursor):
+        self.net.latest["base-sepolia"] = cursor + BASE["index_lag_blocks"]
+
+    def test_steps_after_backfill_use_rpc_and_match_one_census(self):
+        self.set_base_cursor(self.BEFORE_LAST_EVENT)
+        self.assertEqual(self.make().run(), 0)
+        self.net.blockscout_status = 429
+        used = len(self.blockscout_calls())
+        for _ in range(10):
+            self.clock.t += 120
+            self.net.latest["base-sepolia"] += 600
+            self.assertEqual(self.make().run(), 0)
+        self.assertEqual(len(self.blockscout_calls()), used, "2-minute steps never call Blockscout")
+        view = self.snapshot()["census"]["base-sepolia"]
+        self.assertNotIn("stale", view)
+        self.assertEqual(view["to_block"], self.BEFORE_LAST_EVENT + 6000)
+        cfg = pelitarpc.load_config("pelita.json")
+        client = pelitarpc.Client(CHAINS["user_agent"], opener=fakechain.FakeNet().opener)
+        direct = census.run(CHAINS, cfg, client, ["base-sepolia"], view["from_block"], view["to_block"])
+        self.assertEqual(view, direct["chains"]["base-sepolia"])
+        self.assertGreater(view["outages"], 0)
+        runs = [json.loads(x) for x in (self.root / "state" / "larian.jsonl").read_text().splitlines()]
+        self.assertTrue(all(r["ok"] and "stale" not in r for r in runs))
+
+    def test_429_marks_only_that_census_stale_and_waits_before_retrying(self):
+        self.net.blockscout_status = 429
+        self.assertEqual(self.make().run(), 0, "a 429 does not fail the run")
+        snap = self.snapshot()
+        self.assertTrue(snap["census"]["base-sepolia"]["stale"])
+        self.assertIn("429", snap["census"]["base-sepolia"]["error"])
+        self.assertNotIn("stale", snap["census"]["lasna"])
+        self.assertGreater(snap["census"]["lasna"]["outages"], 0)
+        last = json.loads((self.root / "state" / "larian.jsonl").read_text().splitlines()[-1])
+        self.assertEqual((last["ok"], last["stale"]), (True, ["base-sepolia"]))
+        tried = len(self.blockscout_calls())
+        self.clock.t += 120
+        self.make().run()
+        self.assertEqual(len(self.blockscout_calls()), tried, "no Blockscout call inside the retry wait")
+        self.net.blockscout_status = 200
+        self.clock.t += pelitarpc.load_config("pelita.json")["indexer"]["blockscout_retry_seconds"]
+        self.make().run()
+        view = self.snapshot()["census"]["base-sepolia"]
+        self.assertNotIn("stale", view)
+        self.assertGreater(view["outages"], 0)
+
+    def test_stale_census_keeps_last_good_numbers(self):
+        self.set_base_cursor(self.BEFORE_LAST_EVENT)
+        self.make().run()
+        good = self.snapshot()["census"]["base-sepolia"]
+        self.net.blockscout_status = 429
+        self.clock.t += 120
+        self.net.latest["base-sepolia"] += 20000  # too far for the RPC windows: needs Blockscout
+        self.assertEqual(self.make().run(), 0)
+        view = self.snapshot()["census"]["base-sepolia"]
+        self.assertTrue(view.pop("stale"))
+        view.pop("stale_since"), view.pop("error")
+        self.assertEqual(view, good)
+
+
 class FleetTest(IndexerCase):
     def test_fleet_status_and_alert_kinds(self):
         self.deploy()
