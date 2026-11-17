@@ -43,6 +43,20 @@ class StampTest(unittest.TestCase):
             self.assertTrue(all(s.endswith(f"?v={V}") for s in specs), (js.name, specs))
         self.assertGreater(len(list((self.ctx / "web" / "js").glob("*.js"))), 1)
 
+    def test_preview_tags_get_the_absolute_site_url_from_site_env(self):
+        self.assertEqual(stamp.main(["stamp", str(self.ctx), V]), 0)
+        html = (self.ctx / "web" / "index.html").read_text(encoding="utf-8")
+        origin = stamp.site_origin((ROOT / "deploy" / "site.env").read_text(encoding="utf-8"))
+        self.assertRegex(origin, r"^https://[a-z0-9.-]+$")
+        self.assertIn(f'property="og:image" content="{origin}/brand/og-card.png?v={V}"', html)
+        self.assertIn(f'property="og:url" content="{origin}/"', html)
+        self.assertNotIn("@SITE@", html)
+        self.assertNotIn("@V@", html)
+
+    def test_site_env_without_domain_stops_the_deploy(self):
+        with self.assertRaises(ValueError):
+            stamp.site_origin("CONTAINER=pelita-web\n")
+
     def test_an_import_form_it_cannot_version_stops_the_deploy(self):
         js = self.ctx / "web" / "js" / "app.js"
         js.write_text(js.read_text(encoding="utf-8") + '\nconst x = "./later.js";\n', encoding="utf-8")

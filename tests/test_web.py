@@ -2,6 +2,7 @@
 
 import json
 import re
+import struct
 import unittest
 from pathlib import Path
 
@@ -104,6 +105,31 @@ class NoThirdParty(unittest.TestCase):
         for size in (64, 512):
             self.assertTrue((ROOT / "brand" / f"logo-{size}.png").is_file())
         self.assertTrue((WEB / "fonts" / "LICENSES.md").is_file())
+
+
+class LinkPreview(unittest.TestCase):
+    """PRD 4.7: a preview card under 300 KB, and robots that let preview crawlers read the page."""
+
+    def test_card_is_a_small_png_of_the_size_the_page_declares(self):
+        card = ROOT / "brand" / "og-card.png"
+        data = card.read_bytes()
+        self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
+        width, height = struct.unpack(">II", data[16:24])
+        html = read(WEB / "index.html")
+        self.assertIn(f'og:image:width" content="{width}"', html)
+        self.assertIn(f'og:image:height" content="{height}"', html)
+        self.assertLess(len(data), 300_000)
+
+    def test_page_carries_the_preview_tags(self):
+        html = read(WEB / "index.html")
+        for tag in ('property="og:image"', 'property="og:url"', 'property="og:title"', 'name="twitter:card"', 'rel="canonical"'):
+            self.assertIn(tag, html)
+        self.assertRegex(html, r'property="og:image" content="@SITE@/brand/og-card\.png')
+
+    def test_robots_turns_no_crawler_away(self):
+        robots = read(WEB / "robots.txt")
+        self.assertRegex(robots, r"(?m)^User-agent: \*$")
+        self.assertNotRegex(robots, r"(?m)^Disallow:\s*/")
 
 
 class SnapshotShape(unittest.TestCase):

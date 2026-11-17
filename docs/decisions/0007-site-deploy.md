@@ -40,6 +40,13 @@ phone sees it through Cloudflare (HTML `no-transform`, nothing injected, compres
 - **Public checks** (`scripts/check-public.sh`): Safari UA; page 200, `text/html`, compressed, `no-transform`, CSP; only our
   own script tag and no analytics text; every linked asset versioned, 200 and the right type; config and snapshot answer.
 
+- **Link preview** (PRD 4.7, added 17 Nov): `brand/og-card.png` (1200x630, under 300 KB) is rendered by `scripts/og-card.py` from
+  the hero text in `web/lang/en.json`, the colour tokens in `web/css/site.css`, the glyph in `brand/logo.svg` and `DOMAIN` in
+  `deploy/site.env`; change those and run it again. Previews need absolute URLs, so `index.html` carries `@SITE@` (and `@V@` on
+  the card) and `deploy/stamp.py` fills them from `deploy/site.env`; a missing `DOMAIN` stops the deploy. `web/robots.txt` turns
+  no crawler away (a `Disallow: /` would also stop the WhatsApp and Facebook previews). Tests: `tests/test_web.py` (card size and
+  declared dimensions, tags, robots) and `tests/test_deploy_site.py` (filled URLs).
+
 ## Consequences
 
 - Rollback: `deploy/deploy.sh --rollback` runs the image kept by the stopped `pelita-web-undur` container; running it twice

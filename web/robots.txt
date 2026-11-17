@@ -1,0 +1,4 @@
+# Pelita site: everything here is public. Link previews (WhatsApp, Facebook, Telegram, X, LinkedIn, Slack, Discord)
+# read the og: tags in index.html, so no crawler is turned away.
+User-agent: *
+Allow: /

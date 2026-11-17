@@ -5,6 +5,8 @@
    ES modules carries the same ?v=. All of them, or none: a module loaded under two URLs runs twice (two copies of
    the language state). Cloudflare keeps .css/.js for hours whatever the origin says, so a new URL is the only
    reliable way to ship a change.
+   @SITE@ in index.html (canonical, og:url, og:image: link previews need absolute URLs) becomes https://<DOMAIN>
+   from deploy/site.env, and @V@ the version (the preview card is cached by URL like the rest).
 2. Render deploy/nginx.conf + deploy/nginx.headers into deploy/rendered/, with the Content-Security-Policy
    connect-src taken from the RPCs of the active chains in config/chains.json (the fuel gauge calls the RPC
    from the browser).
@@ -41,6 +43,20 @@ def unversioned(text, version):
     return [m[2] for m in ANY_RELATIVE_JS.finditer(text) if not m[2].endswith(f"?v={version}")]
 
 
+def site_origin(site_env):
+    m = re.search(r"^DOMAIN=([a-z0-9.-]+)$", site_env, re.M)
+    if not m:
+        raise ValueError("DOMAIN missing from deploy/site.env")
+    return f"https://{m[1]}"
+
+
+def fill_site(html, origin, version):
+    out = html.replace("@SITE@", origin).replace("@V@", version)
+    if re.search(r"@(SITE|V)@", out):
+        raise ValueError("unfilled @SITE@ or @V@")
+    return out
+
+
 def connect_origins(chains):
     origins = []
     for chain in chains["chains"].values():
@@ -70,7 +86,8 @@ def main(argv):
     ctx, version = Path(argv[1]), argv[2]
     web = ctx / "web"
     index = web / "index.html"
-    index.write_text(stamp_page(index.read_text(encoding="utf-8"), version), encoding="utf-8")
+    origin = site_origin((ctx / "deploy" / "site.env").read_text(encoding="utf-8"))
+    index.write_text(fill_site(stamp_page(index.read_text(encoding="utf-8"), version), origin, version), encoding="utf-8")
     missing = []
     for js in sorted((web / "js").glob("*.js")):
         text = stamp_module(js.read_text(encoding="utf-8"), version)
