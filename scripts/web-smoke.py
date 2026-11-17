@@ -4,7 +4,8 @@
 Serves the site the way deploy/ will: web/ at /, config/chains.json at /config/, brand/ at /brand/, and a snapshot at
 /data/snapshot.json (default: tests/fixtures/snapshot-sample.json with its times shifted to now). The Lasna RPC is
 answered by a stub so the fuel gauge is tested without the network. Checks: no console errors, no failed requests,
-no horizontal overflow, language toggle swaps every text, gauge validates and reads. Screenshots go to
+no horizontal overflow, gauge validates and reads, language toggle swaps every text (the gauge reading too),
+dark table shows debt. Screenshots go to
 $AUTOPILOT_BUKTI_DIR (or out/web-smoke/).
 
 Host tool (Playwright), not part of the offline gate:
@@ -16,6 +17,7 @@ import http.server
 import json
 import os
 import pathlib
+import re
 import sys
 import threading
 import time
@@ -70,24 +72,26 @@ def rpc_stub(route):
     route.fulfill(status=200, content_type="application/json", headers={"access-control-allow-origin": "*"}, body=json.dumps(out))
 
 
+LANG = {n: json.loads((ROOT / "web" / "lang" / f"{n}.json").read_text(encoding="utf-8")) for n in ("en", "ms")}
+GAUGE_KEYS = [k for k in LANG["en"] if k.startswith("gauge.") or k in ("fleet.dark", "fleet.lit")]
+
+
+def overflow(page, when, problems):
+    over = page.evaluate("() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]")
+    if over[0] > over[1]:
+        problems.append(f"horizontal overflow {when} {over}")
+
+
 def check(page, label, shots, errors):
     problems = []
     page.wait_for_selector("#cards .card, #cards .empty", timeout=15000)
     page.wait_for_timeout(400)
-    over = page.evaluate("() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]")
-    if over[0] > over[1]:
-        problems.append(f"horizontal overflow {over}")
-    en_h1 = page.text_content("h1")
-    page.click("#lang")
-    page.wait_for_function("h => document.querySelector('h1').textContent !== h", arg=en_h1, timeout=5000)
-    ms_h1 = page.text_content("h1")
-    leftover = page.evaluate("""() => [...document.querySelectorAll('[data-i18n]')]
-        .filter(e => /^[a-z]+\\.[A-Za-z0-9]+$/.test(e.textContent.trim())).map(e => e.dataset.i18n)""")
-    if leftover:
-        problems.append(f"untranslated keys {leftover}")
-    page.screenshot(path=str(shots / f"{label}-ms.png"), full_page=True)
-    page.click("#lang")
-    page.wait_for_function("h => document.querySelector('h1').textContent === h", arg=en_h1, timeout=5000)
+    overflow(page, "on load", problems)
+    if not page.text_content("#darktable th:last-child").strip() == LANG["en"]["dark.colDebt"]:
+        problems.append("dark table has no debt column")
+    if "lREACT" not in (page.text_content("#darktable tbody") or ""):
+        problems.append("dark table rows show no debt")
+    # read the gauge FIRST, then switch language: the reading must be drawn again in the new language
     page.fill("#gauge-addr", "0x123")
     page.click("#gauge-btn")
     if "0x" not in (page.text_content("#gauge-msg") or ""):
@@ -97,10 +101,30 @@ def check(page, label, shots, errors):
     page.wait_for_selector("#gauge-out:not([hidden]) pre", timeout=8000)
     if "depositTo(address)" not in page.text_content("#gauge-out"):
         problems.append("gauge output lacks the depositTo command")
-    over = page.evaluate("() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]")
-    if over[0] > over[1]:
-        problems.append(f"horizontal overflow after gauge {over}")
+    overflow(page, "after gauge", problems)
     page.screenshot(path=str(shots / f"{label}-en.png"), full_page=True)
+    en_h1 = page.text_content("h1")
+    page.click("#lang")
+    page.wait_for_function("h => document.querySelector('h1').textContent !== h", arg=en_h1, timeout=5000)
+    ms_h1 = page.text_content("h1")
+    leftover = page.evaluate("""() => [...document.querySelectorAll('[data-i18n]')]
+        .filter(e => /^[a-z]+\\.[A-Za-z0-9]+$/.test(e.textContent.trim())).map(e => e.dataset.i18n)""")
+    if leftover:
+        problems.append(f"untranslated keys {leftover}")
+    gauge_ms = page.text_content("#gauge-out") or ""
+    stale = [
+        k
+        for k in GAUGE_KEYS
+        if LANG["en"][k] != LANG["ms"][k] and re.search(rf"\b{re.escape(LANG['en'][k])}\b", gauge_ms)
+    ]
+    if stale:
+        problems.append(f"gauge reading still in English after switching: {stale}")
+    if LANG["ms"]["dark.colDebt"] != page.text_content("#darktable th:last-child").strip():
+        problems.append("dark table debt column not translated")
+    overflow(page, "in BM", problems)
+    page.screenshot(path=str(shots / f"{label}-ms.png"), full_page=True)
+    page.click("#lang")
+    page.wait_for_function("h => document.querySelector('h1').textContent === h", arg=en_h1, timeout=5000)
     page.evaluate("window.scrollTo({top: 0, behavior: 'instant'})")
     page.wait_for_timeout(200)
     page.screenshot(path=str(shots / f"{label}-top.png"))

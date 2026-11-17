@@ -21,6 +21,14 @@ async function rpcBatch(url, calls) {
   });
 }
 
+// The last reading and message stay in ctx so a language switch can draw them again (renderGauge).
+export function renderGauge(ctx) {
+  const g = ctx.gauge;
+  if (!g) return;
+  document.getElementById("gauge-msg").textContent = g.msg ? t(g.msg) : "";
+  if (g.reading) render(document.getElementById("gauge-out"), g.reading);
+}
+
 export function initGauge(ctx) {
   const form = document.getElementById("gauge-form");
   const input = document.getElementById("gauge-addr");
@@ -31,9 +39,11 @@ export function initGauge(ctx) {
   form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
     const addr = input.value.trim();
+    ctx.gauge = { msg: null, reading: ctx.gauge?.reading || null };
     msg.textContent = "";
     if (!ADDRESS.test(addr)) {
       input.setAttribute("aria-invalid", "true");
+      ctx.gauge.msg = "gauge.invalid";
       msg.textContent = t("gauge.invalid");
       input.focus();
       return;
@@ -49,8 +59,10 @@ export function initGauge(ctx) {
         ["eth_call", [{ to: chain.biller, data: sel["reserves(address)"] + word(addr) }, "latest"]],
         ["eth_getBalance", [addr, "latest"]],
       ]);
-      render(out, { addr, chain, debt, reserves, balance, fee: ctx.site.median_fee_wei, fill: ctx.site.gauge_fill_wei });
+      ctx.gauge.reading = { addr, chain, debt, reserves, balance, fee: ctx.site.median_fee_wei, fill: ctx.site.gauge_fill_wei };
+      render(out, ctx.gauge.reading);
     } catch (_) {
+      ctx.gauge = { msg: "gauge.error", reading: null };
       msg.textContent = t("gauge.error");
       out.hidden = true;
     } finally {

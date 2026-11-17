@@ -113,7 +113,7 @@ main { padding: 0 var(--gutter); }
 .stat dd { margin: 0.35rem 0 0; font-family: var(--serif); font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.3rem); line-height: 1.05; font-variant-numeric: tabular-nums; }
 .stat-lit dd { color: var(--amber); }
 .stat-dark dd { color: var(--muted); }
-.stat dd .unit { font-family: var(--sans); font-size: 0.5em; color: var(--muted); letter-spacing: 0.02em; }
+.stat dd .unit, .agg dd .unit { font-family: var(--sans); font-size: 0.5em; color: var(--muted); letter-spacing: 0.02em; }
 @media (max-width: 760px) {
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stat:last-child { grid-column: 1 / -1; }

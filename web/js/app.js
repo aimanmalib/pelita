@@ -2,10 +2,10 @@
 import { lamp, fillLamps } from "./lamp.js";
 import { t, load, saved, lang } from "./i18n.js";
 import { duration, ago, count, amount, short, clock } from "./format.js";
-import { initGauge } from "./gauge.js";
+import { initGauge, renderGauge } from "./gauge.js";
 import { renderFleet, fleetTotals } from "./fleet.js";
 
-const ctx = { site: null, chains: null, snap: null, darkOpen: false };
+const ctx = { site: null, chains: null, snap: null, darkOpen: false, gauge: null };
 const $ = (id) => document.getElementById(id);
 const now = () => Date.now() / 1000;
 
@@ -64,10 +64,18 @@ function renderDark() {
   const tiles = [["dark.outages", count(c.outages)], ["dark.still", count(c.still_dark)]];
   if (c.dark_age_seconds?.count) tiles.push(["dark.medianAge", duration(c.dark_age_seconds.median)]);
   if (c.recovery_seconds?.count) tiles.push(["dark.medianRecover", duration(c.recovery_seconds.median)]);
+  const sym = ctx.chains.chains.lasna.native_symbol;
+  if (c.debt_wei?.count) tiles.push(["dark.medianDebt", amount(c.debt_wei.median, sym)]);
   for (const [k, v] of tiles) {
     const d = document.createElement("div");
     d.innerHTML = `<dd></dd><dt></dt>`;
-    d.querySelector("dd").textContent = v; d.querySelector("dt").textContent = t(k);
+    const dd = d.querySelector("dd");
+    if (k === "dark.medianDebt") {
+      const [num, unit] = v.split(" ");
+      dd.innerHTML = '<span></span> <span class="unit"></span>';
+      dd.children[0].textContent = num; dd.children[1].textContent = unit;
+    } else dd.textContent = v;
+    d.querySelector("dt").textContent = t(k);
     agg.append(d);
   }
   const lamps = Math.min(c.dark.length, ctx.site.dark_grid_max);
@@ -77,7 +85,7 @@ function renderDark() {
   const head = document.createElement("thead");
   head.innerHTML = `<tr><th scope="col"></th><th scope="col" class="num"></th><th scope="col" class="num"></th></tr>`;
   const ths = head.querySelectorAll("th");
-  ths[0].textContent = t("dark.colAddress"); ths[1].textContent = t("dark.colFor"); ths[2].textContent = t("dark.colTimes");
+  ths[0].textContent = t("dark.colAddress"); ths[1].textContent = t("dark.colFor"); ths[2].textContent = t("dark.colDebt");
   const body = document.createElement("tbody");
   for (const r of rows) {
     const tr = document.createElement("tr");
@@ -85,7 +93,7 @@ function renderDark() {
     a.href = `${explorer}/address/${r.address}`; a.textContent = short(r.address); a.title = r.address; a.rel = "noopener";
     const td0 = document.createElement("td"); td0.append(a);
     const td1 = document.createElement("td"); td1.className = "num"; td1.textContent = duration(r.dark_seconds);
-    const td2 = document.createElement("td"); td2.className = "num"; td2.textContent = count(r.outages);
+    const td2 = document.createElement("td"); td2.className = "num"; td2.textContent = r.debt_wei ? amount(r.debt_wei, sym) : "–";
     tr.append(td0, td1, td2); body.append(tr);
   }
   table.append(head, body);
@@ -112,6 +120,7 @@ function renderAll() {
   renderTry();
   renderDark();
   renderLinks();
+  renderGauge(ctx);
 }
 
 async function poll() {
