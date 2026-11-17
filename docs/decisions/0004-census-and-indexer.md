@@ -54,6 +54,14 @@ PRD 4.5 and 4.6 ask for a key-less census of contracts that went dark (`scripts/
   The snapshot is written with `os.replace` in `state/public/`, which the site container mounts read-only as a folder,
   so the page never reads a half-written file.
 
+## Measured (17 Nov, after the 429 fix)
+
+- Ten cron runs in a row, 04:50–05:08 UTC (`state/larian.jsonl` ts 1794891004–1794892083): all `ok`, none `stale`,
+  5.5–8.6 s each. Before the fix, the four runs from 04:38 to 04:44 UTC failed with `HTTP Error 429`.
+- Public snapshot `https://pelita.sasateguh.com/data/snapshot.json`, read twice right after: HTTP 200, age 15 s and 16 s.
+- Base Sepolia RPC `eth_getLogs` on the callback proxy over 201 blocks answered for ranges ending 500, 3,000 and
+  20,000 blocks behind the tip; Blockscout still answered 429 from this host at the same time.
+
 ## Rollback
 
 The census and indexer are read-only. Removing the `PELITA-INDEKS` cron line stops the indexer; the page then shows the
