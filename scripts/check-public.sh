@@ -30,6 +30,8 @@ grep -qiE 'cloudflareinsights|beacon\.min\.js|googletagmanager|google-analytics|
   && bad "analytics text injected into the page" || pass "no analytics injected"
 
 assets=$(grep -oE '(src|href)="[^":#]+"' "$tmp/page.b" | sed -E 's/^(src|href)="//; s/"$//' | sort -u)
+unv=$(printf '%s\n' $assets | grep -E '^(css|js|fonts|brand)/' | grep -v '?v=' || true)
+[ -z "$unv" ] && pass "every linked asset carries ?v=" || bad "asset(s) without ?v= (a CDN would keep old copies): $unv"
 n=0; for a in $assets config/chains.json; do
   c=$(get "$a" asset); n=$((n + 1)); [ "$c" = 200 ] || bad "GET /$a = $c"
   case "$a" in  # a module script or stylesheet with the wrong type is refused by the browser

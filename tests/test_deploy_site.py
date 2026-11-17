@@ -31,6 +31,11 @@ class StampTest(unittest.TestCase):
         html = (self.ctx / "web" / "index.html").read_text(encoding="utf-8")
         self.assertIn(f'src="js/app.js?v={V}"', html)
         self.assertIn(f'href="css/site.css?v={V}"', html)
+        # fonts and the icon too: the CDN kept them with a wrong Content-Type under the old URL (17 Nov)
+        self.assertNotRegex(html, r'(src|href)="(fonts|brand)/[^"?]+"')
+        css = (self.ctx / "web" / "css" / "site.css").read_text(encoding="utf-8")
+        urls = re.findall(r"url\(\s*[\"']?(\.\./[^\"')]+)", css)
+        self.assertTrue(urls and all(u.endswith(f"?v={V}") for u in urls), urls)
         for js in (self.ctx / "web" / "js").glob("*.js"):
             text = js.read_text(encoding="utf-8")
             specs = re.findall(r'["\'](\.{1,2}/[^"\']+\.js[^"\']*)["\']', text)

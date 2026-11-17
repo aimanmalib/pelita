@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Prepare a clean build context for the site image (called by deploy/deploy.sh).
 
-1. Version the assets: web/index.html loads css/ and js/ with ?v=<version>, and every relative import between the
+1. Version the assets: web/index.html loads css/, js/, fonts/ and brand/ with ?v=<version> (CSS url() too), and every relative import between the
    ES modules carries the same ?v=. All of them, or none: a module loaded under two URLs runs twice (two copies of
    the language state). Cloudflare keeps .css/.js for hours whatever the origin says, so a new URL is the only
    reliable way to ship a change.
@@ -18,7 +18,8 @@ import sys
 from pathlib import Path
 from urllib.parse import urlsplit
 
-PAGE_ASSET = re.compile(r'((?:src|href)=")((?:css|js)/[^"?#]+\.(?:css|js))(")')
+PAGE_ASSET = re.compile(r'((?:src|href)=")((?:css|js|fonts|brand)/[^"?#]+\.(?:css|js|woff2|png|svg))(")')
+CSS_URL = re.compile(r'(url\(\s*)(["\']?)(\.\./[^"\')?#]+)\2(\s*\))')
 MODULE_SPEC = re.compile(r'((?:\bfrom|\bimport)\s*\(?\s*)(["\'])(\.{1,2}/[^"\'?#]+\.js)\2')
 ANY_RELATIVE_JS = re.compile(r'(["\'])(\.{1,2}/[^"\']+\.js[^"\']*)\1')
 
@@ -29,6 +30,10 @@ def stamp_page(html, version):
 
 def stamp_module(source, version):
     return MODULE_SPEC.sub(lambda m: f"{m[1]}{m[2]}{m[3]}?v={version}{m[2]}", source)
+
+
+def stamp_css(source, version):
+    return CSS_URL.sub(lambda m: f"{m[1]}{m[2]}{m[3]}?v={version}{m[2]}{m[4]}", source)
 
 
 def unversioned(text, version):
@@ -71,6 +76,11 @@ def main(argv):
         text = stamp_module(js.read_text(encoding="utf-8"), version)
         js.write_text(text, encoding="utf-8")
         missing += [f"{js.name}: {s}" for s in unversioned(text, version)]
+    for css in sorted((web / "css").glob("*.css")):
+        text = stamp_css(css.read_text(encoding="utf-8"), version)
+        css.write_text(text, encoding="utf-8")
+        if CSS_URL.search(text):
+            missing.append(f"{css.name}: url() without ?v=")
     if PAGE_ASSET.search(index.read_text(encoding="utf-8")):
         missing.append("index.html: an asset without ?v=")
     if missing:
