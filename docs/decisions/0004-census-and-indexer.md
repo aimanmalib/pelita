@@ -33,6 +33,18 @@ PRD 4.5 and 4.6 ask for a key-less census of contracts that went dark (`scripts/
 - **Failures.** Any RPC or HTTP error ends the run with exit code 1, a failed line in `state/larian.jsonl`, and the
   previous snapshot left in place. No retry loop. The fifth failure in a row sends one warning.
 
+- **Fields the page reads** (added with the schedule, 17 Nov): every fleet event carries `ts`, the block timestamp,
+  read in one batch with the census block-time cache. `demo` holds the public Beacon (`chain`, `beacon`,
+  `last_beat_ts`, `cooldown_seconds`) for "Try it yourself"; `last_beat_ts` and `cooldown_seconds` are read from the
+  contract (`lastPublicBeat()`, `cooldown()`), not from config, because the owner can change the limits on chain.
+  `demo` is `null` until a deployment file names a `beacon`.
+- **Schedule.** User crontab, every 2 minutes:
+  `jalan-jadual.sh PELITA-INDEKS -- /usr/bin/flock -n -E 66 state/indexer.lock /usr/bin/python3 ops/indexer.py`
+  (absolute paths, output to `state/indexer.log`). Standard library only, so the system `python3` works under cron's
+  `PATH=/usr/bin:/bin`. A run takes about 8 s with no fleet; `flock -n` skips a run while the last one is still going.
+  The snapshot is written with `os.replace` in `state/public/`, which the site container mounts read-only as a folder,
+  so the page never reads a half-written file.
+
 ## Rollback
 
 The census and indexer are read-only. Removing the `PELITA-INDEKS` cron line stops the indexer; the page then shows the

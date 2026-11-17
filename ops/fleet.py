@@ -92,6 +92,28 @@ def read_events(client, chain, dep, events_cfg, first, last):
     return decode_events(logs, topic_names, events_cfg["reasons"], chain.get("name", ""))
 
 
+def read_demo(client, chain_name, chain, selectors, dep):
+    """The public Beacon for "Try it yourself": address, last public beat and cooldown, read from the chain.
+
+    None when this chain has no Beacon. The cooldown is read from the contract, not from config, because the
+    owner can change it on chain with `setLimits`.
+    """
+    beacon = dep.get("beacon")
+    if not beacon:
+        return None
+    calls = [("eth_call", [{"to": beacon, "data": selectors[sig]}, "latest"]) for sig in ("lastPublicBeat()", "cooldown()")]
+    last, cooldown = (int(r, 16) for r in client.batch(chain["rpc"], calls))
+    return {"chain": chain_name, "beacon": beacon.lower(), "last_beat_ts": last, "cooldown_seconds": cooldown}
+
+
+def add_times(events, reader):
+    """Adds `ts` (block timestamp) to each event; the page shows "last relight ... ago" from it."""
+    reader.prefetch_times([e["block"] for e in events])
+    for e in events:
+        e["ts"] = reader.block_time(e["block"])
+    return events
+
+
 def last_reason(events, target):
     for e in reversed(events):
         if e.get("target") == target and e["event"] in ("GaveUp", "Skipped"):

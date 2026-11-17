@@ -13,7 +13,9 @@
     "depositTo(address)": "0xb760faf9",
     "coverDebt()": "0x7a90b990",
     "pay(uint256)": "0xc290d691",
-    "trigger": "0xcebbda8d"
+    "trigger": "0xcebbda8d",
+    "lastPublicBeat()": "0xbdece46b",
+    "cooldown()": "0x787a08a6"
   },
   "s1_observed_pairs": [
     {

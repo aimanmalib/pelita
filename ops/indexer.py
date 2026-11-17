@@ -81,12 +81,13 @@ class Indexer:
         return census.census_result(reader.chain, cs["from_block"], cs["cursor"], as_of, cs["events"], debts)
 
     # ---- fleet --------------------------------------------------------------------------------
-    def update_fleet(self, state, name, chain, dep, latest):
+    def update_fleet(self, state, name, chain, dep, reader, latest):
         fs = state["fleet"]
         own, wards = fleet.read_status(self.client, chain, self.chains["selectors"], dep)
         cursor = fs["cursors"].get(name, int(dep.get("deploy_block", latest)) - 1)
         if latest > cursor:
-            fs["events"].extend(fleet.read_events(self.client, chain, dep, self.events_cfg, cursor + 1, latest))
+            new = fleet.read_events(self.client, chain, dep, self.events_cfg, cursor + 1, latest)
+            fs["events"].extend(fleet.add_times(new, reader))
             fs["events"] = fs["events"][-KEEP_EVENTS:]
             fs["cursors"][name] = latest
         now = int(self.now())
@@ -147,14 +148,16 @@ class Indexer:
     def collect(self, state):
         names = census.active_chains(self.chains)
         deployments = fleet.load_deployments(self.root, names)
-        snap = {"census": {}, "fleet": {}, "events": [], "filters": None}
+        snap = {"census": {}, "fleet": {}, "events": [], "filters": None, "demo": None}
         for name in names:
             chain = self.chains["chains"][name]
             reader = census.ChainReader(self.client, chain, self.chains["topics"])
             latest = reader.latest_block()
             snap["census"][name] = self.update_census(state, name, reader, latest)
             if name in deployments:
-                snap["fleet"][name] = self.update_fleet(state, name, chain, deployments[name], latest)
+                snap["fleet"][name] = self.update_fleet(state, name, chain, deployments[name], reader, latest)
+                demo = fleet.read_demo(self.client, name, chain, self.chains["selectors"], deployments[name])
+                snap["demo"] = snap["demo"] or demo
         interval = self.cfg["indexer"]["filters_interval_seconds"]
         reactive = next((n for n in names if self.chains["chains"][n].get("reactive")), None)
         if reactive and self.now() - state["filters"]["checked_at"] >= interval:

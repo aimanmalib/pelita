@@ -205,6 +205,27 @@ class FleetTest(IndexerCase):
         self.assertEqual(events[0]["event"], "GaveUp")
         self.assertEqual(events[0]["reason"], EVENTS["reasons"]["GaveUp"]["3"])
         self.assertIn("GaveUp", fleet.last_reason(events, GUARDED))
+        self.assertEqual(events[0]["ts"], self.net.block_ts("lasna", self.net.latest["lasna"] - 2))
+
+    def test_demo_reads_beacon_state_from_chain(self):
+        self.make().run()
+        self.assertIsNone(self.snapshot()["demo"], "no Beacon deployed yet: the page shows its pending text")
+        self.deploy()
+        beacon = "0x" + "5A" * 20
+        dep = json.loads((self.root / "deployments" / "base-sepolia.json").read_text())
+        dep["beacon"] = beacon
+        (self.root / "deployments" / "base-sepolia.json").write_text(json.dumps(dep))
+        sel = CHAINS["selectors"]
+        self.net.eth_calls[(BASE["rpc"], beacon.lower(), sel["lastPublicBeat()"])] = hex(1_795_000_000)
+        self.net.eth_calls[(BASE["rpc"], beacon.lower(), sel["cooldown()"])] = hex(900)
+        self.clock.t += 120
+        self.make().run()
+        demo = self.snapshot()["demo"]
+        self.assertEqual(
+            demo,
+            {"chain": "base-sepolia", "beacon": beacon.lower(), "last_beat_ts": 1_795_000_000, "cooldown_seconds": 900},
+        )
+        self.assertIn(demo["chain"], CHAINS["chains"])
 
 
 class FiltersTest(unittest.TestCase):
@@ -215,6 +236,14 @@ class FiltersTest(unittest.TestCase):
         self.assertGreater(s["omni_contracts"], 0)
         self.assertLessEqual(s["omni_contracts_all_inactive"], s["omni_contracts"])
         self.assertLessEqual(s["status_topic_subscribers_active"], s["status_topic_subscribers"])
+
+
+class BeaconSelectorsTest(unittest.TestCase):
+    def test_beacon_getters_read_by_the_indexer_exist_in_source(self):
+        src = (ROOT / "src" / "demo" / "Beacon.sol").read_text()
+        for sig in ("lastPublicBeat()", "cooldown()"):
+            self.assertIn(sig, CHAINS["selectors"])
+            self.assertRegex(src, rf"uint256 public {sig[:-2]};")
 
 
 class EventsConfigTest(unittest.TestCase):
