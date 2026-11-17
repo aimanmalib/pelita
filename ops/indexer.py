@@ -77,7 +77,8 @@ class Indexer:
             cs["cursor"] = latest
         state["census"][name] = cs
         as_of = reader.block_time(cs["cursor"])
-        return census.census_result(reader.chain, cs["from_block"], cs["cursor"], as_of, cs["events"])
+        debts = census.debt_reader(reader, cs["cursor"], self.chains["selectors"])
+        return census.census_result(reader.chain, cs["from_block"], cs["cursor"], as_of, cs["events"], debts)
 
     # ---- fleet --------------------------------------------------------------------------------
     def update_fleet(self, state, name, chain, dep, latest):

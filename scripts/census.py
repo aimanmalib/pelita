@@ -82,6 +82,24 @@ class ChainReader:
             self._ts[number] = _int(block["timestamp"])
         return self._ts[number]
 
+    def debts(self, addresses, block, selector, chunk=50):
+        """biller.debt(address) for each address at `block`, in JSON-RPC batches. {} when the node cannot answer
+        (pruned state, no biller method): the census still publishes, the page shows a dash."""
+        out = {}
+        todo = sorted(set(addresses))
+        try:
+            for i in range(0, len(todo), chunk):
+                part = todo[i : i + chunk]
+                calls = [
+                    ("eth_call", [{"to": self.chain["biller"], "data": selector + a[2:].rjust(64, "0")}, hex(block)])
+                    for a in part
+                ]
+                for a, word in zip(part, self.client.batch(self.chain["rpc"], calls)):
+                    out[a] = _int(word if word not in ("0x", "", None) else "0x0")
+        except (pelitarpc.RpcError, ValueError):
+            return {}
+        return out
+
     def block_at(self, ts, latest):
         """First block whose timestamp is >= ts (binary search, about 25 reads).
 
@@ -232,8 +250,23 @@ def summarize(events, as_of_ts):
     }
 
 
-def census_result(chain, first, last, as_of, events):
-    """The published census for one chain; shared with ops/indexer.py so both print the same numbers."""
+def add_debts(summary, debts):
+    """Debt (wei, as a decimal string: JSON readers in the browser lose precision above 2^53) of every
+    still-dark address, plus the median. Leaves the summary unchanged when no debt was read."""
+    if not debts:
+        return summary
+    for row in summary["dark"]:
+        if row["address"] in debts:
+            row["debt_wei"] = str(debts[row["address"]])
+    q = _quantiles([debts[r["address"]] for r in summary["dark"] if r["address"] in debts])
+    summary["debt_wei"] = q and {k: (v if k == "count" else str(int(v))) for k, v in q.items()}
+    return summary
+
+
+def census_result(chain, first, last, as_of, events, read_debts=None):
+    """The published census for one chain; shared with ops/indexer.py so both print the same numbers.
+
+    `read_debts(addresses)` -> {address: wei}; called once with the still-dark addresses."""
     result = {
         "chain_id": chain["chain_id"],
         "source": "eth_getLogs" if chain.get("reactive") else "blockscout",
@@ -242,13 +275,21 @@ def census_result(chain, first, last, as_of, events):
         "to_block": last,
         "as_of_ts": as_of,
     }
-    result.update(summarize(events, as_of))
+    summary = summarize(events, as_of)
+    if read_debts and summary["dark"]:
+        add_debts(summary, read_debts([d["address"] for d in summary["dark"]]))
+    result.update(summary)
     return result
 
 
-def chain_census(reader, first, last):
+def debt_reader(reader, block, selectors):
+    return lambda addresses: reader.debts(addresses, block, selectors["debt(address)"])
+
+
+def chain_census(reader, first, last, selectors=None):
     events = reader.fetch(first, last)
-    return census_result(reader.chain, first, last, reader.block_time(last), events), events
+    debts = debt_reader(reader, last, selectors) if selectors else None
+    return census_result(reader.chain, first, last, reader.block_time(last), events, debts), events
 
 
 def since_ts(pelita_cfg):
@@ -262,7 +303,7 @@ def run(chains_cfg, pelita_cfg, client, names, from_block=None, to_block=None):
         reader = ChainReader(client, chains_cfg["chains"][name], chains_cfg["topics"])
         last = to_block if to_block is not None else reader.latest_block()
         first = from_block if from_block is not None else reader.block_at(since_ts(pelita_cfg), last)
-        out["chains"][name], _ = chain_census(reader, first, last)
+        out["chains"][name], _ = chain_census(reader, first, last, chains_cfg["selectors"])
     return out
 
 

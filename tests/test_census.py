@@ -1,6 +1,7 @@
 """Offline tests for scripts/census.py over recorded Lasna logs and Base Sepolia Blockscout replies."""
 
 import json
+import statistics
 import sys
 import unittest
 from pathlib import Path
@@ -105,6 +106,50 @@ class CensusOverRecordingTest(unittest.TestCase):
     def test_same_range_twice_gives_identical_output(self):
         args = (CHAINS, CFG, client(self.net), ["lasna"], self.fx["lasna"]["latest"] - 40000, self.fx["lasna"]["latest"])
         self.assertEqual(json.dumps(census.run(*args)), json.dumps(census.run(*args)))
+
+
+class DebtTest(unittest.TestCase):
+    """Each still-dark address carries the debt the biller reports at the last block read, plus the median."""
+
+    def setUp(self):
+        self.net = fakechain.FakeNet()
+        self.last = self.net.fx["lasna"]["latest"]
+        self.chain = CHAINS["chains"]["lasna"]
+
+    def run_lasna(self):
+        return census.run(CHAINS, CFG, client(self.net), ["lasna"], self.last - 40000, self.last)["chains"]["lasna"]
+
+    def test_debt_per_dark_address_and_median(self):
+        dark = [r["address"] for r in self.run_lasna()["dark"]]
+        self.assertGreater(len(dark), 2)
+        owed = {}
+        for i, addr in enumerate(dark):
+            owed[addr] = (i + 1) * 10**15
+            data = CHAINS["selectors"]["debt(address)"] + addr[2:].rjust(64, "0")
+            self.net.eth_calls[(self.chain["rpc"], self.chain["biller"].lower(), data)] = hex(owed[addr])
+        out = self.run_lasna()
+        for row in out["dark"]:
+            self.assertEqual(row["debt_wei"], str(owed[row["address"]]))
+        values = sorted(owed.values())
+        self.assertEqual(out["debt_wei"]["count"], len(values))
+        self.assertEqual(out["debt_wei"]["median"], str(int(statistics.median(values))))
+        self.assertEqual(out["debt_wei"]["max"], str(values[-1]))
+        block = {c["params"][1] for c in self.net.calls("eth_call")}
+        self.assertEqual(block, {hex(self.last)})
+
+    def test_unreadable_debt_leaves_census_without_debt_fields(self):
+        real = self.net._rpc
+
+        def broken(name, url, item):
+            if item["method"] == "eth_call":
+                return {"jsonrpc": "2.0", "id": item["id"], "error": {"message": "missing trie node"}}
+            return real(name, url, item)
+
+        self.net._rpc = broken
+        out = self.run_lasna()
+        self.assertGreater(out["still_dark"], 0)
+        self.assertNotIn("debt_wei", out)
+        self.assertFalse(any("debt_wei" in r for r in out["dark"]))
 
 
 class PrunedHistoryTest(unittest.TestCase):
