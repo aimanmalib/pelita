@@ -1,5 +1,6 @@
 """Offline unit tests for the chain-script helpers (no anvil, no network)."""
 
+import json
 import sys
 import tempfile
 import unittest
@@ -82,6 +83,87 @@ class VerifyTest(unittest.TestCase):
             self.assertEqual(F2.calls[-1][2], 5318007)
             # Base Sepolia has no verifier configured here: nothing was attempted for it.
             self.assertTrue(all(c[0] == "0xK" for c in F2.calls))
+
+
+class VerifyOnlyTest(unittest.TestCase):
+    """--verify-only reads chain ids and verifies; it never creates, sends or transfers."""
+
+    def test_sends_nothing_and_records_the_source_link(self):
+        class F:
+            verified = []
+
+            def chain_id(self, rpc):
+                return {"r": 5318007, "d": 84532}[rpc]
+
+            def verify(self, address, *a):
+                F.verified.append(address)
+
+            def __getattr__(self, name):  # create/send/balance would mean a transaction path ran
+                raise AssertionError(f"verify-only called {name}")
+
+        chains = {"chains": {
+            "lasna": {"aktif": True, "reactive": True, "chain_id": 5318007, "rpc": "r", "biller": "0x8"},
+            "base-sepolia": {"aktif": True, "reactive": False, "chain_id": 84532, "rpc": "d", "biller": "0x4"},
+        }}
+        cfg = {"deploy": {"verifiers": {
+            "lasna": {"verifier": "sourcify", "link": "https://v.example/{chain_id}/{address}"},
+            "base-sepolia": {"verifier": "blockscout"},
+        }}}
+        with tempfile.TemporaryDirectory() as out:
+            d = deployer.Deployer(F(), chains, cfg, {"lasna": "r", "base-sepolia": "d"}, out, log=lambda *_: None)
+            d.r.contracts["keeper"] = {"address": "0xK", "kind": "keeper", "args": ["1", "2"], "block": 7,
+                                       "verified": False}
+            d.d.contracts["beacon"] = {"address": "0xB", "kind": "beacon", "args": ["1", "2", "3"], "block": 9,
+                                       "verified": False}
+            self.assertEqual(d.verify_only(), [])
+            self.assertEqual(sorted(F.verified), ["0xB", "0xK"])
+            self.assertEqual(d.r.contracts["keeper"]["source"], "https://v.example/5318007/0xK")
+            self.assertNotIn("source", d.d.contracts["beacon"])  # no link template: no link invented
+            saved = json.loads((Path(out) / "lasna.json").read_text())
+            self.assertEqual(saved["contracts"]["keeper"]["verified"], "sourcify")
+
+
+class ExplorerCheckTest(unittest.TestCase):
+    """A rate-limited status poll must not leave a verified contract marked unverified, nor re-submit it."""
+
+    def run_with(self, explorer):
+        class F:
+            calls = []
+
+            def verify(self, address, *a):
+                F.calls.append(address)
+
+        chains = {"chains": {
+            "lasna": {"aktif": True, "reactive": True, "chain_id": 5318007, "rpc": "r", "biller": "0x8"},
+            "base-sepolia": {"aktif": True, "reactive": False, "chain_id": 84532, "rpc": "d", "biller": "0x4"},
+        }}
+        check = {"url": "https://x.example/{chain_id}/{address}", "field": "ok", "values": [True]}
+        cfg = {"deploy": {"verifiers": {"base-sepolia": {"verifier": "blockscout", "check": check}}}}
+        urls = []
+
+        def ask(url):
+            urls.append(url)
+            return explorer(url)
+
+        with tempfile.TemporaryDirectory() as out:
+            d = deployer.Deployer(F(), chains, cfg, {"lasna": "r", "base-sepolia": "d"}, out, log=lambda *_: None,
+                                  explorer=ask)
+            d.d.contracts["lantern"] = {"address": "0xL", "kind": "lantern", "args": ["0x4", "0xF"], "block": 3,
+                                        "verified": False}
+            d.verify_all()
+            return d.d.contracts["lantern"]["verified"], F.calls, urls
+
+    def test_already_verified_on_explorer_is_recorded_without_submitting(self):
+        verified, calls, urls = self.run_with(lambda url: {"ok": True})
+        self.assertEqual((verified, calls, urls), ("blockscout", [], ["https://x.example/84532/0xL"]))
+
+    def test_explorer_error_or_no_falls_back_to_forge(self):
+        def boom(url):
+            raise OSError("429")
+
+        for explorer in (boom, lambda url: {"ok": False}, lambda url: ["unexpected"]):
+            verified, calls, _ = self.run_with(explorer)
+            self.assertEqual((verified, calls), ("blockscout", ["0xL"]))
 
 
 if __name__ == "__main__":

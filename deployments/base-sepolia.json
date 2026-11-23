@@ -11,7 +11,8 @@
         "40",
         "86400"
       ],
-      "verified": false
+      "verified": "blockscout",
+      "source": "https://base-sepolia.blockscout.com/address/0x90832735001E807Dde8CD0f5181F07b85BEDb7a4?tab=contract"
     },
     "lantern_guarded": {
       "address": "0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6",
@@ -22,7 +23,8 @@
         "0x476F44b11F5C942c58f4c8E3d0300E5710743585",
         "0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6"
       ],
-      "verified": false
+      "verified": "blockscout",
+      "source": "https://base-sepolia.blockscout.com/address/0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6?tab=contract"
     }
   },
   "beacon": "0x90832735001E807Dde8CD0f5181F07b85BEDb7a4",

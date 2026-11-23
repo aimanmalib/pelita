@@ -83,8 +83,10 @@ class Side:
 
 
 class Deployer:
-    def __init__(self, foundry, chains_cfg, pelita_cfg, rpcs, out_dir, verify=True, demo=True, log=print):
+    def __init__(self, foundry, chains_cfg, pelita_cfg, rpcs, out_dir, verify=True, demo=True, log=print,
+                 explorer=None):
         self.f, self.cfg, self.verify_on, self.demo, self.log = foundry, pelita_cfg, verify, demo, log
+        self.explorer = explorer  # url -> parsed JSON; read-only "is it verified already?" lookups
         chains = chains_cfg["chains"]
         active = [n for n, c in chains.items() if c.get("aktif")]
         react = [n for n in active if chains[n]["reactive"]]
@@ -171,13 +173,32 @@ class Deployer:
                     continue
                 contract, sig = SPECS[rec["kind"]]
                 try:
-                    self.f.verify(rec["address"], contract, side.chain["chain_id"], sig, rec["args"],
-                                  side.verifier["verifier"], side.verifier.get("verifier_url"))
+                    if self._explorer_says_verified(side, rec):
+                        self.log(f"= {side.name} {key} already verified on the explorer")
+                    else:
+                        self.f.verify(rec["address"], contract, side.chain["chain_id"], sig, rec["args"],
+                                      side.verifier["verifier"], side.verifier.get("verifier_url"))
                     rec["verified"] = side.verifier["verifier"]
+                    link = side.verifier.get("link")
+                    if link:
+                        rec["source"] = link.format(chain_id=side.chain["chain_id"], address=rec["address"])
                     self.log(f"v {side.name} {key} verified ({rec['verified']})")
                 except Exception as e:  # verification is retried on the next run; it never blocks a deploy
                     self.log(f"! {side.name} {key} not verified yet: {e}")
             self._save(side)
+
+    def _explorer_says_verified(self, side, rec):
+        """A submission can succeed while its status poll is rate-limited (Blockscout, 23 Nov). Asking the
+        explorer's read API first avoids a second submission and records the truth. Any error = "don't know"."""
+        check = side.verifier.get("check")
+        if not check or not self.explorer:
+            return False
+        try:
+            reply = self.explorer(check["url"].format(chain_id=side.chain["chain_id"], address=rec["address"]))
+        except Exception as e:  # unknown, so fall back to forge
+            self.log(f"! {side.name} explorer check failed: {e}")
+            return False
+        return isinstance(reply, dict) and reply.get(check["field"]) in check["values"]
 
     def _save(self, side):
         side.save("keeper" if side is self.r else "tank", "flicker" if side is self.r else "lantern")
@@ -208,6 +229,12 @@ class Deployer:
         self._save(r)
         self._save(d)
         return self.sent
+
+    def verify_only(self):
+        """Source-verify what deployments/ already lists. Reads chains, sends no transaction."""
+        self.check_chains()
+        self.verify_all()
+        return [(s.name, k, r) for s in (self.r, self.d) for k, r in s.contracts.items() if not r.get("verified")]
 
     def deploy_demo(self, keeper, rid, did):
         cfg, r, d = self.cfg, self.r, self.d
@@ -243,13 +270,26 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description="Deploy Pelita (idempotent). RPCs: PELITA_RPC_<CHAIN> overrides config.")
     ap.add_argument("--out", default=str(pelitarpc.ROOT / "deployments"), help="folder for <chain>.json")
     ap.add_argument("--no-verify", action="store_true", help="skip source verification (local anvil)")
+    ap.add_argument("--verify-only", action="store_true", help="only source-verify deployments/; no transaction")
     ap.add_argument("--no-demo", action="store_true", help="Keeper and Tank only, no Beacon/Flicker/Lantern")
     a = ap.parse_args(argv)
     chains = pelitarpc.load_config("chains.json")
     cfg = pelitarpc.load_config("pelita.json")
     rpcs = {n: rpc_for(n, c) for n, c in chains["chains"].items()}
     f = Foundry(auth_from_env(), cwd=pelitarpc.ROOT)
-    d = Deployer(f, chains, cfg, rpcs, a.out, verify=not a.no_verify, demo=not a.no_demo)
+    client = pelitarpc.Client(chains["user_agent"])
+    d = Deployer(f, chains, cfg, rpcs, a.out, verify=not a.no_verify, demo=not a.no_demo,
+                 explorer=lambda url: json.loads(client.request(url)[2]))
+    if a.verify_only:
+        try:
+            left = d.verify_only()
+        except Exception as e:
+            print(f"deploy: verify FAILED: {e}", file=sys.stderr)
+            return 1
+        for name, key, rec in left:
+            print(f"deploy: not verified: {name} {key} {rec['address']}", file=sys.stderr)
+        print(f"deploy: verify {'OK' if not left else 'INCOMPLETE'} (0 transactions sent)")
+        return 0 if not left else 1
     try:
         sent = d.run()
     except Exception as e:

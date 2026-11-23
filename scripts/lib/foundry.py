@@ -116,7 +116,8 @@ class Foundry:
         return self.cast("wallet", "address", *self.auth)
 
     def verify(self, address, contract, chain_id, ctor_sig, args, verifier, verifier_url=None):
-        argv = ["verify-contract", address, contract, "--chain-id", chain_id, "--verifier", verifier]
+        # --watch: wait for the explorer's verdict, so "verified" in deployments/ means verified, not "submitted".
+        argv = ["verify-contract", address, contract, "--chain-id", chain_id, "--verifier", verifier, "--watch"]
         if verifier_url:
             argv += ["--verifier-url", verifier_url]
         if ctor_sig:

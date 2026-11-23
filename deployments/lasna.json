@@ -10,7 +10,8 @@
         "300000000000000000",
         "3000000000000000000"
       ],
-      "verified": false
+      "verified": "sourcify",
+      "source": "https://repo.sourcify.dev/5318007/0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa"
     },
     "flicker_guarded": {
       "address": "0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6",
@@ -22,7 +23,8 @@
         "0x90832735001E807Dde8CD0f5181F07b85BEDb7a4",
         "100000"
       ],
-      "verified": false
+      "verified": "sourcify",
+      "source": "https://repo.sourcify.dev/5318007/0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6"
     }
   },
   "keeper": "0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa",
