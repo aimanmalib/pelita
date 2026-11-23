@@ -58,6 +58,8 @@
       "blockscout_api": "https://base-sepolia.blockscout.com/api",
       "get_logs_max_blocks": 201,
       "rpc_logs_max_windows": 20,
+      "rpc_batch_max": 20,
+      "rpc_batch_pause_s": 1.1,
       "index_lag_blocks": 300,
       "native_symbol": "ETH",
       "lreact_faucet": "0x2afaFD298b23b62760711756088F75B7409f5967",
