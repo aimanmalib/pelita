@@ -33,10 +33,13 @@ def _word(address):
 
 
 def read_status(client, chain, selectors, dep):
-    """Balances and Omni debt/reserves for the Keeper or Tank and every ward, in one batch."""
+    """Balances and Omni debt/reserves for the Keeper or Tank and every ward, in one batch.
+
+    A chain deployed only in part (wards before its Keeper or Tank, ADR 0002) gives `None` for the first value.
+    """
     biller = chain["biller"]
     own = dep.get("keeper") or dep.get("tank")
-    targets = [own] + [w["address"] for w in dep.get("wards", [])]
+    targets = ([own] if own else []) + [w["address"] for w in dep.get("wards", [])]
     calls = []
     for addr in targets:
         calls.append(("eth_getBalance", [addr, "latest"]))
@@ -47,10 +50,12 @@ def read_status(client, chain, selectors, dep):
     for i, addr in enumerate(targets):
         bal, debt, res = (int(results[3 * i + k], 16) for k in range(3))
         rows.append({"address": addr.lower(), "balance_wei": bal, "debt_wei": debt, "reserves_wei": res})
-    own_row, ward_rows = rows[0], rows[1:]
+    own_row, ward_rows = (rows[0], rows[1:]) if own else (None, rows)
     for row, ward in zip(ward_rows, dep.get("wards", [])):
         row["role"] = ward.get("role", "guarded")
         row["name"] = ward.get("name", "")
+    if own_row is None:
+        return None, ward_rows
     return {"role": "keeper" if dep.get("keeper") else "tank", **own_row}, ward_rows
 
 

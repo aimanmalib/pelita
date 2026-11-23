@@ -243,6 +243,22 @@ class FleetTest(IndexerCase):
         self.make().run()
         self.assertEqual(self.sent, [], "at most once a day per kind")
 
+    def test_partial_deployment_without_tank(self):
+        """ADR 0002: Base Sepolia holds a Beacon and a Lantern before its Tank exists; the run must not crash."""
+        self.deploy()
+        path = self.root / "deployments" / "base-sepolia.json"
+        base = json.loads(path.read_text())
+        del base["tank"], base["deploy_block"]
+        path.write_text(json.dumps(base))
+        self.net.balances[(LASNA["rpc"], KEEPER)] = 10 * 10**18
+        self.set_debt(BASE, CONTROL, 10**16)
+        self.assertEqual(self.make().run(), 0)
+        view = self.snapshot()["fleet"]["base-sepolia"]
+        self.assertIsNone(view["own"])
+        self.assertEqual([w["address"] for w in view["wards"]], [CONTROL.lower()])
+        self.assertEqual(view["wards"][0]["debt_wei"], 10**16)
+        self.assertEqual(self.sent, [], "no Tank, no tank alert")
+
     def test_failed_notify_is_retried_next_run(self):
         self.deploy()
         self.set_debt(LASNA, KEEPER, 1)

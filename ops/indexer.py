@@ -117,7 +117,8 @@ class Indexer:
         fs = state["fleet"]
         own, wards = fleet.read_status(self.client, chain, self.chains["selectors"], dep)
         cursor = fs["cursors"].get(name, int(dep.get("deploy_block", latest)) - 1)
-        if latest > cursor:
+        # No Keeper or Tank yet (partial deployment): no events to read, and the cursor waits for its deploy block.
+        if own and latest > cursor:
             new = fleet.read_events(self.client, chain, dep, self.events_cfg, cursor + 1, latest)
             fs["events"].extend(fleet.add_times(new, reader))
             fs["events"] = fs["events"][-KEEP_EVENTS:]
@@ -148,7 +149,9 @@ class Indexer:
         low_mark = Decimal(self.cfg["keeper"]["low_mark"]) * fleet.WEI
         for name, view in fleet_view.items():
             own = view["own"]
-            if own["role"] == "keeper":
+            if own is None:
+                pass
+            elif own["role"] == "keeper":
                 if own["debt_wei"] > 0:
                     self.alert(state, "keeper_debt", "critical", debt=fleet.ether(own["debt_wei"]))
                 if own["balance_wei"] < low_mark:
