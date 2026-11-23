@@ -1,0 +1,36 @@
+{
+  "chain_id": 84532,
+  "contracts": {
+    "beacon": {
+      "address": "0x90832735001E807Dde8CD0f5181F07b85BEDb7a4",
+      "tx": "0x067b7a3a00de3ad676cbaae3bf1154526fae0cf905e6e39eaf4e8b32cc0daf1d",
+      "block": 62517399,
+      "kind": "beacon",
+      "args": [
+        "600",
+        "40",
+        "86400"
+      ],
+      "verified": false
+    },
+    "lantern_guarded": {
+      "address": "0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6",
+      "tx": "0x4b1b95a66ef4a70c2b9404d8b83a2ce72248f709c2f42438e522e0a016a764eb",
+      "block": 62517442,
+      "kind": "lantern",
+      "args": [
+        "0x476F44b11F5C942c58f4c8E3d0300E5710743585",
+        "0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6"
+      ],
+      "verified": false
+    }
+  },
+  "beacon": "0x90832735001E807Dde8CD0f5181F07b85BEDb7a4",
+  "wards": [
+    {
+      "address": "0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6",
+      "role": "guarded",
+      "name": "Lantern"
+    }
+  ]
+}

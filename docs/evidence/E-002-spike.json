@@ -1,0 +1,109 @@
+{
+  "_about": "Spike S1/S2 (PRD 4.4, ADR 0002), read back from the chains by scripts/spike/spike_evidence.py.",
+  "chains": {
+    "lasna": 5318007,
+    "base-sepolia": 84532
+  },
+  "keeper": "0xfd15abb7defb73b10942bb1207b1e24ccfa138fa",
+  "flicker": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6",
+  "beat": {
+    "tx": "0xafdbf92586d122f9bea75d0db2e39d2a55bcc40b00959dd51eebded1e6a6c58f",
+    "block": 62517653,
+    "block_time": 1795425399,
+    "status": 1,
+    "from": "0xdccab20653ae18226b95a015948e99f919283394",
+    "to": "0x90832735001e807dde8cd0f5181f07b85bedb7a4",
+    "gas_used": 47035,
+    "logs": [
+      {
+        "address": "0x90832735001e807dde8cd0f5181f07b85bedb7a4",
+        "event": "Beat",
+        "log_index": 10
+      }
+    ],
+    "fee_wei": 235175047035
+  },
+  "flicker_reaction": {
+    "tx": "0x050325447787fa4579792c7fb936980e4259bd3db056b4e96b6b2e87f5418c74",
+    "block": 9044621,
+    "block_time": 1795425399,
+    "status": 1,
+    "from": "0x038e06667e42782e571eab20432b9237f9bd6b82",
+    "to": "0x8888888888888888888888888888888888888888",
+    "gas_used": 121785,
+    "logs": [
+      {
+        "address": "0x8888888888888888888888888888888888888888",
+        "event": "0xef94dbc611c4b95bf4b8ba34b413972180c2faf26fbb480befacedd83e07b133",
+        "log_index": 1
+      },
+      {
+        "address": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6",
+        "event": "Forwarded",
+        "log_index": 2
+      },
+      {
+        "address": "0x8888888888888888888888888888888888888888",
+        "event": "0xade428889ac75005bd70004e1b1e262be6bf4f97bad5827315a7d58261a6dac7",
+        "log_index": 3
+      },
+      {
+        "address": "0x8888888888888888888888888888888888888888",
+        "event": "BlacklistContract",
+        "log_index": 4,
+        "contract": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6"
+      }
+    ],
+    "refChainId": 84532,
+    "refTx": "0xafdbf92586d122f9bea75d0db2e39d2a55bcc40b00959dd51eebded1e6a6c58f",
+    "rnkTxType": "r"
+  },
+  "keeper_reaction": {
+    "tx": "0xa70511e09727b819599f8777d4b6026aca500b1925d9626ff54fc7e77c6adb62",
+    "block": 9044622,
+    "block_time": 1795425400,
+    "status": 1,
+    "from": "0x038e06667e42782e571eab20432b9237f9bd6b82",
+    "to": "0x8888888888888888888888888888888888888888",
+    "gas_used": 132767,
+    "logs": [
+      {
+        "address": "0xfd15abb7defb73b10942bb1207b1e24ccfa138fa",
+        "event": "WentDark",
+        "log_index": 1,
+        "chain_id": 5318007,
+        "target": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6"
+      },
+      {
+        "address": "0x8888888888888888888888888888888888888888",
+        "event": "WhitelistContract",
+        "log_index": 2,
+        "contract": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6"
+      },
+      {
+        "address": "0xfd15abb7defb73b10942bb1207b1e24ccfa138fa",
+        "event": "Refueled",
+        "log_index": 3,
+        "chain_id": 5318007,
+        "target": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6",
+        "amount_wei": 64835700000000000,
+        "owed_wei": 14835700000000000,
+        "origin_block": 9044621
+      },
+      {
+        "address": "0xfd15abb7defb73b10942bb1207b1e24ccfa138fa",
+        "event": "LowTank",
+        "log_index": 4,
+        "balance_wei": 435164300000000000
+      }
+    ],
+    "refChainId": 5318007,
+    "refTx": "0x050325447787fa4579792c7fb936980e4259bd3db056b4e96b6b2e87f5418c74",
+    "rnkTxType": "r"
+  },
+  "flicker_debt_after_wei": 0,
+  "verdict": {
+    "S1": true,
+    "S2": true
+  }
+}

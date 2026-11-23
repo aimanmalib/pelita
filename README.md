@@ -85,8 +85,12 @@ invariant tests that check them: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Deployment and full loops
 
-The contracts are not deployed to the testnets yet. When they are, this section lists each address with its source
-verification link (Sourcify on Lasna, Blockscout on Base Sepolia), and three loops with every transaction hash:
+The deployment is in progress. The Keeper and one guarded demo pair are on chain, and the first Lasna loop has run:
+the Keeper heard the outage and paid the debt, with `WhitelistContract` in its own refuel transaction.
+Its hashes, read back from the chains, are in [docs/evidence/E-002-spike.json](docs/evidence/E-002-spike.json)
+(decision record: [docs/decisions/0002-spike-lasna-loop.md](docs/decisions/0002-spike-lasna-loop.md)). When the
+deployment is complete, this section lists each address with its source verification link (Sourcify on Lasna,
+Blockscout on Base Sepolia), and three loops with every transaction hash:
 
 - **Lasna:** the outage transaction (`BlacklistContract`) and the Keeper's reaction (`Refueled` and
   `WhitelistContract` in the same transaction).

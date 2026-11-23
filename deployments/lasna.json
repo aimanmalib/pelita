@@ -1,0 +1,37 @@
+{
+  "chain_id": 5318007,
+  "contracts": {
+    "keeper": {
+      "address": "0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa",
+      "tx": "0x9f29b3bb5e42dbbccd9af9708a7bab885f29c2e7ceb90744d79c7242c25a92bb",
+      "block": 9044563,
+      "kind": "keeper",
+      "args": [
+        "300000000000000000",
+        "3000000000000000000"
+      ],
+      "verified": false
+    },
+    "flicker_guarded": {
+      "address": "0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6",
+      "tx": "0x33a018c6e702d52927cf07fb88fd74bcbbe56b8f5980bfcefc130bd505f8ee91",
+      "block": 9044576,
+      "kind": "flicker",
+      "args": [
+        "84532",
+        "0x90832735001E807Dde8CD0f5181F07b85BEDb7a4",
+        "100000"
+      ],
+      "verified": false
+    }
+  },
+  "keeper": "0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa",
+  "deploy_block": 9044563,
+  "wards": [
+    {
+      "address": "0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6",
+      "role": "guarded",
+      "name": "Flicker"
+    }
+  ]
+}
