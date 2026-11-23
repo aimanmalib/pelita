@@ -88,7 +88,11 @@ invariant tests that check them: [docs/SECURITY.md](docs/SECURITY.md).
 The deployment is in progress. The Keeper and one guarded demo pair are on chain, and the first Lasna loop has run:
 the Keeper heard the outage and paid the debt, with `WhitelistContract` in its own refuel transaction.
 Its hashes, read back from the chains, are in [docs/evidence/E-002-spike.json](docs/evidence/E-002-spike.json)
-(decision record: [docs/decisions/0002-spike-lasna-loop.md](docs/decisions/0002-spike-lasna-loop.md)). When the
+(decision record: [docs/decisions/0002-spike-lasna-loop.md](docs/decisions/0002-spike-lasna-loop.md)). The demo loop
+has run once too: a public `poke()` on Base Sepolia, the `Flicker` reaction on Lasna and the `Lit` callback in the
+`Lantern` ([docs/evidence/E-004-demo-loop.json](docs/evidence/E-004-demo-loop.json)). The first demo pair asked for
+too little callback gas, and the Base Sepolia proxy refused every delivery to it, so the pair was replaced
+([docs/decisions/0008-callback-gas-floor.md](docs/decisions/0008-callback-gas-floor.md)). When the
 deployment is complete, this section lists each address with its source verification link (Sourcify on Lasna,
 Blockscout on Base Sepolia), and three loops with every transaction hash:
 

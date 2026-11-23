@@ -166,5 +166,76 @@ class ExplorerCheckTest(unittest.TestCase):
             self.assertEqual((verified, calls), ("blockscout", ["0xL"]))
 
 
+class CallbackGasTest(unittest.TestCase):
+    """Base Sepolia's proxy rejected a 100000-gas delivery with InsufficientGas (23 Nov, ADR 0008): a demo pair with
+    such a limit can never be lit. The deployer refuses it, and replaces a Flicker whose fixed gas is too low."""
+
+    CHAINS = {"chains": {
+        "lasna": {"aktif": True, "reactive": True, "chain_id": 5318007, "rpc": "r", "biller": "0x8"},
+        "base-sepolia": {"aktif": True, "reactive": False, "chain_id": 84532, "rpc": "d", "biller": "0x4",
+                         "callback_gas_min": 200000},
+    }}
+
+    def fake(self):
+        class F:
+            sent, created = [], []
+            wards = {"0xold"}
+
+            def has_code(self, rpc, address):
+                return True
+
+            def create(self, rpc, contract, args, value):
+                F.created.append((contract, args))
+                return f"0xnew{len(F.created)}", f"0xtx{len(F.created)}"
+
+            def receipt_block(self, rpc, tx):
+                return 1
+
+            def call(self, rpc, to, sig, *args):
+                if sig.startswith("ward("):
+                    return "(1, 0x, 0, 0, 0, 0, 0, 0, true, true)" if args[1] in F.wards else "(false, false)"
+                return "0x0000000000000000000000000000000000000000"
+
+            def send(self, rpc, to, sig, args, value=0):
+                F.sent.append((to, sig, list(args)))
+                return "0xsent"
+
+        return F
+
+    def test_gas_below_the_proxy_floor_is_refused(self):
+        with tempfile.TemporaryDirectory() as out:
+            d = deployer.Deployer(self.fake()(), self.CHAINS, {}, {"lasna": "r", "base-sepolia": "d"}, out,
+                                  log=lambda *_: None)
+            with self.assertRaises(deployer.DeployError):
+                d.check_callback_gas(100000)
+            d.check_callback_gas(300000)
+
+    def test_flicker_with_other_fixed_gas_is_replaced_retired_and_released(self):
+        F = self.fake()
+        with tempfile.TemporaryDirectory() as out:
+            d = deployer.Deployer(F(), self.CHAINS, {}, {"lasna": "r", "base-sepolia": "d"}, out, log=lambda *_: None)
+            old = {"address": "0xold", "kind": "flicker", "args": ["84532", "0xB", "100000"], "block": 5}
+            d.r.contracts["flicker_guarded"] = dict(old)
+            d.r.contracts["keeper"] = {"address": "0xK", "kind": "keeper", "args": ["1", "2"], "block": 4}
+            new = d.ensure_contract(d.r, "flicker_guarded", "flicker", [84532, "0xB", 300000])
+            self.assertEqual(new, "0xnew1")
+            self.assertEqual(d.r.data["retired"], [dict(old, key="flicker_guarded")])
+            # Same fixed args: kept, nothing created.
+            self.assertEqual(d.ensure_contract(d.r, "flicker_guarded", "flicker", [84532, "0xB", 300000]), "0xnew1")
+            self.assertEqual(len(F.created), 1)
+            # A beacon value that has a setter is still kept, not redeployed.
+            d.d.contracts["beacon"] = {"address": "0xB", "kind": "beacon", "args": ["600", "40", "86400"], "block": 2}
+            self.assertEqual(d.ensure_contract(d.d, "beacon", "beacon", [300, 40, 86400]), "0xB")
+            d.release_retired("0xK", d.r, 5318007)
+            self.assertEqual(F.sent, [("0xK", "release(uint256,address)", ["5318007", "0xold"])])
+            F.wards.clear()  # released: a second run sends nothing
+            d.release_retired("0xK", d.r, 5318007)
+            self.assertEqual(len(F.sent), 1)
+            d.r.save("keeper", "flicker")
+            saved = json.loads((Path(out) / "lasna.json").read_text())
+            self.assertEqual([w["address"] for w in saved["wards"]], ["0xnew1"])
+            self.assertEqual(saved["retired"][0]["address"], "0xold")
+
+
 if __name__ == "__main__":
     unittest.main()

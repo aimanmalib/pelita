@@ -28,6 +28,7 @@ def run(d, keeper_fund, flicker_fund, beat):
     rid, did = r.chain["chain_id"], dst.chain["chain_id"]
     d.check_chains()
     k, demo = cfg["keeper"], cfg["demo"]
+    d.check_callback_gas(demo["flicker_callback_gas"])
     keeper = d.ensure_contract(r, "keeper", "keeper", [to_wei(k["self_floor"]), to_wei(k["low_mark"])])
     d._save(r)
     d.ensure_chain(keeper, rid, r.chain["biller"], ZERO, 0)
@@ -43,6 +44,7 @@ def run(d, keeper_fund, flicker_fund, beat):
     d._save(dst)
     d.ensure_lantern(flicker, lantern)
     d.ensure_ward(keeper, rid, flicker, cfg["wards"][r.name], cfg["wards"]["demo"]["daily_cap"])
+    d.release_retired(keeper, r, rid)
     d.ensure_balance(r, keeper, to_wei(keeper_fund), "keeper")
     d._save(r)
     if beat:

@@ -31,7 +31,7 @@
     "beacon_max_beats_per_window": 40,
     "beacon_window_seconds": 86400,
     "flicker_beats_before_dark": 3,
-    "flicker_callback_gas": 100000,
+    "flicker_callback_gas": 300000,
     "flicker_fund": "0.05",
     "lantern_fund": "0.00001",
     "_fund_note": "Demo contracts are funded once, at creation, and never topped up: they must go dark. Starting values; tuned from measured fees in P2b and recorded in docs/decisions/."

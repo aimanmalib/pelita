@@ -53,6 +53,7 @@
       "reactive": false,
       "rpc": "https://sepolia.base.org",
       "biller": "0x476F44b11F5C942c58f4c8E3d0300E5710743585",
+      "callback_gas_min": 200000,
       "explorer": "https://base-sepolia.blockscout.com",
       "explorer_tx": "https://base-sepolia.blockscout.com/tx/",
       "blockscout_api": "https://base-sepolia.blockscout.com/api",

@@ -5,82 +5,87 @@
     "base-sepolia": 84532
   },
   "proxy": "0x476F44b11F5C942c58f4c8E3d0300E5710743585",
-  "flicker": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6",
-  "lantern": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6",
-  "beat_number": 2,
+  "flicker": "0xa4c7bddba75955c915fc38753037e82c32d240b2",
+  "lantern": "0xf5f37156f2c3414735e6085aaecc9940e6c77904",
+  "beat_number": 4,
   "beat": {
-    "tx": "0xc04b6749394d7d9ece40d573d3c2af9017b0d5906415fee1caa7a2624d407f0b",
-    "block": 62527940,
-    "block_time": 1795427456,
+    "tx": "0xb001f0f3d765a6f01ef6fbf28e46c5fb2df346c89c69528750df614fe07c48ef",
+    "block": 62768831,
+    "block_time": 1795475635,
     "status": 1,
     "from": "0xdccab20653ae18226b95a015948e99f919283394",
     "to": "0x90832735001e807dde8cd0f5181f07b85bedb7a4",
-    "gas_used": 98859,
+    "gas_used": 46734,
     "logs": [
       {
         "address": "0x90832735001e807dde8cd0f5181f07b85bedb7a4",
         "event": "Beat",
-        "log_index": 0
+        "log_index": 6
       }
     ],
-    "fee_wei": 494295098859
+    "fee_wei": 280404000000
   },
   "flicker_reaction": {
-    "tx": "0x31ac6a9c47024f743fd64b766ec8893c42ddb20fe34ee03ca6c19b8fff963700",
-    "block": 9046566,
-    "block_time": 1795427456,
+    "tx": "0x597fc3964da8c294efa1301f2a1dabf7e20c3aba9f0f37f67bfe9315aff43293",
+    "block": 9091970,
+    "block_time": 1795475634,
     "status": 1,
     "from": "0x038e06667e42782e571eab20432b9237f9bd6b82",
     "to": "0x8888888888888888888888888888888888888888",
-    "gas_used": 80843,
+    "gas_used": 107910,
     "logs": [
       {
         "address": "0x8888888888888888888888888888888888888888",
         "event": "CallbackRequest",
-        "log_index": 1
+        "log_index": 2
       },
       {
-        "address": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6",
+        "address": "0xa4c7bddba75955c915fc38753037e82c32d240b2",
         "event": "Forwarded",
-        "log_index": 2
+        "log_index": 3
       }
     ],
     "refChainId": 84532,
-    "refTx": "0xc04b6749394d7d9ece40d573d3c2af9017b0d5906415fee1caa7a2624d407f0b",
+    "refTx": "0xb001f0f3d765a6f01ef6fbf28e46c5fb2df346c89c69528750df614fe07c48ef",
     "rnkTxType": "r"
   },
   "deliveries": [
     {
-      "tx": "0x72d02abfc1164ed7ecb5197bd07306583acc1a920eb62aea70642f7fd0c93cbe",
-      "block": 62527948,
-      "from": "0xf7e866d726658f6c3f14b8ee537fe268a4d91ddb",
+      "tx": "0x70f8bd06b89fa6093a952e8f4a260aa77d98e766026de266d950446fc941bece",
+      "block": 62768837,
+      "from": "0xf9f61c1d3325e2d4abb55dd9e0db84f7a0d914b0",
       "call": "deliverCallback",
-      "block_time": 1795427458,
-      "status": 0,
+      "block_time": 1795475636,
+      "status": 1,
       "to": "0x476f44b11f5c942c58f4c8e3d0300e5710743585",
-      "gas_used": 32287,
-      "logs": [],
-      "fee_wei": 193722000000,
-      "revert_data": "0xea8e4eb5"
+      "gas_used": 115665,
+      "logs": [
+        {
+          "address": "0xf5f37156f2c3414735e6085aaecc9940e6c77904",
+          "event": "Lit",
+          "log_index": 9
+        }
+      ],
+      "fee_wei": 693990000000
     }
   ],
   "other_proxy_txs": [
     {
-      "tx": "0x45500d4c9548bac75911c738e5e000287c415329f037bdcf05cd00735fd94d71",
-      "block": 62527928,
-      "from": "0xd06cf06d1cf132f5f0b974be13ad3bdcc633992c",
-      "call": "removeCallbackSenders"
+      "tx": "0x3012ab392079a541e2044c3eee3eaa3deca9dd57451104c3e424039903381933",
+      "block": 62768838,
+      "from": "0xf9f61c1d3325e2d4abb55dd9e0db84f7a0d914b0",
+      "call": "deliverCallback"
     }
   ],
   "window": {
     "base_blocks": [
-      62527910,
-      62528090
+      62768801,
+      62768981
     ]
   },
   "verdict": {
     "forwarded": true,
-    "delivered": false,
-    "lit": false
+    "delivered": true,
+    "lit": true
   }
 }

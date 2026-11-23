@@ -121,6 +121,21 @@ class DemoLoopEvidenceTest(unittest.TestCase):
         self.assertEqual(ev["flicker_reaction"]["refTx"], "0xbeat")
         self.assertEqual(ev["beat_number"], N)
 
+    def test_reaction_in_first_block_of_the_beat_second_and_not_a_retired_flicker(self):
+        """23 Nov: the reaction sat in the first of several Lasna blocks sharing the beat's second, after the reaction of a
+        retired Flicker to the same beat. Both were missed / mixed up by the old reader."""
+        lasna, base = chains()
+        good = lasna._rx[0]
+        retired = dict(good, transactionHash="0xold", logs=[lg(SYSTEM, dl.CALLBACK_REQUEST, "0x" + w(84532),
+                                                               "0x" + w("0x" + "0d" * 20), "0x" + w("0x" + "0e" * 20)),
+                                                            lg("0x" + "0d" * 20, "0x" + w(1))])
+        # Two Lasna blocks a second; the beat second (base ts 1_002_000) spans blocks 4000..4001.
+        lasna.ts = lambda b: 1_000_000 + b // 2
+        lasna._rx = [dict(retired, blockNumber=hex(4000)), dict(good, blockNumber=hex(4000))]
+        ev = dl.collect(lasna, base, DEPS, PROXY, EVENTS_CFG, "0xbeat", base_blocks=20, lasna_blocks=60, rate=(7, 0.0))
+        self.assertEqual(ev["flicker_reaction"]["tx"], "0xfl")
+        self.assertTrue(ev["verdict"]["forwarded"])
+
     def test_reverted_delivery_keeps_revert_data_and_operator_change_in_window(self):
         ev = run(delivered=False)
         self.assertEqual(ev["verdict"], {"forwarded": True, "delivered": False, "lit": False})

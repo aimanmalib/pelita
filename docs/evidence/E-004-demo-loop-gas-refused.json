@@ -1,0 +1,79 @@
+{
+  "_about": "Demo loop Beat -> Flicker -> Lit (PRD 0.3, P2c), read back from the chains by scripts/spike/demo_loop_evidence.py.",
+  "chains": {
+    "lasna": 5318007,
+    "base-sepolia": 84532
+  },
+  "proxy": "0x476F44b11F5C942c58f4c8E3d0300E5710743585",
+  "flicker": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6",
+  "lantern": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6",
+  "beat_number": 3,
+  "beat": {
+    "tx": "0x2566ba92071fb11a86e494e58d58b5b86fca34a80348ab646680360dc33110cd",
+    "block": 62765810,
+    "block_time": 1795475030,
+    "status": 1,
+    "from": "0xdccab20653ae18226b95a015948e99f919283394",
+    "to": "0x90832735001e807dde8cd0f5181f07b85bedb7a4",
+    "gas_used": 46734,
+    "logs": [
+      {
+        "address": "0x90832735001e807dde8cd0f5181f07b85bedb7a4",
+        "event": "Beat",
+        "log_index": 0
+      }
+    ],
+    "fee_wei": 280404000000
+  },
+  "flicker_reaction": {
+    "tx": "0x309be498a42df39e91be4e4793c20498c2a49c333455ef690cf9be28fe6a6f1c",
+    "block": 9091405,
+    "block_time": 1795475030,
+    "status": 1,
+    "from": "0x038e06667e42782e571eab20432b9237f9bd6b82",
+    "to": "0x8888888888888888888888888888888888888888",
+    "gas_used": 80843,
+    "logs": [
+      {
+        "address": "0x8888888888888888888888888888888888888888",
+        "event": "CallbackRequest",
+        "log_index": 1
+      },
+      {
+        "address": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6",
+        "event": "Forwarded",
+        "log_index": 2
+      }
+    ],
+    "refChainId": 84532,
+    "refTx": "0x2566ba92071fb11a86e494e58d58b5b86fca34a80348ab646680360dc33110cd",
+    "rnkTxType": "r"
+  },
+  "deliveries": [
+    {
+      "tx": "0xb8bd5de581230080d51badc7c7cd2efc118e094177d87db5f83ad55cd233b1f3",
+      "block": 62765816,
+      "from": "0xf9f61c1d3325e2d4abb55dd9e0db84f7a0d914b0",
+      "call": "deliverCallback",
+      "block_time": 1795475032,
+      "status": 0,
+      "to": "0x476f44b11f5c942c58f4c8e3d0300e5710743585",
+      "gas_used": 43691,
+      "logs": [],
+      "fee_wei": 262146000000,
+      "revert_data": ""
+    }
+  ],
+  "other_proxy_txs": [],
+  "window": {
+    "base_blocks": [
+      62765780,
+      62765960
+    ]
+  },
+  "verdict": {
+    "forwarded": true,
+    "delivered": false,
+    "lit": false
+  }
+}

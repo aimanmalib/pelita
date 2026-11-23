@@ -94,8 +94,13 @@ def collect(lasna, base, deployments, proxy, events_cfg, beat_tx, base_blocks=15
 
     first = deployments["lasna"]["contracts"]["flicker_guarded"]["block"]
     head = int(lasna.c.call(lasna.url, "eth_blockNumber"), 16)
-    start = block_at(lasna, beat_s["block_time"], first, head)
-    fl = se.find_reaction(lasna.reactions(start, min(head, start + lasna_blocks)), beat_tx)
+    # Several Lasna blocks can share the beat's second, and the reaction may sit in the first of them: start at the last
+    # block of the second before. Every Flicker subscribed to the Beacon (a retired one too, ADR 0008) reacts to the same
+    # beat, so only reactions that carry a log from this Flicker count.
+    start = block_at(lasna, beat_s["block_time"] - 1, first, head)
+    mine = [r for r in lasna.reactions(start, min(head, start + lasna_blocks))
+            if any(lg["address"].lower() == flicker for lg in r["logs"])]
+    fl = se.find_reaction(mine, beat_tx)
     fl_s = se.summarise(fl, lasna.block_time(fl["blockNumber"]), nm) if fl else None
     requested = bool(fl) and any(lg["topics"][0].lower() == CALLBACK_REQUEST and se.addr(lg["topics"][3]) == lantern
                                  for lg in fl["logs"])

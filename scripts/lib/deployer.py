@@ -23,6 +23,8 @@ SPECS = {
     "lantern": ("src/demo/Lantern.sol:Lantern", "constructor(address,address)"),
 }
 ROLES = ("guarded", "control")
+# Kinds whose constructor values cannot be changed later (no setter): a config change means a new contract.
+IMMUTABLE_KINDS = {"flicker"}
 ZERO = "0x0000000000000000000000000000000000000000"
 WARD_SIG = "ward(uint256,address)((uint256,address,uint256,uint256,uint32,uint32,uint64,uint64,bool,bool))"
 
@@ -110,12 +112,17 @@ class Deployer:
         rec = side.contracts.get(key)
         want = [str(a) for a in args]
         if rec and self.f.has_code(side.rpc, rec["address"]):
-            if _addresses(rec["args"]) == _addresses(want):
+            if _addresses(rec["args"]) != _addresses(want):
+                self.log(f"~ {side.name} {key}: a contract it points at was redeployed; deploying a new one")
+            elif rec["args"] != want and kind in IMMUTABLE_KINDS:
+                self.log(f"~ {side.name} {key}: constructor args {rec['args']} are fixed and config wants {want}; "
+                         "deploying a new one")
+            else:
                 if rec["args"] != want:
                     self.log(f"! {side.name} {key}: config differs from constructor args {rec['args']}; use the setters")
                 self.log(f"= {side.name} {key} {rec['address']}")
                 return rec["address"]
-            self.log(f"~ {side.name} {key}: a contract it points at was redeployed; deploying a new one")
+            side.data.setdefault("retired", []).append(dict(rec, key=key))
         contract, _ = SPECS[kind]
         addr, tx = self.f.create(side.rpc, contract, [str(a) for a in args], value_wei)
         self.sent += 1
@@ -154,6 +161,21 @@ class Deployer:
             return
         args = [chain_id, target, to_wei(ward_cfg["refill"]), to_wei(ward_cfg["max_owed"]), daily_cap]
         self.send_once(self.r, keeper, "protect(uint256,address,uint256,uint256,uint32)", args, f"protect {target}")
+
+    def check_callback_gas(self, gas):
+        """The destination's callback proxy rejects a delivery whose gas limit is below its own floor (measured on
+        Base Sepolia 23 Nov: InsufficientGas, ADR 0008), so such a contract could never be lit or refuelled."""
+        floor = self.d.chain.get("callback_gas_min", 0)
+        if int(gas) < floor:
+            raise DeployError(f"{self.d.name}: callback gas {gas} is below the proxy floor {floor} (ADR 0008)")
+
+    def release_retired(self, keeper, side, chain_id):
+        """A retired guarded contract is no longer watched: release its ward so the Keeper stops refuelling it."""
+        for rec in side.data.get("retired", []):
+            if rec["key"].endswith("_guarded") and last_bool(self.f.call(self.r.rpc, keeper, WARD_SIG, chain_id,
+                                                                        rec["address"])):
+                self.send_once(self.r, keeper, "release(uint256,address)", [chain_id, rec["address"]],
+                               f"release {rec['address']}")
 
     def ensure_balance(self, side, address, target_wei, label):
         have = self.f.balance(side.rpc, address)
@@ -215,6 +237,9 @@ class Deployer:
         tank = self.ensure_contract(d, "tank", "tank", [d.chain["biller"], keeper, to_wei(dest["tank_self_floor"]),
                                                          to_wei(dest["tank_max_per_refuel"])])
         self._save(d)
+        self.check_callback_gas(dest["callback_gas"])
+        if self.demo:
+            self.check_callback_gas(cfg["demo"]["flicker_callback_gas"])
         self.ensure_chain(keeper, rid, r.chain["biller"], ZERO, 0)
         self.ensure_chain(keeper, did, d.chain["biller"], tank, dest["callback_gas"])
 
@@ -257,6 +282,8 @@ class Deployer:
         flicker, lantern = pairs["guarded"]
         self.ensure_ward(keeper, rid, flicker, cfg["wards"][r.name], cap)
         self.ensure_ward(keeper, did, lantern, cfg["wards"][d.name], cap)
+        self.release_retired(keeper, r, rid)
+        self.release_retired(keeper, d, did)
 
 
 def main(argv=None):

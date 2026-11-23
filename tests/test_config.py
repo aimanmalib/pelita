@@ -94,6 +94,15 @@ class DemoConfigTest(unittest.TestCase):
         self.assertGreaterEqual(demo["beacon_cooldown_seconds"], 0)
         self.assertGreater(demo["flicker_callback_gas"], 0)
 
+    def test_callback_gas_clears_the_measured_proxy_floor(self):
+        """ADR 0008: a limit under the destination proxy's floor is never delivered (InsufficientGas on Base Sepolia)."""
+        cfg, chains = load("pelita.json"), load("chains.json")["chains"]
+        for name, dest in cfg["destinations"].items():
+            floor = chains[name].get("callback_gas_min", 0)
+            self.assertGreaterEqual(dest["callback_gas"], floor, name)
+            self.assertGreaterEqual(cfg["demo"]["flicker_callback_gas"], floor, name)
+        self.assertGreater(chains["base-sepolia"]["callback_gas_min"], 100000)
+
     def test_demo_test_constants_match_config(self):
         demo = load("pelita.json")["demo"]
         source = (ROOT / "test" / "demo" / "Demo.t.sol").read_text(encoding="utf-8")

@@ -14,6 +14,29 @@
       "source": "https://repo.sourcify.dev/5318007/0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa"
     },
     "flicker_guarded": {
+      "address": "0xa4c7BDDbA75955C915FC38753037e82c32d240B2",
+      "tx": "0x2c35c9e7bedacbc9061215ef69aa70927ac64b482f3a7e4ca480d1c1983bf658",
+      "block": 9091705,
+      "kind": "flicker",
+      "args": [
+        "84532",
+        "0x90832735001E807Dde8CD0f5181F07b85BEDb7a4",
+        "300000"
+      ],
+      "verified": false
+    }
+  },
+  "keeper": "0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa",
+  "deploy_block": 9044563,
+  "wards": [
+    {
+      "address": "0xa4c7BDDbA75955C915FC38753037e82c32d240B2",
+      "role": "guarded",
+      "name": "Flicker"
+    }
+  ],
+  "retired": [
+    {
       "address": "0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6",
       "tx": "0x33a018c6e702d52927cf07fb88fd74bcbbe56b8f5980bfcefc130bd505f8ee91",
       "block": 9044576,
@@ -24,16 +47,8 @@
         "100000"
       ],
       "verified": "sourcify",
-      "source": "https://repo.sourcify.dev/5318007/0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6"
-    }
-  },
-  "keeper": "0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa",
-  "deploy_block": 9044563,
-  "wards": [
-    {
-      "address": "0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6",
-      "role": "guarded",
-      "name": "Flicker"
+      "source": "https://repo.sourcify.dev/5318007/0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6",
+      "key": "flicker_guarded"
     }
   ]
 }
