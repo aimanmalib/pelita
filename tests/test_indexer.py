@@ -245,7 +245,8 @@ class FleetTest(IndexerCase):
         self.assertEqual(self.sent, [], "at most once a day per kind")
 
     def test_tank_low_message_is_actionable(self):
-        """ADR 0009: the tank_low warning says whether the Keeper already stopped, how much test ETH and to where."""
+        # ADR 0009: the tank_low warning says whether the Keeper already stopped, how much test ETH and to where.
+        # (A comment, not a docstring: `unittest -v` would print a docstring on the result line.)
         address = "0x" + "AB" * 20
         cfg_path = self.root / "config" / "pelita.json"
         cfg = json.loads(cfg_path.read_text())
