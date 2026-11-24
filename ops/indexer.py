@@ -4,8 +4,12 @@
 Each run: incremental dark/lit census per active chain (block cursor), fleet status in one batch per
 chain, Pelita's own events, rnk_getFilters at most every `filters_interval_seconds`; then an atomic
 write of state/public/snapshot.json and alerts through ~/bin/notify.sh, at most once a day per kind.
-An RPC failure marks the run failed in state/larian.jsonl and keeps the previous snapshot; there is no
-retry loop. A census failure on one chain (Blockscout 429) only marks that chain `stale` in the snapshot. After `rpc_failures_before_warn` failures in a row, one warning.
+A chain whose RPC refuses (the public Base Sepolia RPC answered 429 to a third of the runs, 24 Nov) keeps
+its last good census, fleet and demo views marked `stale`; the other chains stay fresh and the snapshot is
+written. Only a run where every chain failed is marked failed in state/larian.jsonl and keeps the previous
+snapshot. There is no retry loop: pelitarpc tries each configured endpoint once per call. A census failure
+on one chain (Blockscout 429) likewise marks only that census `stale`. After `rpc_failures_before_warn`
+failed runs in a row, for one chain or for the whole run, one warning (ADR 0004).
 """
 
 import json
@@ -16,6 +20,7 @@ import time
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts" / "lib"))
@@ -149,6 +154,8 @@ class Indexer:
         low_mark = Decimal(self.cfg["keeper"]["low_mark"]) * fleet.WEI
         for name, view in fleet_view.items():
             own = view["own"]
+            if view.get("stale"):
+                continue  # last good numbers from an earlier run: the chain-failure warning covers it
             if own is None:
                 pass
             elif own["role"] == "keeper":
@@ -176,44 +183,78 @@ class Indexer:
         state.setdefault("census", {})
         state.setdefault("census_last", {})
         state.setdefault("census_stale", {})
+        state.setdefault("chain_stale", {})
+        state.setdefault("chain_last", {})
         state.setdefault("fleet", {"cursors": {}, "events": [], "dark_since": {}})
         state.setdefault("filters", {"checked_at": 0, "summary": None})
         state.setdefault("alerts", {})
         state.setdefault("failures", 0)
         return state
 
-    def collect(self, state):
-        names = census.active_chains(self.chains)
-        deployments = fleet.load_deployments(self.root, names)
-        snap = {"census": {}, "fleet": {}, "events": [], "filters": None, "demo": None}
-        for name in names:
-            chain = self.chains["chains"][name]
-            reader = census.ChainReader(self.client, chain, self.chains["topics"])
-            latest = reader.latest_block()
-            snap["census"][name] = self.census_step(state, name, reader, latest)
-            if name in deployments:
-                snap["fleet"][name] = self.update_fleet(state, name, chain, deployments[name], reader, latest)
-                demo = fleet.read_demo(self.client, name, chain, self.chains["selectors"], deployments[name])
-                snap["demo"] = snap["demo"] or demo
-        interval = self.cfg["indexer"]["filters_interval_seconds"]
-        reactive = next((n for n in names if self.chains["chains"][n].get("reactive")), None)
-        if reactive and self.now() - state["filters"]["checked_at"] >= interval:
-            chain = self.chains["chains"][reactive]
+    def chain_step(self, state, snap, name, chain, dep):
+        """Every read of one chain for this run. Raises on the first failure; the caller isolates it."""
+        reader = census.ChainReader(self.client, chain, self.chains["topics"])
+        latest = reader.latest_block()
+        snap["census"][name] = self.census_step(state, name, reader, latest)
+        last = {}
+        if dep is not None:
+            last["fleet"] = self.update_fleet(state, name, chain, dep, reader, latest)
+            last["demo"] = fleet.read_demo(self.client, name, chain, self.chains["selectors"], dep)
+        if chain.get("reactive") and self.now() - state["filters"]["checked_at"] >= self.cfg["indexer"]["filters_interval_seconds"]:
             result = self.client.call(chain["rpc"], "rnk_getFilters")
             state["filters"] = {
                 "checked_at": int(self.now()),
                 "summary": fleet.summarize_filters(result, self.chains["topics"], chain["biller"]),
             }
+        return last
+
+    def chain_failed(self, state, snap, name, chain, err):
+        """Keeps this chain's last good views, marked `stale`; one warning when it reaches the limit."""
+        now = int(self.now())
+        stale = state["chain_stale"].get(name) or {"since": now, "runs": 0}
+        stale["runs"] += 1
+        named = isinstance(err, (pelitarpc.RpcError, pelitarpc.Unavailable))  # pelitarpc already names the host
+        stale["error"] = (str(err) if named else f"{urlparse(chain['rpc']).hostname}: {type(err).__name__}: {err}")[:300]
+        state["chain_stale"][name] = stale
+        snap["census"][name] = self.stale_view(state, name, stale)
+        last = state["chain_last"].get(name, {})
+        if last.get("fleet") is not None:
+            snap["fleet"][name] = dict(last["fleet"], stale=True, stale_since=stale["since"], error=stale["error"])
+        limit = self.cfg["alerts"]["rpc_failures_before_warn"]
+        if stale["runs"] == limit:
+            self.alert(state, "rpc_failures", "warn", count=limit, error=f"{name} {stale['error']}"[:120])
+        return last
+
+    def collect(self, state):
+        names = census.active_chains(self.chains)
+        deployments = fleet.load_deployments(self.root, names)
+        snap = {"census": {}, "fleet": {}, "events": [], "filters": None, "demo": None}
+        errors = {}
+        for name in names:
+            chain = self.chains["chains"][name]
+            try:
+                last = self.chain_step(state, snap, name, chain, deployments.get(name))
+            except FAILURES as err:
+                last = self.chain_failed(state, snap, name, chain, err)
+                errors[name] = state["chain_stale"][name]["error"]
+            else:
+                state["chain_stale"].pop(name, None)
+                state["chain_last"][name] = last
+                if "fleet" in last:
+                    snap["fleet"][name] = last["fleet"]
+            snap["demo"] = snap["demo"] or last.get("demo")
+        if names and len(errors) == len(names):
+            raise pelitarpc.Unavailable("; ".join(f"{n} {e}" for n, e in errors.items()))
         snap["filters"] = state["filters"]
         snap["events"] = state["fleet"]["events"][-50:]
-        return snap
+        return snap, errors
 
     def run(self):
         started = self.now()
         state = self.load_state()
         record = {"ts": int(started)}
         try:
-            snap = self.collect(state)
+            snap, errors = self.collect(state)
         except FAILURES as err:
             state["failures"] += 1
             record.update(ok=False, error=f"{type(err).__name__}: {err}"[:300])
@@ -231,6 +272,8 @@ class Indexer:
             stale = sorted(n for n, c in snap["census"].items() if c.get("stale"))
             if stale:
                 record["stale"] = stale
+            if errors:
+                record["chain_errors"] = errors
             rc = 0
         record["seconds"] = round(self.now() - started, 2)
         write_json_atomic(self.state_path, state)
@@ -240,8 +283,7 @@ class Indexer:
 
 
 def main():
-    chains = pelitarpc.load_config("chains.json")
-    return Indexer(ROOT, pelitarpc.Client(chains["user_agent"])).run()
+    return Indexer(ROOT, pelitarpc.client_for(pelitarpc.load_config("chains.json"))).run()
 
 
 if __name__ == "__main__":

@@ -62,7 +62,43 @@ PRD 4.5 and 4.6 ask for a key-less census of contracts that went dark (`scripts/
 - Base Sepolia RPC `eth_getLogs` on the callback proxy over 201 blocks answered for ranges ending 500, 3,000 and
   20,000 blocks behind the tip; Blockscout still answered 429 from this host at the same time.
 
+## Measured (24 Nov): Base Sepolia public RPC 429
+
+- `state/larian.jsonl` from 23 Nov 09:08 UTC: 462 runs, 152 failed (33 %); 147 of them `HTTP Error 429`, one Lasna
+  `-32007 25/second request limit`, one 503, two timeouts. Longest failing streak 5, twice (two warnings). 18–22 Nov: 0–1
+  failed runs a day.
+- The failures began with the Base Sepolia deployment (23 Nov 09:27): the indexer now reads the fleet, its events and
+  the demo Beacon on Base Sepolia every 2 minutes, about 6–9 requests a run to `sepolia.base.org`. In 20 instrumented
+  `collect()` passes, the 2 failures were both 429 from `https://sepolia.base.org`; Lasna took 10–11 requests a run
+  without a 429.
+- Cause in code: only the census was isolated per chain. `latest_block()`, the fleet reads, the demo read and
+  `rnk_getFilters` were not, so one 429 on one chain threw away every chain's fresh numbers, and the error named
+  neither the chain nor the host.
+- `https://base-sepolia-rpc.publicnode.com` (no key) answered `eth_chainId` = `0x14a34` (84532), 3 of 3 HTTP 200,
+  0.56–0.79 s.
+
+Decisions:
+
+- **Per-chain isolation.** Each chain's reads run in `Indexer.chain_step`. A failure keeps that chain's last good
+  census and fleet views marked `stale` (fleet alerts skip stale views), the other chains stay fresh and the snapshot
+  is written. `state/larian.jsonl` lists the chain in `stale` and its error in `chain_errors`. Only a run where every
+  chain failed is a failed run that keeps the previous snapshot.
+- **One warning per failing chain.** `state.chain_stale[<chain>].runs` counts failed runs in a row. At
+  `rpc_failures_before_warn` (unchanged) it sends the `rpc_failures` warning once, its `{error}` starting with
+  `<chain> <host>:`.
+- **Fallback endpoints, indexer only.** `rpc_fallback` (optional list) in `config/chains.json`; Base Sepolia lists
+  publicnode. `pelitarpc.Client` tries the next endpoint on HTTP 429/5xx, a timeout or connection error, or a
+  "request limit" reply (-32005/-32007). Each endpoint is tried once per call, with no sleep. After a refusal the
+  client starts on the endpoint that answered for the rest of the run. A node error (pruned block, revert) does not
+  move. When every endpoint refuses, the client raises `pelitarpc.Unavailable` (an `OSError`, not `RpcError`, so
+  `debts()` cannot turn it into a dash), and the message names every host. The site CSP is still built from `rpc`
+  alone, so the fallback never reaches the browser.
+- Same pattern as viem's `fallback([http(a), http(b)])` transport, written again in the standard library (ADR 0001).
+- Regression tests: `tests/test_indexer_rpc_limit.py`. They failed on `f39ec90`: a 429 on Base Sepolia made `run()`
+  return 1, and no warning named the chain.
+
 ## Rollback
 
 The census and indexer are read-only. Removing the `PELITA-INDEKS` cron line stops the indexer; the page then shows the
-last snapshot with its `generated_at` time.
+last snapshot with its `generated_at` time. To undo the 24 Nov per-chain isolation and fallback, `git revert` its commit
+(cron runs the old code on its next run). To drop only the fallback, remove `rpc_fallback` from `config/chains.json`.

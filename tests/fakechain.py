@@ -45,7 +45,11 @@ class FakeNet:
         self.extra_logs = {}  # rpc url -> list of logs for eth_getLogs on non-biller addresses
         self.fail = False
         self.blockscout_status = 200  # 429 replays Blockscout's "Too many requests" (measured 17 Nov)
-        self.by_rpc = {CHAINS["chains"][n]["rpc"]: n for n in ("lasna", "base-sepolia")}
+        self.limited = {}  # rpc url -> HTTP status it answers to every request (429 measured on sepolia.base.org, 24 Nov)
+        self.by_rpc = {}
+        for n in ("lasna", "base-sepolia"):
+            for url in [CHAINS["chains"][n]["rpc"]] + CHAINS["chains"][n].get("rpc_fallback", []):
+                self.by_rpc[url] = n
 
     def calls(self, method):
         """Every JSON-RPC call item with this method, single or inside a batch."""
@@ -72,6 +76,9 @@ class FakeNet:
                 body = io.BytesIO(b'{"message":"Too many requests"}')
                 raise HTTPError(req.full_url, self.blockscout_status, "Too Many Requests", {}, body)
             return _Resp(self._blockscout(req.full_url))
+        if req.full_url in self.limited:
+            body = io.BytesIO(b"rate limited")
+            raise HTTPError(req.full_url, self.limited[req.full_url], "Too Many Requests", {}, body)
         name = self.by_rpc[req.full_url]
         if isinstance(body, list):
             return _Resp([self._rpc(name, req.full_url, item) for item in body])

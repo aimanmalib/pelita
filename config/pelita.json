@@ -61,7 +61,7 @@
       "tank_low": "Pelita: tangki rendah ({detail}). Kenapa: Keeper tidak dapat menyalakan kontrak bila minyak habis. Buat: ulang langkah faucet (Baki KAU).",
       "ward_dark": "Pelita: kontrak dijaga {address} ({chain}) padam lebih {minutes} minit. Kenapa: Pelita gagal menyalakannya ({reason}). Buat: semak tangki dan had harian; tiada tindakan jika ini kontrak kawalan.",
       "keeper_debt": "Pelita: Keeper sendiri berhutang {debt} di Lasna. Kenapa: tanpa minyak Keeper berhenti menjaga semua kontrak. Buat: isi tangki Keeper sekarang (faucet, Baki KAU).",
-      "rpc_failures": "Pelita: pengindeks gagal {count} kali berturut ({error}). Kenapa: RPC atau Blockscout tidak menjawab; laman memapar data lama. Buat: tiada jika ia pulih sendiri; jika berterusan sehari, semak state/larian.jsonl.",
+      "rpc_failures": "Pelita: pengindeks gagal {count} kali berturut ({error}). Kenapa: RPC awam rantai itu (atau Blockscout) menolak atau tidak menjawab walaupun pengindeks sudah mencuba pelayan ganti; laman memapar data lama rantai itu. Buat: tiada jika ia pulih sendiri; jika berterusan sehari, semak state/larian.jsonl.",
       "site_down": "Pelita: laman {url} tidak menjawab {fails} kali berturut (kod terakhir {code}). Kenapa: kontena atau laluan proksi jatuh; juri melihat ralat. Buat: jalankan deploy/deploy.sh --status; jika kontena hilang, deploy/deploy.sh semula.",
       "site_up": "Pelita: laman {url} pulih (kod {code}). Tiada tindakan perlu."
     }

@@ -142,7 +142,8 @@ class FailureTest(IndexerCase):
         for _ in range(limit + 3):
             self.clock.t += 120
             self.assertEqual(self.make().run(), 1)
-        self.assertEqual(len(self.net.requests) - calls_before, limit + 3, "one request per run: no retry loop")
+        chains = len(census.active_chains(CHAINS))
+        self.assertEqual(len(self.net.requests) - calls_before, chains * (limit + 3), "one request per chain per run: no retry loop")
         self.assertEqual(self.snapshot(), before)
         self.assertEqual([lvl for lvl, _ in self.sent], ["warn"])
         lines = (self.root / "state" / "larian.jsonl").read_text().splitlines()
