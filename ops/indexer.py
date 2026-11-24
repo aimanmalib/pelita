@@ -18,7 +18,7 @@ import subprocess
 import sys
 import time
 from datetime import datetime, timezone
-from decimal import Decimal
+from decimal import ROUND_CEILING, Decimal
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -139,15 +139,33 @@ class Indexer:
         return {"own": own, "wards": wards}
 
     # ---- alerts -------------------------------------------------------------------------------
-    def alert(self, state, kind, level, **fields):
+    def alert(self, state, kind, level, text=None, **fields):
         today = datetime.fromtimestamp(self.now(), timezone.utc).strftime("%Y-%m-%d")
         sent = state["alerts"]
         if sent.get(kind) == today:
             return False
-        rc = self.notify(self.cfg["alerts"]["text"][kind].format(**fields), level)
+        rc = self.notify(self.cfg["alerts"]["text"][text or kind].format(**fields), level)
         if rc == 0:
             sent[kind] = today
         return rc == 0
+
+    def tank_low_alert(self, state, role, chain, balance_wei):
+        """ADR 0009: say whether the Keeper already stopped, how much test ETH is needed and where it goes."""
+        a, funds, keeper = self.cfg["alerts"], self.cfg["funds"], self.cfg["keeper"]
+        balance = Decimal(balance_wei) / fleet.WEI
+        fields = {"chain": chain, "balance": fleet.ether(balance_wei), "low_mark": keeper["low_mark"],
+                  "refills": a["base_tank_min_refills"], "address": a.get("top_up_address")}
+        if role == "keeper":
+            short = Decimal(funds["keeper_fund"]) - balance
+            eth = short / Decimal(funds["lreact_per_eth"])
+            stopped = balance < Decimal(keeper["self_floor"])
+            fields["status"] = a["keeper_state"]["stopped" if stopped else "running"].format(floor=keeper["self_floor"])
+        else:
+            eth = Decimal(funds["tank_fund"]) - balance
+        step = Decimal(1).scaleb(-a["eth_decimals"])
+        fields["eth_needed"] = str(max(eth, step).quantize(step, rounding=ROUND_CEILING))
+        text = f"tank_low_{role}" + ("" if fields["address"] else "_plain")
+        self.alert(state, "tank_low", "warn", text=text, **fields)
 
     def check_fleet_alerts(self, state, fleet_view):
         a = self.cfg["alerts"]
@@ -162,13 +180,11 @@ class Indexer:
                 if own["debt_wei"] > 0:
                     self.alert(state, "keeper_debt", "critical", debt=fleet.ether(own["debt_wei"]))
                 if own["balance_wei"] < low_mark:
-                    detail = f"Keeper Lasna {fleet.ether(own['balance_wei'])} < {self.cfg['keeper']['low_mark']}"
-                    self.alert(state, "tank_low", "warn", detail=detail)
+                    self.tank_low_alert(state, "keeper", name, own["balance_wei"])
             else:
                 refill = Decimal(self.cfg["wards"].get(name, {}).get("refill", "0")) * fleet.WEI
                 if own["balance_wei"] < refill * a["base_tank_min_refills"]:
-                    detail = f"Tank {name} {fleet.ether(own['balance_wei'])} < {a['base_tank_min_refills']} refills"
-                    self.alert(state, "tank_low", "warn", detail=detail)
+                    self.tank_low_alert(state, "tank", name, own["balance_wei"])
             for w in view["wards"]:
                 if w["role"] == "guarded" and w.get("dark_seconds", 0) > a["ward_dark_minutes"] * 60:
                     reason = fleet.last_reason(state["fleet"]["events"], w["address"])

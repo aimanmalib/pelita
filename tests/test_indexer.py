@@ -244,6 +244,53 @@ class FleetTest(IndexerCase):
         self.make().run()
         self.assertEqual(self.sent, [], "at most once a day per kind")
 
+    def test_tank_low_message_is_actionable(self):
+        """ADR 0009: the tank_low warning says whether the Keeper already stopped, how much test ETH and to where."""
+        address = "0x" + "AB" * 20
+        cfg_path = self.root / "config" / "pelita.json"
+        cfg = json.loads(cfg_path.read_text())
+        cfg["keeper"].update(self_floor="0.3", low_mark="3")  # frozen fixture, not the live values
+        cfg["funds"].update(keeper_fund="12", tank_fund="0.02", lreact_per_eth="100")
+        cfg["alerts"]["top_up_address"] = address
+        cfg_path.write_text(json.dumps(cfg))
+        self.deploy()
+        self.net.balances[(LASNA["rpc"], KEEPER)] = 267_375_100_000_000_000  # 0.2673751 lREACT, under self_floor
+        self.net.balances[(BASE["rpc"], TANK)] = 10**18
+        self.make().run()
+        (msg,) = [m for lvl, m in self.sent if lvl == "warn"]
+        self.assertIn(address, msg)
+        self.assertIn("berhenti", msg)
+        self.assertNotIn("masih mengisi", msg)
+        self.assertIn("0.118", msg, "(12 - 0.2673751) / 100 = 0.11732... rounded up")
+        self.assertIn("0.2673751", msg)
+
+        self.sent.clear()
+        self.clock.t += 86400
+        self.net.balances[(LASNA["rpc"], KEEPER)] = 10**18  # 1 lREACT: over self_floor, under low_mark
+        self.make().run()
+        (msg,) = [m for lvl, m in self.sent if lvl == "warn"]
+        self.assertIn("masih mengisi", msg)
+        self.assertIn("0.11", msg)
+        self.assertIn(address, msg)
+
+        self.sent.clear()
+        self.clock.t += 86400
+        self.net.balances[(LASNA["rpc"], KEEPER)] = 10 * 10**18
+        self.net.balances[(BASE["rpc"], TANK)] = 10**15  # 0.001 ETH < 10 refills
+        self.make().run()
+        (msg,) = [m for lvl, m in self.sent if lvl == "warn"]
+        self.assertIn(address, msg)
+        self.assertIn("0.019", msg, "tank_fund 0.02 - 0.001")
+
+        self.sent.clear()
+        self.clock.t += 86400
+        del cfg["alerts"]["top_up_address"]  # a deploy-your-own install without the key keeps working
+        cfg_path.write_text(json.dumps(cfg))
+        self.make().run()
+        (msg,) = [m for lvl, m in self.sent if lvl == "warn"]
+        self.assertNotIn(address, msg)
+        self.assertNotIn("{", msg)
+
     def test_partial_deployment_without_tank(self):
         """ADR 0002: Base Sepolia holds a Beacon and a Lantern before its Tank exists; the run must not crash."""
         self.deploy()

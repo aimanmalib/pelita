@@ -50,7 +50,9 @@
     "keeper_fund": "12",
     "tank_fund": "0.02",
     "max_swap_eth": "0.25",
-    "_note": "deploy.sh tops the Keeper (lREACT) and Tank (ETH) up to these balances with a plain transfer (RT-5). funds.sh tukar refuses more than max_swap_eth in one faucet call."
+    "_note": "deploy.sh tops the Keeper (lREACT) and Tank (ETH) up to these balances with a plain transfer (RT-5). funds.sh tukar refuses more than max_swap_eth in one faucet call.",
+    "lreact_per_eth": "100",
+    "_note_lreact_per_eth": "Measured on the lREACT faucet: 0.009 ETH swapped gave 0.9 lREACT (E-002, 23 Nov 2026). Used only to tell the owner how much test ETH the Keeper needs (ADR 0009)."
   },
   "alerts": {
     "ward_dark_minutes": 10,
@@ -58,12 +60,22 @@
     "rpc_failures_before_warn": 5,
     "max_per_kind_per_day": 1,
     "text": {
-      "tank_low": "Pelita: tangki rendah ({detail}). Kenapa: Keeper tidak dapat menyalakan kontrak bila minyak habis. Buat: ulang langkah faucet (Baki KAU).",
+      "tank_low_keeper": "Pelita: tangki Keeper {chain} rendah ({balance} lREACT < {low_mark}). {status}. Buat: hantar {eth_needed} ETH ujian Base Sepolia ke {address} (Baki KAU 2); autopilot menunggu baki itu, kemudian menukar ke lREACT dan mengisi Keeper sendiri.",
+      "tank_low_keeper_plain": "Pelita: tangki Keeper {chain} rendah ({balance} lREACT < {low_mark}). {status}. Buat: dapatkan {eth_needed} ETH ujian Base Sepolia, tukar di faucet lREACT dan pindahkan ke Keeper.",
+      "tank_low_tank": "Pelita: tangki Tank {chain} rendah ({balance} ETH < {refills} isian). Kenapa: Tank tidak dapat menyalakan kontrak Base bila minyak habis. Buat: hantar {eth_needed} ETH ujian Base Sepolia ke {address} (Baki KAU 2); autopilot menunggu baki itu, kemudian mengisi Tank sendiri.",
+      "tank_low_tank_plain": "Pelita: tangki Tank {chain} rendah ({balance} ETH < {refills} isian). Kenapa: Tank tidak dapat menyalakan kontrak Base bila minyak habis. Buat: pindahkan {eth_needed} ETH ujian Base Sepolia ke Tank.",
       "ward_dark": "Pelita: kontrak dijaga {address} ({chain}) padam lebih {minutes} minit. Kenapa: Pelita gagal menyalakannya ({reason}). Buat: semak tangki dan had harian; tiada tindakan jika ini kontrak kawalan.",
       "keeper_debt": "Pelita: Keeper sendiri berhutang {debt} di Lasna. Kenapa: tanpa minyak Keeper berhenti menjaga semua kontrak. Buat: isi tangki Keeper sekarang (faucet, Baki KAU).",
       "rpc_failures": "Pelita: pengindeks gagal {count} kali berturut ({error}). Kenapa: RPC awam rantai itu (atau Blockscout) menolak atau tidak menjawab walaupun pengindeks sudah mencuba pelayan ganti; laman memapar data lama rantai itu. Buat: tiada jika ia pulih sendiri; jika berterusan sehari, semak state/larian.jsonl.",
       "site_down": "Pelita: laman {url} tidak menjawab {fails} kali berturut (kod terakhir {code}). Kenapa: kontena atau laluan proksi jatuh; juri melihat ralat. Buat: jalankan deploy/deploy.sh --status; jika kontena hilang, deploy/deploy.sh semula.",
       "site_up": "Pelita: laman {url} pulih (kod {code}). Tiada tindakan perlu."
+    },
+    "top_up_address": "0xdCCAB20653AE18226b95A015948E99f919283394",
+    "_note_top_up_address": "The deployer that funds.sh and deploy.sh spend from; tank_low says to send test ETH here. Leave it out and tank_low uses the *_plain texts (ADR 0009).",
+    "eth_decimals": 3,
+    "keeper_state": {
+      "stopped": "Keeper SUDAH berhenti menyalakan kontrak (baki di bawah lantai {floor} lREACT)",
+      "running": "Keeper masih mengisi, tetapi berhenti bila baki di bawah {floor} lREACT"
     }
   },
   "indexer": {
