@@ -97,6 +97,16 @@ Decisions:
 - Regression tests: `tests/test_indexer_rpc_limit.py`. They failed on `f39ec90`: a 429 on Base Sepolia made `run()`
   return 1, and no warning named the chain.
 
+After 6.5 hours live (24 Nov, 00:34–07:10 UTC, runs with `ts >= 1795480419`, the fix's commit time): 200 runs,
+200 `ok` (100 %, against 67 % before), longest failing streak 0, no run with `base-sepolia` in `stale`, no
+`chain_errors`; `state/indexer.json` holds no `chain_stale` entry and `failures` is 0. The run log does not record
+whether the fallback answered a call, so these numbers do not separate "the fallback absorbed a 429" from "no 429
+came". Counted with:
+
+```sh
+python3 -c 'import json; r=[json.loads(l) for l in open("state/larian.jsonl") if l.strip()]; r=[x for x in r if x["ts"]>=1795480419]; print(len(r), sum(x["ok"] for x in r), sum("base-sepolia" in x.get("stale",[]) for x in r), sum("chain_errors" in x for x in r))'
+```
+
 ## Rollback
 
 The census and indexer are read-only. Removing the `PELITA-INDEKS` cron line stops the indexer; the page then shows the
