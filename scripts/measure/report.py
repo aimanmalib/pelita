@@ -111,7 +111,11 @@ def cost_section(series, chains):
               "| Side | Keeper reaction (median, `lREACT`) | Callback (median, ETH) | Samples |", "|---|---|---|---|"]
     for side, s in fees.items():
         med = lambda xs: statistics.median(xs) if xs else None  # noqa: E731
-        lines.append(f"| {side} | {coin(med(s['reaction_fee_wei']))} | "
+        # A reactive transaction's receipt shows no fee (E-005, 25 Nov 2026): Lasna bills the reaction to the Keeper.
+        # A median of zero would read as "free", so the slot stays open until that bill is read from the chain.
+        react = (coin(med(s["reaction_fee_wei"])) if any(s["reaction_fee_wei"])
+                 else "<<TBD H5: reaction receipts carry no fee; read what Lasna billed the Keeper>>")
+        lines.append(f"| {side} | {react} | "
                      f"{coin(med(s['callback_fee_wei'])) if s['callback_fee_wei'] else 'n/a'} | {len(s['reaction_fee_wei'])} |")
     return lines + [""]
 

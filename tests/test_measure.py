@@ -112,6 +112,18 @@ class ReportTest(unittest.TestCase):
         text, _ = self.render(3)
         self.assertIn("| Result | | **not met** |", text)
 
+    def test_zero_reaction_fee_is_an_open_slot_not_free(self):
+        # Reactive receipts on Lasna carry no fee (measured 25 Nov 2026); a median of 0 must not read as "free".
+        with tempfile.TemporaryDirectory() as d:
+            self.write_evidence(d, 3)
+            p = Path(d) / "E-005-series-lasna.json"
+            data = json.loads(p.read_text())
+            data["summary"]["guarded"]["reaction_fee_wei"] = [0, 0, 0]
+            p.write_text(json.dumps(data))
+            text = report.render(Path(d), series.pelitarpc.load_config("pelita.json"), CHAINS)
+        self.assertIn("| lasna | <<TBD H5", text)
+        self.assertNotIn("| lasna | 0 |", text)
+
     def test_render_is_deterministic(self):
         self.assertEqual(self.render(3)[0], self.render(3)[0])
 
