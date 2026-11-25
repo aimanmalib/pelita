@@ -41,6 +41,18 @@ def last_bool(text):
     return t > f
 
 
+def ward_terms(text):
+    """Parses the `cast call` text of `ward(...)` into (refill, maxOwed, dailyCap, dark, active).
+
+    cast prints `(5318007 [5.318e6], 0xAb.., 50000000000000000 [5e16], 100000000000000000 [1e17], 20, 3, ..., false, true)`.
+    """
+    body = text.strip().splitlines()[-1].strip().lstrip("(").rstrip(")")
+    fields = [f.split("[")[0].strip() for f in body.split(",")]
+    if len(fields) != 10 or fields[-1] not in ("true", "false") or fields[-2] not in ("true", "false"):
+        raise DeployError(f"unexpected ward tuple: {text[-120:]}")
+    return int(fields[2]), int(fields[3]), int(fields[4]), fields[8] == "true", fields[9] == "true"
+
+
 def _addresses(args):
     return [a.lower() for a in args if str(a).startswith("0x")]
 
@@ -156,10 +168,20 @@ class Deployer:
         self.send_once(self.r, flicker, "setLantern(address)", [lantern], "setLantern")
 
     def ensure_ward(self, keeper, chain_id, target, ward_cfg, daily_cap):
-        if last_bool(self.f.call(self.r.rpc, keeper, WARD_SIG, chain_id, target)):
+        """Protects `target` with the terms in config. An active ward whose terms differ from config is released and
+        protected again (the Keeper has no setter for them); a ward that is dark right now is left alone, because a
+        fresh ward would never see the blacklist that is already behind it (ADR 0010)."""
+        want = (to_wei(ward_cfg["refill"]), to_wei(ward_cfg["max_owed"]), int(daily_cap))
+        refill, max_owed, cap, dark, active = ward_terms(self.f.call(self.r.rpc, keeper, WARD_SIG, chain_id, target))
+        if active and (refill, max_owed, cap) == want:
             self.log(f"= ward {chain_id} {target} active")
             return
-        args = [chain_id, target, to_wei(ward_cfg["refill"]), to_wei(ward_cfg["max_owed"]), daily_cap]
+        if active and dark:
+            self.log(f"! ward {chain_id} {target} terms differ from config but it is dark now; run again once it is lit")
+            return
+        if active:
+            self.send_once(self.r, keeper, "release(uint256,address)", [chain_id, target], f"release {target} (new terms)")
+        args = [chain_id, target, *want]
         self.send_once(self.r, keeper, "protect(uint256,address,uint256,uint256,uint32)", args, f"protect {target}")
 
     def check_callback_gas(self, gas):

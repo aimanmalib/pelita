@@ -193,7 +193,9 @@ class CallbackGasTest(unittest.TestCase):
 
             def call(self, rpc, to, sig, *args):
                 if sig.startswith("ward("):
-                    return "(1, 0x, 0, 0, 0, 0, 0, 0, true, true)" if args[1] in F.wards else "(false, false)"
+                    if args[1] in F.wards:
+                        return "(1, 0x, 0, 0, 0, 0, 0, 0, false, true)"
+                    return "(0, 0x0000000000000000000000000000000000000000, 0, 0, 0, 0, 0, 0, false, false)"
                 return "0x0000000000000000000000000000000000000000"
 
             def send(self, rpc, to, sig, args, value=0):
@@ -235,6 +237,46 @@ class CallbackGasTest(unittest.TestCase):
             saved = json.loads((Path(out) / "lasna.json").read_text())
             self.assertEqual([w["address"] for w in saved["wards"]], ["0xnew1"])
             self.assertEqual(saved["retired"][0]["address"], "0xold")
+
+
+class WardTermsTest(unittest.TestCase):
+    """deploy.sh brings an active ward's terms back to config (ADR 0010)."""
+
+    LIVE = ("(5318007 [5.318e6], 0xa4c7BDDbA75955C915FC38753037e82c32d240B2, 50000000000000000 [5e16], "
+            "100000000000000000 [1e17], 20, 3, 1795617765 [1.795e9], 1795618190 [1.795e9], {dark}, true)")
+
+    def test_parses_the_cast_tuple(self):
+        self.assertEqual(deployer.ward_terms(self.LIVE.format(dark="false")), (5 * 10**16, 10**17, 20, False, True))
+        with self.assertRaises(deployer.DeployError):
+            deployer.ward_terms("(true)")
+
+    def run_ensure(self, dark, cap):
+        sent = []
+
+        class F:
+            def call(self, rpc, to, sig, *args):
+                return WardTermsTest.LIVE.format(dark="true" if dark else "false")
+
+            def send(self, rpc, to, sig, args, value=0):
+                sent.append((sig.split("(")[0], list(args)))
+                return "0xsent"
+
+        with tempfile.TemporaryDirectory() as out:
+            d = deployer.Deployer(F(), CallbackGasTest.CHAINS, {}, {"lasna": "r", "base-sepolia": "d"}, out,
+                                  log=lambda *_: None)
+            d.ensure_ward("0xK", 5318007, "0xF", {"refill": "0.05", "max_owed": "0.1"}, cap)
+        return sent
+
+    def test_same_terms_send_nothing(self):
+        self.assertEqual(self.run_ensure(dark=False, cap=20), [])
+
+    def test_new_terms_release_then_protect(self):
+        sent = self.run_ensure(dark=False, cap=40)
+        self.assertEqual([s[0] for s in sent], ["release", "protect"])
+        self.assertEqual(sent[1][1], ["5318007", "0xF", str(5 * 10**16), str(10**17), "40"])
+
+    def test_dark_ward_is_not_reprotected(self):
+        self.assertEqual(self.run_ensure(dark=True, cap=40), [])
 
 
 if __name__ == "__main__":
