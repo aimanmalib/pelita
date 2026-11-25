@@ -1,0 +1,74 @@
+{
+  "side": "base-sepolia",
+  "block_ranges": {
+    "lasna": [
+      9044563,
+      9225056
+    ],
+    "base-sepolia": [
+      63463194,
+      63482143
+    ]
+  },
+  "as_of_ts": 1795618297,
+  "rows": [
+    {
+      "side": "base-sepolia",
+      "role": "guarded",
+      "target": "0xf5f37156f2c3414735e6085aaecc9940e6c77904",
+      "dark_tx": "0x43881c5c15012332a5e6604cb39a698e640cb18e880a646d6aa0da2dbd692729",
+      "dark_block": 63482036,
+      "dark_ts": 1795618276,
+      "reaction_tx": "0x239574bc45f48d8c0326f0bc08ed05966e16cf4112ecfb09010293711bc562f8",
+      "reaction_block": 9224991,
+      "reaction_ts": 1795618275,
+      "reaction_fee_wei": 0,
+      "outcome": "RefuelRequested",
+      "callback_tx": "0x602cdda51c889be52834b6b638ad46b5939ebc84cf62d324e36480564cfce1fb",
+      "callback_ts": 1795618277,
+      "callback_fee_wei": 695094000000,
+      "callback_event": "Refueled",
+      "lit_tx": "0x602cdda51c889be52834b6b638ad46b5939ebc84cf62d324e36480564cfce1fb",
+      "lit_ts": 1795618277,
+      "latency_s": 1
+    }
+  ],
+  "summary": {
+    "guarded": {
+      "outages": 1,
+      "relit": 1,
+      "relit_pct": 100.0,
+      "median_s": 1,
+      "max_s": 1,
+      "reaction_fee_wei": [
+        0
+      ],
+      "callback_fee_wei": [
+        695094000000
+      ]
+    },
+    "control": {
+      "outages": 0,
+      "relit": 0,
+      "relit_pct": null,
+      "median_s": null,
+      "max_s": null,
+      "reaction_fee_wei": [],
+      "callback_fee_wei": []
+    }
+  },
+  "controls": [
+    {
+      "address": "0xc8f9a1f1922e734ab3a4f86dabf7788a0a9ee95b",
+      "dark": false,
+      "debt_wei": 0,
+      "dark_since_ts": null,
+      "hours_dark": 0
+    }
+  ],
+  "demo": {
+    "beats": 15,
+    "lit_guarded": 15,
+    "lit_control": 4
+  }
+}

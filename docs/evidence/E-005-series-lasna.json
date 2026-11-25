@@ -1,0 +1,101 @@
+{
+  "side": "lasna",
+  "block_ranges": {
+    "lasna": [
+      9044563,
+      9225036
+    ]
+  },
+  "as_of_ts": 1795618323,
+  "rows": [
+    {
+      "side": "lasna",
+      "role": "guarded",
+      "target": "0xa4c7bddba75955c915fc38753037e82c32d240b2",
+      "dark_tx": "0x07de1f4ff24a5eb8c58e982dadcfcab67905b1eed0c3cfd0fcfc4be5eca6d656",
+      "dark_block": 9224514,
+      "dark_ts": 1795617764,
+      "reaction_tx": "0xac7d0ec7db5a217fb92db3628e5e670427e873305c9974c9b0227325937212c6",
+      "reaction_block": 9224515,
+      "reaction_ts": 1795617765,
+      "reaction_fee_wei": 0,
+      "outcome": "Refueled",
+      "lit_tx": "0xac7d0ec7db5a217fb92db3628e5e670427e873305c9974c9b0227325937212c6",
+      "lit_ts": 1795617765,
+      "latency_s": 1
+    },
+    {
+      "side": "lasna",
+      "role": "control",
+      "target": "0x42cdfe8c54c2395eaca20ba5cdafffbdf6061458",
+      "dark_tx": "0x17d878fc2278a85049865d60f8c82a7308b98a024d4e87b599d61337fe99682a",
+      "dark_block": 9224554,
+      "dark_ts": 1795617807
+    },
+    {
+      "side": "lasna",
+      "role": "guarded",
+      "target": "0xa4c7bddba75955c915fc38753037e82c32d240b2",
+      "dark_tx": "0x785b01ea4fa20877e208f8c3b58d09876dffd3baa0c72d0644878d9562cb4b8a",
+      "dark_block": 9224714,
+      "dark_ts": 1795617977,
+      "reaction_tx": "0x17929b16959d81a18a2ccdb84f0a5a02fe7f809b9f5a41176f28c170b28e6e6d",
+      "reaction_block": 9224715,
+      "reaction_ts": 1795617978,
+      "reaction_fee_wei": 0,
+      "outcome": "Refueled",
+      "lit_tx": "0x17929b16959d81a18a2ccdb84f0a5a02fe7f809b9f5a41176f28c170b28e6e6d",
+      "lit_ts": 1795617978,
+      "latency_s": 1
+    },
+    {
+      "side": "lasna",
+      "role": "guarded",
+      "target": "0xa4c7bddba75955c915fc38753037e82c32d240b2",
+      "dark_tx": "0x45b04b63a7fda977da6e95cd2f10eb623d7457635b6e4faaeffe6ea4177e8158",
+      "dark_block": 9224910,
+      "dark_ts": 1795618189,
+      "reaction_tx": "0x47bf9807338b0da198920c9278a07878161b203ddcf907467cd7065f667cc596",
+      "reaction_block": 9224911,
+      "reaction_ts": 1795618190,
+      "reaction_fee_wei": 0,
+      "outcome": "Refueled",
+      "lit_tx": "0x47bf9807338b0da198920c9278a07878161b203ddcf907467cd7065f667cc596",
+      "lit_ts": 1795618190,
+      "latency_s": 1
+    }
+  ],
+  "summary": {
+    "guarded": {
+      "outages": 3,
+      "relit": 3,
+      "relit_pct": 100.0,
+      "median_s": 1,
+      "max_s": 1,
+      "reaction_fee_wei": [
+        0,
+        0,
+        0
+      ],
+      "callback_fee_wei": []
+    },
+    "control": {
+      "outages": 1,
+      "relit": 0,
+      "relit_pct": 0.0,
+      "median_s": null,
+      "max_s": null,
+      "reaction_fee_wei": [],
+      "callback_fee_wei": []
+    }
+  },
+  "controls": [
+    {
+      "address": "0x42cdfe8c54c2395eaca20ba5cdafffbdf6061458",
+      "dark": true,
+      "debt_wei": 13125700000000000,
+      "dark_since_ts": 1795617807,
+      "hours_dark": 0.1
+    }
+  ]
+}

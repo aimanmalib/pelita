@@ -1,0 +1,107 @@
+{
+  "_about": "First full loop of each path (PRD 0.3, P2c), taken by scripts/measure/first_loops.py from the E-005 series files and E-004-demo-loop.json, which were read off the chains.",
+  "sources": [
+    "E-005-series-lasna.json",
+    "E-005-series-base-sepolia.json",
+    "E-004-demo-loop.json"
+  ],
+  "loops": [
+    {
+      "side": "lasna",
+      "closed": true,
+      "target": "0xa4c7bddba75955c915fc38753037e82c32d240b2",
+      "latency_s": 1,
+      "steps": [
+        {
+          "step": "dark",
+          "event": "BlacklistContract",
+          "tx": "0x07de1f4ff24a5eb8c58e982dadcfcab67905b1eed0c3cfd0fcfc4be5eca6d656",
+          "block": 9224514,
+          "ts": 1795617764
+        },
+        {
+          "step": "reaction",
+          "event": "Refueled",
+          "tx": "0xac7d0ec7db5a217fb92db3628e5e670427e873305c9974c9b0227325937212c6",
+          "block": 9224515,
+          "ts": 1795617765,
+          "refTx": "0x07de1f4ff24a5eb8c58e982dadcfcab67905b1eed0c3cfd0fcfc4be5eca6d656",
+          "fee_wei": 0
+        },
+        {
+          "step": "relit",
+          "event": "WhitelistContract",
+          "tx": "0xac7d0ec7db5a217fb92db3628e5e670427e873305c9974c9b0227325937212c6",
+          "ts": 1795617765
+        }
+      ]
+    },
+    {
+      "side": "base-sepolia",
+      "closed": true,
+      "target": "0xf5f37156f2c3414735e6085aaecc9940e6c77904",
+      "latency_s": 1,
+      "steps": [
+        {
+          "step": "dark",
+          "event": "BlacklistContract",
+          "tx": "0x43881c5c15012332a5e6604cb39a698e640cb18e880a646d6aa0da2dbd692729",
+          "block": 63482036,
+          "ts": 1795618276
+        },
+        {
+          "step": "reaction",
+          "event": "RefuelRequested",
+          "tx": "0x239574bc45f48d8c0326f0bc08ed05966e16cf4112ecfb09010293711bc562f8",
+          "block": 9224991,
+          "ts": 1795618275,
+          "refTx": "0x43881c5c15012332a5e6604cb39a698e640cb18e880a646d6aa0da2dbd692729",
+          "fee_wei": 0
+        },
+        {
+          "step": "callback",
+          "event": "Refueled",
+          "tx": "0x602cdda51c889be52834b6b638ad46b5939ebc84cf62d324e36480564cfce1fb",
+          "ts": 1795618277,
+          "fee_wei": 695094000000
+        },
+        {
+          "step": "relit",
+          "event": "WhitelistContract",
+          "tx": "0x602cdda51c889be52834b6b638ad46b5939ebc84cf62d324e36480564cfce1fb",
+          "ts": 1795618277
+        }
+      ]
+    },
+    {
+      "side": "demo",
+      "closed": true,
+      "beat_number": 4,
+      "steps": [
+        {
+          "step": "beat",
+          "event": "Beat",
+          "tx": "0xb001f0f3d765a6f01ef6fbf28e46c5fb2df346c89c69528750df614fe07c48ef",
+          "block": 62768831,
+          "ts": 1795475635
+        },
+        {
+          "step": "reaction",
+          "event": "Forwarded",
+          "tx": "0x597fc3964da8c294efa1301f2a1dabf7e20c3aba9f0f37f67bfe9315aff43293",
+          "block": 9091970,
+          "ts": 1795475634,
+          "refTx": "0xb001f0f3d765a6f01ef6fbf28e46c5fb2df346c89c69528750df614fe07c48ef"
+        },
+        {
+          "step": "lit",
+          "event": "Lit",
+          "tx": "0x70f8bd06b89fa6093a952e8f4a260aa77d98e766026de266d950446fc941bece",
+          "block": 62768837,
+          "ts": 1795475636
+        }
+      ]
+    }
+  ],
+  "all_closed": true
+}
