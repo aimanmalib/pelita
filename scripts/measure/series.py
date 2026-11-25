@@ -1,8 +1,8 @@
 """Measurement series for H1-H5 (PRD 2.1, 4.5). Two commands:
 
 record  Read-only, no key. Reads, from each chain's deploy block to its tip: every dark/lit event of the demo wards
-        (guarded and control), every Keeper reaction on Lasna with its receipt (`refTx`, fee), every Tank callback on
-        the destination, and the Beacon beats and Lantern lights for H4. Writes docs/evidence/E-005-series-<side>.json.
+        (guarded and control), every Keeper reaction on Lasna with its receipt (`refTx`) and what Lasna billed for it,
+        every Tank callback on the destination, and the Beacon beats and Lantern lights for H4. Writes docs/evidence/E-005-series-<side>.json.
         A reaction is paired with its outage EXACTLY: the reactive transaction's `refTx` is the outage transaction.
         Times are block timestamps, never this script's clock.
 poke    Sends `pokeOwner()` to the Beacon N times, `--interval` seconds apart (Foundry keystore; drives the demo).
@@ -58,6 +58,8 @@ def build_rows(side, wards, darks, lits, reactions, callbacks):
             r = mine[0]
             row.update(reaction_tx=r["tx"], reaction_block=r["block"], reaction_ts=r["ts"],
                        reaction_fee_wei=r.get("fee_wei", 0), outcome=r["event"])
+            if "billed_wei" in r:
+                row["reaction_billed_wei"] = r["billed_wei"]
             if r.get("reason"):
                 row["reason"] = r["reason"]
             cb = by_seq.get(r.get("seq")) if r["event"] == "RefuelRequested" else None
@@ -103,6 +105,7 @@ def summarize(rows, role="guarded"):
         "max_s": lat[-1] if lat else None,
         "reaction_fee_wei": [r["reaction_fee_wei"] for r in mine if "reaction_fee_wei" in r],
         "callback_fee_wei": [r["callback_fee_wei"] for r in mine if "callback_fee_wei" in r],
+        "reaction_billed_wei": [r["reaction_billed_wei"] for r in mine if "reaction_billed_wei" in r],
     }
 
 
@@ -135,6 +138,8 @@ def keeper_reactions(client, reader, dep, events_cfg, first, last):
     for e, lg in zip(events, logs):
         if e["event"] == "RefuelRequested":
             e["seq"] = _int(lg["topics"][3])
+        if e["event"] == "Refueled":
+            e["sent_wei"] = _int("0x" + lg["data"][2:66])
     txs = sorted({e["tx"] for e in events})
     receipts = dict(zip(txs, client.batch(lasna["rpc"], [("eth_getTransactionReceipt", [t]) for t in txs])))
     reader.prefetch_times(e["block"] for e in events)
@@ -143,7 +148,55 @@ def keeper_reactions(client, reader, dep, events_cfg, first, last):
         e["ref_tx"] = rc.get("refTx")
         e["fee_wei"] = _int(rc.get("gasUsed")) * _int(rc.get("effectiveGasPrice"))
         e["ts"] = reader.block_time(e["block"])
+    billed = keeper_billed(client, lasna, dep["keeper"], events)
+    for e in events:
+        if e["tx"] in billed:
+            e["billed_wei"] = billed[e["tx"]]
     return events
+
+
+def billed_per_tx(blocks, keeper, events):
+    """What Lasna billed the Keeper for each reaction transaction, from its balance (pure; tested on fixtures).
+
+    A reactive transaction's receipt shows no fee (E-005, 25 Nov 2026): the system takes the bill from the Keeper's own
+    balance inside the reaction's block. So, per block B: billed = balance(B-1) - balance(B) - lREACT the Keeper sent in
+    B (`Refueled` amounts), split evenly over the reactions addressed to the Keeper in B. A block where any transaction
+    calls the Keeper directly (a top-up, an owner call) is not clean and gives no figure; neither does a non-positive bill.
+    blocks  {block: {"before": wei, "after": wei, "txs": [{hash, to, input}]}}
+    events  Keeper events with {tx, block, sent_wei?}
+    """
+    keeper = keeper.lower()
+    word = keeper[2:].rjust(64, "0")
+    out = {}
+    for b, blk in blocks.items():
+        txs = blk["txs"]
+        if any((t.get("to") or "").lower() == keeper for t in txs):
+            continue
+        mine = [t["hash"] for t in txs if (t.get("input") or "")[10:74].lower() == word]
+        sent = sum(e.get("sent_wei", 0) for e in events if e["block"] == b)
+        bill = blk["before"] - blk["after"] - sent
+        if not mine or bill <= 0:
+            continue
+        for h in mine:
+            out[h] = bill // len(mine)
+    return out
+
+
+def keeper_billed(client, lasna, keeper, events, chunk=20):
+    """Reads, for each block holding a Keeper reaction, the block's transactions and the Keeper's balance around it."""
+    numbers = sorted({e["block"] for e in events})
+    blocks = {}
+    for i in range(0, len(numbers), chunk):
+        part = numbers[i : i + chunk]
+        calls = []
+        for b in part:
+            calls += [("eth_getBlockByNumber", [hex(b), True]), ("eth_getBalance", [keeper, hex(b - 1)]),
+                      ("eth_getBalance", [keeper, hex(b)])]
+        res = client.batch(lasna["rpc"], calls)
+        for j, b in enumerate(part):
+            blk, before, after = res[3 * j : 3 * j + 3]
+            blocks[b] = {"before": _int(before), "after": _int(after), "txs": (blk or {}).get("transactions", [])}
+    return billed_per_tx(blocks, keeper, events)
 
 
 def tank_callbacks(client, dest, dep, events_cfg, first, last):

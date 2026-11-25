@@ -86,7 +86,14 @@ def control_section(series, hours):
               "| Chain | Contract | Dark at last block | Hours dark | debt() | Result |", "|---|---|---|---|---|---|"]
     for side, c in rows:
         ok = c["dark"] and c["hours_dark"] >= hours and c["debt_wei"] > 0
-        lines.append(f"| {side} | `{c['address']}` | {c['dark']} | {c['hours_dark']} | {coin(c['debt_wei'])} | {verdict(ok)} |")
+        result = verdict(ok)
+        demo = (series[side] or {}).get("demo") or {}
+        never = not any(r["target"] == c["address"] for r in series[side]["rows"])
+        if never and demo and demo.get("lit_control", 0) < demo.get("beats", 0):
+            # The control Lantern only spends gas when a beat reaches it; with its upstream control dark, none do.
+            result = (f"no outage: it received {demo['lit_control']} of {demo['beats']} beats, because its upstream "
+                      "control on Lasna is dark (H4)")
+        lines.append(f"| {side} | `{c['address']}` | {c['dark']} | {c['hours_dark']} | {coin(c['debt_wei'])} | {result} |")
     return lines + [""]
 
 
@@ -107,16 +114,18 @@ def cost_section(series, chains):
     fees = {side: d["summary"]["guarded"] for side, d in series.items() if d}
     if not fees:
         return lines + [tbd("H5", "python3 scripts/measure/series.py record --side <chain>"), ""]
-    lines += ["Fees from transaction receipts (gas used times effective gas price).", "",
-              "| Side | Keeper reaction (median, `lREACT`) | Callback (median, ETH) | Samples |", "|---|---|---|---|"]
+    lines += ["Callback: fee from its receipt (gas used times effective gas price). Keeper reaction: a reactive receipt shows",
+              "no fee, so the figure is what Lasna took from the Keeper's balance in the reaction's block, less the `lREACT`",
+              "it sent to the ward (`scripts/measure/series.py`, `billed_per_tx`). Blocks where anything else called the",
+              "Keeper are left out.", "",
+              "| Side | Keeper reaction billed (median, `lREACT`) | Callback (median, ETH) | Samples |", "|---|---|---|---|"]
     for side, s in fees.items():
         med = lambda xs: statistics.median(xs) if xs else None  # noqa: E731
-        # A reactive transaction's receipt shows no fee (E-005, 25 Nov 2026): Lasna bills the reaction to the Keeper.
-        # A median of zero would read as "free", so the slot stays open until that bill is read from the chain.
-        react = (coin(med(s["reaction_fee_wei"])) if any(s["reaction_fee_wei"])
-                 else "<<TBD H5: reaction receipts carry no fee; read what Lasna billed the Keeper>>")
+        # A median of zero would read as "free", so a side with no positive bill keeps the slot open.
+        billed = [x for x in s.get("reaction_billed_wei", []) if x > 0]
+        react = coin(med(billed)) if billed else "<<TBD H5: no clean Keeper bill read on Lasna yet>>"
         lines.append(f"| {side} | {react} | "
-                     f"{coin(med(s['callback_fee_wei'])) if s['callback_fee_wei'] else 'n/a'} | {len(s['reaction_fee_wei'])} |")
+                     f"{coin(med(s['callback_fee_wei'])) if s['callback_fee_wei'] else 'n/a'} | {len(billed)} |")
     return lines + [""]
 
 

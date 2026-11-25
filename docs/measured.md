@@ -5,7 +5,7 @@ Times are block timestamps. Testnet only: Reactive Lasna and Base Sepolia. Targe
 
 ## H1. Lasna outages relit by the Keeper
 
-Source: `docs/evidence/E-005-series-lasna.json` (lasna blocks 9044563-9230346). Repeat: `python3 scripts/measure/series.py record --side lasna`.
+Source: `docs/evidence/E-005-series-lasna.json` (lasna blocks 9044563-9231296). Repeat: `python3 scripts/measure/series.py record --side lasna`.
 
 | Measure | Target | Measured |
 |---|---|---|
@@ -106,8 +106,8 @@ Target: stays dark for at least 24 hours with `debt()` above 0.
 
 | Chain | Contract | Dark at last block | Hours dark | debt() | Result |
 |---|---|---|---|---|---|
-| lasna | `0x42cdfe8c54c2395eaca20ba5cdafffbdf6061458` | True | 1.7 | 0.0131257 | **not met** |
-| base-sepolia | `0xc8f9a1f1922e734ab3a4f86dabf7788a0a9ee95b` | False | 0 | 0 | **not met** |
+| lasna | `0x42cdfe8c54c2395eaca20ba5cdafffbdf6061458` | True | 2.0 | 0.0131257 | **not met** |
+| base-sepolia | `0xc8f9a1f1922e734ab3a4f86dabf7788a0a9ee95b` | False | 0 | 0 | no outage: it received 4 of 450 beats, because its upstream control on Lasna is dark (H4) |
 
 ## H4. Lost beats, guarded against control
 
@@ -120,12 +120,15 @@ Same Beacon, same beats, same block range.
 
 ## H5. Cost of one relight
 
-Fees from transaction receipts (gas used times effective gas price).
+Callback: fee from its receipt (gas used times effective gas price). Keeper reaction: a reactive receipt shows
+no fee, so the figure is what Lasna took from the Keeper's balance in the reaction's block, less the `lREACT`
+it sent to the ward (`scripts/measure/series.py`, `billed_per_tx`). Blocks where anything else called the
+Keeper are left out.
 
-| Side | Keeper reaction (median, `lREACT`) | Callback (median, ETH) | Samples |
+| Side | Keeper reaction billed (median, `lREACT`) | Callback (median, ETH) | Samples |
 |---|---|---|---|
-| lasna | <<TBD H5: reaction receipts carry no fee; read what Lasna billed the Keeper>> | n/a | 52 |
-| base-sepolia | <<TBD H5: reaction receipts carry no fee; read what Lasna billed the Keeper>> | 0.000000695094 | 15 |
+| lasna | 0.017684 | n/a | 52 |
+| base-sepolia | <<TBD H5: no clean Keeper bill read on Lasna yet>> | 0.000000695094 | 0 |
 
 ## H8. Census of dark contracts (no key)
 

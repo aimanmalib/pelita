@@ -124,8 +124,51 @@ class ReportTest(unittest.TestCase):
         self.assertIn("| lasna | <<TBD H5", text)
         self.assertNotIn("| lasna | 0 |", text)
 
+    def test_keeper_bill_is_read_from_its_balance(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.write_evidence(d, 3)
+            p = Path(d) / "E-005-series-lasna.json"
+            data = json.loads(p.read_text())
+            data["summary"]["guarded"]["reaction_billed_wei"] = [3 * 10**16, 10**16, 2 * 10**16]
+            p.write_text(json.dumps(data))
+            text = report.render(Path(d), series.pelitarpc.load_config("pelita.json"), CHAINS)
+        self.assertIn("| lasna | 0.02 | n/a | 3 |", text)
+        self.assertNotIn("<<TBD H5", text)
+
+    def test_base_control_that_never_went_dark_names_the_lost_beats(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.write_evidence(d, 3)
+            base = {"side": "base-sepolia", "rows": [], "as_of_ts": 1, "block_ranges": {"base-sepolia": [1, 2]}, "summary": {"guarded": series.summarize([])},
+                    "controls": series.control_status([], {C: 0}, 1), "demo": {"beats": 450, "lit_guarded": 450,
+                                                                               "lit_control": 4}}
+            (Path(d) / "E-005-series-base-sepolia.json").write_text(json.dumps(base))
+            text = report.render(Path(d), series.pelitarpc.load_config("pelita.json"), CHAINS)
+        self.assertIn("| base-sepolia | `" + C + "` | False | 0 | 0 | no outage: it received 4 of 450 beats", text)
+
     def test_render_is_deterministic(self):
         self.assertEqual(self.render(3)[0], self.render(3)[0])
+
+
+class BillTest(unittest.TestCase):
+    K = "0x" + "b" * 40
+    ARG = "0xcebbda8d" + "0" * 24 + "b" * 40
+
+    def block(self, before, after, *txs):
+        return {"before": before, "after": after, "txs": list(txs)}
+
+    def test_bill_is_balance_drop_less_value_sent_split_over_reactions(self):
+        r1, r2 = {"hash": "0x1", "to": "0x" + "8" * 40, "input": self.ARG}, {"hash": "0x2", "to": None, "input": self.ARG}
+        other = {"hash": "0x3", "to": "0x" + "9" * 40, "input": "0x"}
+        blocks = {5: self.block(1000, 700, r1, other), 6: self.block(700, 600, r1 | {"hash": "0x4"}, r2)}
+        events = [{"tx": "0x1", "block": 5, "sent_wei": 250}, {"tx": "0x1", "block": 5}]
+        self.assertEqual(series.billed_per_tx(blocks, self.K.upper().replace("0X", "0x"), events),
+                         {"0x1": 50, "0x4": 50, "0x2": 50})
+
+    def test_block_with_a_direct_call_or_no_positive_bill_gives_no_figure(self):
+        react = {"hash": "0x1", "to": "0x" + "8" * 40, "input": self.ARG}
+        topup = {"hash": "0x2", "to": self.K, "input": "0x"}
+        blocks = {5: self.block(1000, 700, react, topup), 6: self.block(700, 700, react | {"hash": "0x5"})}
+        self.assertEqual(series.billed_per_tx(blocks, self.K, []), {})
 
 
 if __name__ == "__main__":
