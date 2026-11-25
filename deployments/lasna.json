@@ -23,7 +23,21 @@
         "0x90832735001E807Dde8CD0f5181F07b85BEDb7a4",
         "300000"
       ],
-      "verified": false
+      "verified": "sourcify",
+      "source": "https://repo.sourcify.dev/5318007/0xa4c7BDDbA75955C915FC38753037e82c32d240B2"
+    },
+    "flicker_control": {
+      "address": "0x42CdFE8C54c2395eaca20ba5cdaFfFbDf6061458",
+      "tx": "0xc2950a563bd5322dcd80b23715944a20b1179bb0090862c934fcbf4ef8f3ae3b",
+      "block": 9221518,
+      "kind": "flicker",
+      "args": [
+        "84532",
+        "0x90832735001E807Dde8CD0f5181F07b85BEDb7a4",
+        "300000"
+      ],
+      "verified": "sourcify",
+      "source": "https://repo.sourcify.dev/5318007/0x42CdFE8C54c2395eaca20ba5cdaFfFbDf6061458"
     }
   },
   "keeper": "0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa",
@@ -32,6 +46,11 @@
     {
       "address": "0xa4c7BDDbA75955C915FC38753037e82c32d240B2",
       "role": "guarded",
+      "name": "Flicker"
+    },
+    {
+      "address": "0x42CdFE8C54c2395eaca20ba5cdaFfFbDf6061458",
+      "role": "control",
       "name": "Flicker"
     }
   ],

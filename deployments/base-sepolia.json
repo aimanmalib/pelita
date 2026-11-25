@@ -23,7 +23,33 @@
         "0x476F44b11F5C942c58f4c8E3d0300E5710743585",
         "0xa4c7BDDbA75955C915FC38753037e82c32d240B2"
       ],
+      "verified": "blockscout",
+      "source": "https://base-sepolia.blockscout.com/address/0xF5f37156f2C3414735E6085aAeCC9940e6C77904?tab=contract"
+    },
+    "tank": {
+      "address": "0xeDF0239e5661097228a570B8Ad05707562886bCf",
+      "tx": "0x953282a5e07ab96990fb3e43de16f2a717a86223b69e23058bdd7b0b93950213",
+      "block": 63463194,
+      "kind": "tank",
+      "args": [
+        "0x476F44b11F5C942c58f4c8E3d0300E5710743585",
+        "0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa",
+        "1000000000000000",
+        "2000000000000000"
+      ],
       "verified": false
+    },
+    "lantern_control": {
+      "address": "0xc8F9A1F1922e734ab3a4f86DAbF7788A0A9EE95b",
+      "tx": "0x7dd1edc73187b4d09243858d9cf8a10bf89c7498b75865b1af55760de10cfc90",
+      "block": 63463271,
+      "kind": "lantern",
+      "args": [
+        "0x476F44b11F5C942c58f4c8E3d0300E5710743585",
+        "0x42CdFE8C54c2395eaca20ba5cdaFfFbDf6061458"
+      ],
+      "verified": "blockscout",
+      "source": "https://base-sepolia.blockscout.com/address/0xc8F9A1F1922e734ab3a4f86DAbF7788A0A9EE95b?tab=contract"
     }
   },
   "beacon": "0x90832735001E807Dde8CD0f5181F07b85BEDb7a4",
@@ -31,6 +57,11 @@
     {
       "address": "0xF5f37156f2C3414735E6085aAeCC9940e6C77904",
       "role": "guarded",
+      "name": "Lantern"
+    },
+    {
+      "address": "0xc8F9A1F1922e734ab3a4f86DAbF7788A0A9EE95b",
+      "role": "control",
       "name": "Lantern"
     }
   ],
@@ -48,5 +79,7 @@
       "source": "https://base-sepolia.blockscout.com/address/0xc8deb0e8547Be8aA60d41fBEc50c5bBaBdbC9dc6?tab=contract",
       "key": "lantern_guarded"
     }
-  ]
+  ],
+  "tank": "0xeDF0239e5661097228a570B8Ad05707562886bCf",
+  "deploy_block": 63463194
 }
