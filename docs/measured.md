@@ -72,12 +72,12 @@ Source: `docs/evidence/E-005-series-lasna.json` (lasna blocks 9044563-9231296). 
 
 ## H2. Base Sepolia outages relit through a callback
 
-Source: `docs/evidence/E-005-series-base-sepolia.json` (lasna blocks 9044563-9230306, base-sepolia blocks 63463194-63510600). Repeat: `python3 scripts/measure/series.py record --side base-sepolia`.
+Source: `docs/evidence/E-005-series-base-sepolia.json` (lasna blocks 9044563-9232150, base-sepolia blocks 63463194-63520597). Repeat: `python3 scripts/measure/series.py record --side base-sepolia`.
 
 | Measure | Target | Measured |
 |---|---|---|
-| Guarded outages | at least 15 | 15 |
-| Relit | 100% | 15 (100.0%) |
+| Guarded outages | at least 15 | 17 |
+| Relit | 100% | 17 (100.0%) |
 | Median outage to relit (block timestamps) | at most 10 s | 1 s |
 | Slowest | | 2 s |
 | Result | | met |
@@ -99,6 +99,8 @@ Source: `docs/evidence/E-005-series-base-sepolia.json` (lasna blocks 9044563-923
 | [0x623efc2b](https://base-sepolia.blockscout.com/tx/0x623efc2be4c0922e9dc930b5915ef9e4712410fa2adf8427c830b6e88383837d) | [0xd02b8eba](https://lasna.reactscan.net/tx/0xd02b8ebac13b3d874be50ddb63b5c641ec8a73230a37072c2ea20c5894e0f10a) | RefuelRequested | [0xe31bf72e](https://base-sepolia.blockscout.com/tx/0xe31bf72ecaa5ff00789cbf460968d7dd96dc509705515c5f316dd5c061d28e2a) | [0xe31bf72e](https://base-sepolia.blockscout.com/tx/0xe31bf72ecaa5ff00789cbf460968d7dd96dc509705515c5f316dd5c061d28e2a) | 1 |
 | [0x520cefe8](https://base-sepolia.blockscout.com/tx/0x520cefe830c4d12365a24ea6f37674fa10a6a39282d36a6c300f4af1cbd04e16) | [0x39212d74](https://lasna.reactscan.net/tx/0x39212d740f7b6e7f2d5cb5157179211a2c2307f4ba5b29ae4406f3a6dc7fb865) | RefuelRequested | [0x52a44e82](https://base-sepolia.blockscout.com/tx/0x52a44e82ec266b346c755d8f7fa1c45d951f0256e842a4d369659a775a58af55) | [0x52a44e82](https://base-sepolia.blockscout.com/tx/0x52a44e82ec266b346c755d8f7fa1c45d951f0256e842a4d369659a775a58af55) | 1 |
 | [0x661390ce](https://base-sepolia.blockscout.com/tx/0x661390cec324bbd063d8904851b6564a0674b9a22f2f10db77b30a917ff16c7d) | [0x3638f744](https://lasna.reactscan.net/tx/0x3638f744ab0c29af7e7f96f689e51d55f286742cd7b7456d6a83f64e57bd2830) | RefuelRequested | [0x003b6cab](https://base-sepolia.blockscout.com/tx/0x003b6cabc7f82cb47daab8393aee278b2d14c95056a099ff151b3fbf32df0ff1) | [0x003b6cab](https://base-sepolia.blockscout.com/tx/0x003b6cabc7f82cb47daab8393aee278b2d14c95056a099ff151b3fbf32df0ff1) | 1 |
+| [0xd78cf2d2](https://base-sepolia.blockscout.com/tx/0xd78cf2d2c99a70d7040adc67ec5c542785c7c7dec72d39bf79695b5630952130) | [0x089ad716](https://lasna.reactscan.net/tx/0x089ad716ab2dc90cd1be9fa12890ef43eeb37c26142171351453548343d04089) | RefuelRequested | [0xbcac0985](https://base-sepolia.blockscout.com/tx/0xbcac098502e1414f9e87c9a6b4184e02c0d780d81bf2d8ea4ed0ea6fb898bf9a) | [0xbcac0985](https://base-sepolia.blockscout.com/tx/0xbcac098502e1414f9e87c9a6b4184e02c0d780d81bf2d8ea4ed0ea6fb898bf9a) | 1 |
+| [0x0359140a](https://base-sepolia.blockscout.com/tx/0x0359140a7c3a67df8a6b777e185af45b03ac4655f976e0a3152b508185f5a9ec) | [0x146f24f4](https://lasna.reactscan.net/tx/0x146f24f4448327f1f059574228e7f5a7cfa77cd4af38a2691eb153a800844623) | RefuelRequested | [0x4263f5b8](https://base-sepolia.blockscout.com/tx/0x4263f5b8b1c6d52f792ffddbfad8fd4415d5ab1d094665235a34b26ce355fa86) | [0x4263f5b8](https://base-sepolia.blockscout.com/tx/0x4263f5b8b1c6d52f792ffddbfad8fd4415d5ab1d094665235a34b26ce355fa86) | 1 |
 
 ## H3. Control pair without Pelita
 
@@ -107,7 +109,7 @@ Target: stays dark for at least 24 hours with `debt()` above 0.
 | Chain | Contract | Dark at last block | Hours dark | debt() | Result |
 |---|---|---|---|---|---|
 | lasna | `0x42cdfe8c54c2395eaca20ba5cdafffbdf6061458` | True | 2.0 | 0.0131257 | **not met** |
-| base-sepolia | `0xc8f9a1f1922e734ab3a4f86dabf7788a0a9ee95b` | False | 0 | 0 | no outage: it received 4 of 450 beats, because its upstream control on Lasna is dark (H4) |
+| base-sepolia | `0xc8f9a1f1922e734ab3a4f86dabf7788a0a9ee95b` | False | 0 | 0 | no outage: it received 4 of 462 beats, because its upstream control on Lasna is dark (H4) |
 
 ## H4. Lost beats, guarded against control
 
@@ -115,8 +117,8 @@ Same Beacon, same beats, same block range.
 
 | | Beats sent | Lights received | Lost |
 |---|---|---|---|
-| Guarded | 450 | 450 | 0 |
-| Control | 450 | 4 | 446 |
+| Guarded | 462 | 462 | 0 |
+| Control | 462 | 4 | 458 |
 
 ## H5. Cost of one relight
 
@@ -128,7 +130,7 @@ Keeper are left out.
 | Side | Keeper reaction billed (median, `lREACT`) | Callback (median, ETH) | Samples |
 |---|---|---|---|
 | lasna | 0.017684 | n/a | 52 |
-| base-sepolia | <<TBD H5: no clean Keeper bill read on Lasna yet>> | 0.000000695094 | 0 |
+| base-sepolia | 0.0150344 | 0.000000695094 | 17 |
 
 ## H8. Census of dark contracts (no key)
 

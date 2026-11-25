@@ -3,14 +3,14 @@
   "block_ranges": {
     "lasna": [
       9044563,
-      9230306
+      9232150
     ],
     "base-sepolia": [
       63463194,
-      63510600
+      63520597
     ]
   },
-  "as_of_ts": 1795623988,
+  "as_of_ts": 1795625988,
   "rows": [
     {
       "side": "base-sepolia",
@@ -24,6 +24,7 @@
       "reaction_ts": 1795618275,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 16744400000000000,
       "callback_tx": "0x602cdda51c889be52834b6b638ad46b5939ebc84cf62d324e36480564cfce1fb",
       "callback_ts": 1795618277,
       "callback_fee_wei": 695094000000,
@@ -44,6 +45,7 @@
       "reaction_ts": 1795623533,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0x00ea5483d3820cf183a44e41bb35a9aaced61d1d962482233bc3d4f2db463afe",
       "callback_ts": 1795623535,
       "callback_fee_wei": 695094000000,
@@ -64,6 +66,7 @@
       "reaction_ts": 1795623570,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0x88f64078944f9807e9d9969d7593d1f14e4002f0494463ff5026f7f14ae6a8e1",
       "callback_ts": 1795623571,
       "callback_fee_wei": 695094000000,
@@ -84,6 +87,7 @@
       "reaction_ts": 1795623604,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0xad27a830d17977725ae5db5fb669880ebb340346ebcaf9e6ae9e58ce22bf871d",
       "callback_ts": 1795623606,
       "callback_fee_wei": 695094000000,
@@ -104,6 +108,7 @@
       "reaction_ts": 1795623640,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0x7475f703a6ff440851f271009cc3d82795d7634906abe8480a6886d697ed15eb",
       "callback_ts": 1795623641,
       "callback_fee_wei": 695094000000,
@@ -124,6 +129,7 @@
       "reaction_ts": 1795623674,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0xbe437a951a7f388c49aa839fdfc446fdd856d0dcf34f4e5e5b0c9d213c836561",
       "callback_ts": 1795623676,
       "callback_fee_wei": 695094000000,
@@ -144,6 +150,7 @@
       "reaction_ts": 1795623709,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0xb5e889df4baa2f276852868a59a344a942ded47eb576805d1a5a442acba52be3",
       "callback_ts": 1795623711,
       "callback_fee_wei": 695094000000,
@@ -164,6 +171,7 @@
       "reaction_ts": 1795623743,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0x82a360a7ced4dfa5ffd10a9be541ea34365303677a82f353839c027f6a4e5598",
       "callback_ts": 1795623744,
       "callback_fee_wei": 695094000000,
@@ -184,6 +192,7 @@
       "reaction_ts": 1795623773,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0x83622b1c7d4e84fed8dc1aaddd5a019e1fc8ccf3a07ea766c61a1861dd26b76b",
       "callback_ts": 1795623775,
       "callback_fee_wei": 695094000000,
@@ -204,6 +213,7 @@
       "reaction_ts": 1795623804,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0xa90fcecf8e13fa9719939262929b8ad91787578742f4fa114e3c24afaaa7aab3",
       "callback_ts": 1795623806,
       "callback_fee_wei": 695094000000,
@@ -224,6 +234,7 @@
       "reaction_ts": 1795623835,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0xa0c3feecf0603a712db39552b5e40dc867471c971c3b997a4ebb6960f73ea6ba",
       "callback_ts": 1795623837,
       "callback_fee_wei": 695094000000,
@@ -244,6 +255,7 @@
       "reaction_ts": 1795623867,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0x555fb93cba922167b56d8c06ee96a91d180ad18ae996783cd34f4a1dedaa6b9c",
       "callback_ts": 1795623869,
       "callback_fee_wei": 695094000000,
@@ -264,6 +276,7 @@
       "reaction_ts": 1795623896,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0xe31bf72ecaa5ff00789cbf460968d7dd96dc509705515c5f316dd5c061d28e2a",
       "callback_ts": 1795623898,
       "callback_fee_wei": 695094000000,
@@ -284,6 +297,7 @@
       "reaction_ts": 1795623927,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0x52a44e82ec266b346c755d8f7fa1c45d951f0256e842a4d369659a775a58af55",
       "callback_ts": 1795623929,
       "callback_fee_wei": 695094000000,
@@ -304,6 +318,7 @@
       "reaction_ts": 1795623957,
       "reaction_fee_wei": 0,
       "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
       "callback_tx": "0x003b6cabc7f82cb47daab8393aee278b2d14c95056a099ff151b3fbf32df0ff1",
       "callback_ts": 1795623959,
       "callback_fee_wei": 695094000000,
@@ -311,16 +326,60 @@
       "lit_tx": "0x003b6cabc7f82cb47daab8393aee278b2d14c95056a099ff151b3fbf32df0ff1",
       "lit_ts": 1795623959,
       "latency_s": 1
+    },
+    {
+      "side": "base-sepolia",
+      "role": "guarded",
+      "target": "0xf5f37156f2c3414735e6085aaecc9940e6c77904",
+      "dark_tx": "0xd78cf2d2c99a70d7040adc67ec5c542785c7c7dec72d39bf79695b5630952130",
+      "dark_block": 63510611,
+      "dark_ts": 1795623991,
+      "reaction_tx": "0x089ad716ab2dc90cd1be9fa12890ef43eeb37c26142171351453548343d04089",
+      "reaction_block": 9230264,
+      "reaction_ts": 1795623990,
+      "reaction_fee_wei": 0,
+      "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
+      "callback_tx": "0xbcac098502e1414f9e87c9a6b4184e02c0d780d81bf2d8ea4ed0ea6fb898bf9a",
+      "callback_ts": 1795623992,
+      "callback_fee_wei": 695094000000,
+      "callback_event": "Refueled",
+      "lit_tx": "0xbcac098502e1414f9e87c9a6b4184e02c0d780d81bf2d8ea4ed0ea6fb898bf9a",
+      "lit_ts": 1795623992,
+      "latency_s": 1
+    },
+    {
+      "side": "base-sepolia",
+      "role": "guarded",
+      "target": "0xf5f37156f2c3414735e6085aaecc9940e6c77904",
+      "dark_tx": "0x0359140a7c3a67df8a6b777e185af45b03ac4655f976e0a3152b508185f5a9ec",
+      "dark_block": 63510768,
+      "dark_ts": 1795624022,
+      "reaction_tx": "0x146f24f4448327f1f059574228e7f5a7cfa77cd4af38a2691eb153a800844623",
+      "reaction_block": 9230293,
+      "reaction_ts": 1795624021,
+      "reaction_fee_wei": 0,
+      "outcome": "RefuelRequested",
+      "reaction_billed_wei": 15034400000000000,
+      "callback_tx": "0x4263f5b8b1c6d52f792ffddbfad8fd4415d5ab1d094665235a34b26ce355fa86",
+      "callback_ts": 1795624023,
+      "callback_fee_wei": 695094000000,
+      "callback_event": "Refueled",
+      "lit_tx": "0x4263f5b8b1c6d52f792ffddbfad8fd4415d5ab1d094665235a34b26ce355fa86",
+      "lit_ts": 1795624023,
+      "latency_s": 1
     }
   ],
   "summary": {
     "guarded": {
-      "outages": 15,
-      "relit": 15,
+      "outages": 17,
+      "relit": 17,
       "relit_pct": 100.0,
       "median_s": 1,
       "max_s": 2,
       "reaction_fee_wei": [
+        0,
+        0,
         0,
         0,
         0,
@@ -352,7 +411,28 @@
         695094000000,
         695094000000,
         695094000000,
+        695094000000,
+        695094000000,
         695094000000
+      ],
+      "reaction_billed_wei": [
+        16744400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000,
+        15034400000000000
       ]
     },
     "control": {
@@ -362,7 +442,8 @@
       "median_s": null,
       "max_s": null,
       "reaction_fee_wei": [],
-      "callback_fee_wei": []
+      "callback_fee_wei": [],
+      "reaction_billed_wei": []
     }
   },
   "controls": [
@@ -375,8 +456,8 @@
     }
   ],
   "demo": {
-    "beats": 450,
-    "lit_guarded": 450,
+    "beats": 462,
+    "lit_guarded": 462,
     "lit_control": 4
   }
 }
