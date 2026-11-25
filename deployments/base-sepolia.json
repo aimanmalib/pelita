@@ -37,7 +37,8 @@
         "1000000000000000",
         "2000000000000000"
       ],
-      "verified": false
+      "verified": "sourcify",
+      "source": "https://repo.sourcify.dev/84532/0xeDF0239e5661097228a570B8Ad05707562886bCf"
     },
     "lantern_control": {
       "address": "0xc8F9A1F1922e734ab3a4f86DAbF7788A0A9EE95b",
