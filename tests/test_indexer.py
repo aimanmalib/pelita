@@ -252,6 +252,7 @@ class FleetTest(IndexerCase):
         cfg = json.loads(cfg_path.read_text())
         cfg["keeper"].update(self_floor="0.3", low_mark="3")  # frozen fixture, not the live values
         cfg["funds"].update(keeper_fund="12", tank_fund="0.02", lreact_per_eth="100")
+        cfg["wards"]["base-sepolia"]["refill"] = "0.0002"  # 10 refills = 0.002 ETH, so a 0.001 ETH Tank is low
         cfg["alerts"]["top_up_address"] = address
         cfg_path.write_text(json.dumps(cfg))
         self.deploy()

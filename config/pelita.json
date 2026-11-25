@@ -6,12 +6,12 @@
   },
   "wards": {
     "lasna": {
-      "refill": "0.05",
+      "refill": "0.25",
       "max_owed": "0.1",
       "daily_cap": 10
     },
     "base-sepolia": {
-      "refill": "0.0002",
+      "refill": "0.000005",
       "max_owed": "0.001",
       "daily_cap": 10
     },
