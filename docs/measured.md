@@ -5,7 +5,7 @@ Times are block timestamps. Testnet only: Reactive Lasna and Base Sepolia. Targe
 
 ## H1. Lasna outages relit by the Keeper
 
-Source: `docs/evidence/E-005-series-lasna.json` (lasna blocks 9044563-9231296). Repeat: `python3 scripts/measure/series.py record --side lasna`.
+Source: `docs/evidence/E-005-series-lasna.json` (lasna blocks 9044563-9331033). Repeat: `python3 scripts/measure/series.py record --side lasna`.
 
 | Measure | Target | Measured |
 |---|---|---|
@@ -72,7 +72,7 @@ Source: `docs/evidence/E-005-series-lasna.json` (lasna blocks 9044563-9231296). 
 
 ## H2. Base Sepolia outages relit through a callback
 
-Source: `docs/evidence/E-005-series-base-sepolia.json` (lasna blocks 9044563-9232150, base-sepolia blocks 63463194-63520597). Repeat: `python3 scripts/measure/series.py record --side base-sepolia`.
+Source: `docs/evidence/E-005-series-base-sepolia.json` (lasna blocks 9044563-9331067, base-sepolia blocks 63463194-64058125). Repeat: `python3 scripts/measure/series.py record --side base-sepolia`.
 
 | Measure | Target | Measured |
 |---|---|---|
@@ -108,7 +108,7 @@ Target: stays dark for at least 24 hours with `debt()` above 0.
 
 | Chain | Contract | Dark at last block | Hours dark | debt() | Result |
 |---|---|---|---|---|---|
-| lasna | `0x42cdfe8c54c2395eaca20ba5cdafffbdf6061458` | True | 2.0 | 0.0131257 | **not met** |
+| lasna | `0x42cdfe8c54c2395eaca20ba5cdafffbdf6061458` | True | 32.1 | 0.0131257 | met |
 | base-sepolia | `0xc8f9a1f1922e734ab3a4f86dabf7788a0a9ee95b` | False | 0 | 0 | no outage: it received 4 of 462 beats, because its upstream control on Lasna is dark (H4) |
 
 ## H4. Lost beats, guarded against control

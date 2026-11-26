@@ -3,14 +3,14 @@
   "block_ranges": {
     "lasna": [
       9044563,
-      9232150
+      9331067
     ],
     "base-sepolia": [
       63463194,
-      63520597
+      64058125
     ]
   },
-  "as_of_ts": 1795625988,
+  "as_of_ts": 1795733493,
   "rows": [
     {
       "side": "base-sepolia",

@@ -3,10 +3,10 @@
   "block_ranges": {
     "lasna": [
       9044563,
-      9231296
+      9331033
     ]
   },
-  "as_of_ts": 1795625109,
+  "as_of_ts": 1795733498,
   "rows": [
     {
       "side": "lasna",
@@ -1035,7 +1035,7 @@
       "dark": true,
       "debt_wei": 13125700000000000,
       "dark_since_ts": 1795617807,
-      "hours_dark": 2.0
+      "hours_dark": 32.1
     }
   ]
 }
