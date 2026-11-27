@@ -1,0 +1,54 @@
+{
+ "baris": [
+  {
+   "id": "hook",
+   "sari": "Since November 4, 116 reactive contracts on Lasna went dark. 97 are still dark.",
+   "baca": "Since November fourth, one hundred and sixteen reactive contracts on Lasna went dark. Ninety-seven are still dark."
+  },
+  {
+   "id": "masalah",
+   "sari": "They ran out of gas money, and they got no warning."
+  },
+  {
+   "id": "pelita",
+   "sari": "I'm not a developer. I can't watch a dashboard. So I built Pelita. I fill one tank. It does the rest."
+  },
+  {
+   "id": "gelung",
+   "sari": "Here a contract runs dry. Reactive's own system contract announces it. Pelita hears that event and refuels it in the same reaction."
+  },
+  {
+   "id": "base",
+   "sari": "On Base Sepolia the refill arrives as a callback. Its twin without Pelita received 4 of 462 heartbeats.",
+   "baca": "On Base Sepolia the refill arrives as a callback. Its twin without Pelita received four of four hundred and sixty-two heartbeats."
+  },
+  {
+   "id": "bukti",
+   "sari": "52 outages on Lasna, 17 on Base Sepolia. Every one was relit. Median: 1 second. Every hash is in the repo.",
+   "baca": "Fifty-two outages on Lasna, seventeen on Base Sepolia. Every one was relit. Median: one second. Every hash is in the repo."
+  },
+  {
+   "id": "laman",
+   "sari": "The page checks any contract's fuel, and shows who is dark right now. Anyone can relight them."
+  },
+  {
+   "id": "kos",
+   "sari": "No polling bot. It costs nothing until something goes dark."
+  },
+  {
+   "id": "tutup",
+   "sari": "Pelita. Keep it lit."
+  }
+ ],
+ "peta": {
+  "4,": "fourth,",
+  "116": "one hundred and sixteen",
+  "4": "four",
+  "462": "four hundred and sixty-two",
+  "52": "Fifty-two",
+  "17": "seventeen",
+  "1": "one",
+  "97": "Ninety-seven"
+ },
+ "sebut": {}
+}

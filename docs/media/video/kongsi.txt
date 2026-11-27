@@ -1,0 +1,3 @@
+Pelita keeps reactive contracts on Reactive Lasna and Base Sepolia lit: when one runs out of gas money, a Keeper hears the system contract's own event and pays the debt in the same reaction. Testnet only. Every number in the video is in docs/measured.md: https://github.com/aimanmalib/pelita
+Narration is an AI clone of the author's own voice (ElevenLabs): mark the video as altered or synthetic content when uploading.
+Music: Sascha Ende, ende.app (CC BY 4.0)

@@ -1,0 +1,189 @@
+{
+ "video": {
+  "nama": "pelita-demo",
+  "awalan_filedrop": "pelita-",
+  "fps": 30,
+  "panjang": 80.0,
+  "poster": 0.0,
+  "format": {
+   "l": {
+    "saiz": [
+     1920,
+     1080
+    ],
+    "nama": "desktop-16x9"
+   }
+  },
+  "suara": {
+   "id": "Ote1SdIQw1HEueVQdGnX",
+   "model": "eleven_v3",
+   "bahasa": "en"
+  },
+  "muzik": {
+   "fail": "happy-beats-business-moves-vol-9-by-ende-dot-app.mp3",
+   "db": -16,
+   "kredit": "Music: Sascha Ende, ende.app (CC BY 4.0)"
+  }
+ },
+ "babak": {
+  "hook": [
+   0,
+   9
+  ],
+  "masalah": [
+   9,
+   14.2
+  ],
+  "pelita": [
+   14.2,
+   23.4
+  ],
+  "gelung": [
+   23.4,
+   36.2
+  ],
+  "base": [
+   36.2,
+   47
+  ],
+  "bukti": [
+   47,
+   59
+  ],
+  "laman": [
+   59,
+   67
+  ],
+  "kos": [
+   67,
+   73.4
+  ],
+  "tutup": [
+   73.4,
+   80
+  ]
+ },
+ "suara": {
+  "hook": 0.4,
+  "masalah": 9.4,
+  "pelita": 14.6,
+  "gelung": 24.0,
+  "base": 37.0,
+  "bukti": 47.6,
+  "laman": 59.6,
+  "kos": 67.8,
+  "tutup": 74.4
+ },
+ "sari_kata": [
+  "hook",
+  "masalah",
+  "pelita",
+  "gelung",
+  "base",
+  "bukti",
+  "laman",
+  "kos"
+ ],
+ "peristiwa": {
+  "umum": {
+   "kata": [
+    "gelung",
+    "announces"
+   ],
+   "anjak": -0.1
+  },
+  "dengar": {
+   "kata": [
+    "gelung",
+    "hears"
+   ],
+   "anjak": -0.1
+  },
+  "nyala": {
+   "kata": [
+    "gelung",
+    "same"
+   ],
+   "anjak": -0.1
+  },
+  "kembar": {
+   "kata": [
+    "base",
+    "twin"
+   ],
+   "anjak": -0.1
+  },
+  "tangki": {
+   "kata": [
+    "pelita",
+    "fill"
+   ],
+   "anjak": -0.1
+  },
+  "senarai": {
+   "kata": [
+    "laman",
+    "shows"
+   ],
+   "anjak": -0.1
+  }
+ },
+ "bunyi": [
+  {
+   "t": "babak.pelita",
+   "fail": "impact/impactSoft_medium_001.ogg",
+   "db": -12
+  },
+  {
+   "t": "nyala",
+   "fail": "impact/impactBell_heavy_003.ogg",
+   "db": -14
+  },
+  {
+   "t": "babak.tutup",
+   "fail": "impact/impactSoft_heavy_001.ogg",
+   "db": -10
+  }
+ ],
+ "teks": {
+  "hook_kicker": "Reactive Lasna testnet · census Nov 4, 2026 to block 8,524,855",
+  "hook_a": "went dark",
+  "hook_b": "still dark",
+  "masalah_h": "dark for 32.1 h",
+  "masalah_s": "Flicker without Pelita · debt 0.0131257 lREACT",
+  "url_bar": "pelita.sasateguh.com/",
+  "l1": "1 · Runs dry: the system contract logs it",
+  "l2": "2 · The Keeper reacts: depositTo",
+  "l3": "3 · Lit again, same reaction",
+  "lb1": "Base Sepolia: refill by callback",
+  "lb2": "Its twin without Pelita: 4 of 462 heartbeats",
+  "bukti_kicker": "Measured on chain · docs/measured.md",
+  "b_l": "Lasna outages",
+  "b_b": "Base Sepolia outages",
+  "b_r": "relit",
+  "b_m": "median outage to relit",
+  "b_s": "slowest",
+  "kos_h": "No polling bot.",
+  "kos_s": "0.017684 lREACT per relight on Lasna (median of 52)",
+  "t_nama": "Pelita",
+  "t_slogan": "Keep it lit.",
+  "t_url": "pelita.sasateguh.com",
+  "t_repo": "github.com/aimanmalib/pelita",
+  "t_aku": "Narration: AI clone of my own voice · Built with Claude Code",
+  "t_acara": "Reactive Omni Buildathon · Set It and Forget It · testnet only",
+  "t_muzik": "Music: Sascha Ende, ende.app (CC BY 4.0)"
+ },
+ "tangkap": {
+  "laman": "https://pelita.sasateguh.com/",
+  "gauge_alamat": "0x42CdFE8C54c2395eaca20ba5cdaFfFbDf6061458",
+  "penjelajah": {
+   "x-padam": "https://lasna.reactscan.net/tx/0x07de1f4ff24a5eb8c58e982dadcfcab67905b1eed0c3cfd0fcfc4be5eca6d656",
+   "x-reaksi": "https://lasna.reactscan.net/tx/0xac7d0ec7db5a217fb92db3628e5e670427e873305c9974c9b0227325937212c6",
+   "x-callback": "https://base-sepolia.blockscout.com/tx/0x602cdda51c889be52834b6b638ad46b5939ebc84cf62d324e36480564cfce1fb"
+  }
+ },
+ "akhir": {
+  "lufs": -16.5,
+  "dbtp": -2.0
+ }
+}
