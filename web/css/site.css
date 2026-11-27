@@ -52,6 +52,7 @@ h3 { font-size: 1.3rem; margin-top: 2rem; margin-bottom: 0.6rem; }
 p { margin: 0; }
 
 .skip { position: absolute; left: -999px; top: 0.5rem; background: var(--amber); color: var(--amber-ink); padding: 0.5rem 0.9rem; border-radius: var(--radius-s); z-index: 10; }
+.skip:hover { color: var(--amber-ink); }
 .skip:focus { left: 0.5rem; }
 
 /* glyph: amber = lit, grey = dark */
@@ -222,6 +223,14 @@ main { padding: 0 var(--gutter); }
 .cols p, .cols li { color: var(--muted); }
 .limits, .links { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.5rem; }
 .links { list-style: none; padding: 0; }
+.cost { display: grid; gap: 1rem; margin: 1.1rem 0 0; }
+.cost div { min-width: 0; padding-top: 0.85rem; border-top: 1px solid var(--line-soft); }
+.cost dt { font-family: var(--serif); font-size: 1.1rem; color: var(--text); }
+.cost dd { margin: 0.3rem 0 0; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cost .amt { white-space: nowrap; }
+.cost .amt .mono { color: var(--amber-core); font-size: 1rem; }
+.cost .amt .unit { font-size: 0.85rem; }
+.cost dd.note { margin-top: 0.35rem; font-size: 0.88rem; color: var(--faint); }
 @media (max-width: 860px) { .cols { grid-template-columns: 1fr; gap: 0; } }
 
 .foot { display: flex; gap: 0.8rem; align-items: center; max-width: calc(72rem + 2 * var(--gutter)); margin: 0 auto; padding: 2.5rem var(--gutter) 3.5rem; color: var(--faint); font-size: 0.9rem; border-top: 1px solid var(--line-soft); }

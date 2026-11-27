@@ -5,7 +5,7 @@ Serves the site the way deploy/ will: web/ at /, config/chains.json at /config/,
 /data/snapshot.json (default: tests/fixtures/snapshot-sample.json with its times shifted to now). The Lasna RPC is
 answered by a stub so the fuel gauge is tested without the network. Checks: no console errors, no failed requests,
 no horizontal overflow, gauge validates and reads, language toggle swaps every text (the gauge reading too),
-dark table shows debt. Screenshots go to
+dark table shows debt, cost block and gauge estimate match web/measured.json. Screenshots go to
 $AUTOPILOT_BUKTI_DIR (or out/web-smoke/).
 
 Host tool (Playwright), not part of the offline gate:
@@ -103,6 +103,14 @@ def check(page, label, shots, errors):
     if "depositTo(address)" not in page.text_content("#gauge-out"):
         problems.append("gauge output lacks the depositTo command")
     overflow(page, "after gauge", problems)
+    # H5 figures: the cost block and the gauge estimate come from web/measured.json, which report.py writes
+    measured = json.loads((ROOT / "web" / "measured.json").read_text())["relight"]
+    cost = page.eval_on_selector_all("#cost .amt .mono", "els => els.map(e => e.textContent.trim())")
+    want = [v for f in measured.values() for v in (f["reaction"], f["callback"]) if v]
+    if cost != want:
+        problems.append(f"cost block shows {cost}, measured.json has {want}")
+    if LANG["en"]["gauge.leftPending"] in page.text_content("#gauge-out"):
+        problems.append("gauge still says the fee is pending although measured.json has it")
     page.screenshot(path=str(shots / f"{label}-en.png"), full_page=True)
     en_h1 = page.text_content("h1")
     page.click("#lang")

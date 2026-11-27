@@ -135,6 +135,28 @@ class ReportTest(unittest.TestCase):
         self.assertIn("| lasna | 0.02 | n/a | 3 |", text)
         self.assertNotIn("<<TBD H5", text)
 
+    def test_site_figures_match_the_measured_table_and_never_show_zero_as_free(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.write_evidence(d, 3)
+            p = Path(d) / "E-005-series-lasna.json"
+            data = json.loads(p.read_text())
+            data["summary"]["guarded"]["reaction_billed_wei"] = [3 * 10**16, 0, 10**16, 2 * 10**16]
+            p.write_text(json.dumps(data))
+            figs = report.site_figures(Path(d))
+            text = report.render(Path(d), series.pelitarpc.load_config("pelita.json"), CHAINS)
+            lasna = figs["relight"]["lasna"]
+            self.assertEqual((lasna["reaction"], lasna["reaction_wei"], lasna["samples"]), ("0.02", str(2 * 10**16), 3))
+            self.assertIn(f"| lasna | {lasna['reaction']} |", text)
+            self.assertNotIn("base-sepolia", figs["relight"])
+            data["summary"]["guarded"]["reaction_billed_wei"] = [0, 0]
+            p.write_text(json.dumps(data))
+            self.assertIsNone(report.site_figures(Path(d))["relight"]["lasna"]["reaction_wei"])
+
+    def test_committed_page_figures_are_current(self):
+        ev = Path(report.pelitarpc.ROOT) / "docs" / "evidence"
+        committed = json.loads((Path(report.pelitarpc.ROOT) / "web" / "measured.json").read_text())
+        self.assertEqual(committed, report.site_figures(ev))
+
     def test_base_control_that_never_went_dark_names_the_lost_beats(self):
         with tempfile.TemporaryDirectory() as d:
             self.write_evidence(d, 3)

@@ -12,7 +12,8 @@
   "gauge_chain": "lasna",
   "dark_table_rows": 12,
   "dark_grid_max": 240,
-  "median_fee_wei": null,
+  "measured_url": "measured.json",
+  "gauge_fee_side": "lasna",
   "links": {
     "repo": "https://github.com/aimanmalib/pelita",
     "measured": "https://github.com/aimanmalib/pelita/blob/main/docs/measured.md",

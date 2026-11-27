@@ -59,7 +59,7 @@ export function initGauge(ctx) {
         ["eth_call", [{ to: chain.biller, data: sel["reserves(address)"] + word(addr) }, "latest"]],
         ["eth_getBalance", [addr, "latest"]],
       ]);
-      ctx.gauge.reading = { addr, chain, debt, reserves, balance, fee: ctx.site.median_fee_wei, fill: ctx.site.gauge_fill_wei };
+      ctx.gauge.reading = { addr, chain, debt, reserves, balance, fee: ctx.measured?.relight?.[ctx.site.gauge_fee_side]?.reaction_wei ?? null, fill: ctx.site.gauge_fill_wei };
       render(out, ctx.gauge.reading);
     } catch (_) {
       ctx.gauge = { msg: "gauge.error", reading: null };
@@ -93,6 +93,11 @@ function render(out, { addr, chain, debt, reserves, balance, fee, fill }) {
     const dd = document.createElement("dd"); dd.textContent = v;
     if (k === "gauge.left" && !fee) dd.className = "soft";
     kv.append(dt, dd);
+  }
+  if (fee) {
+    const est = document.createElement("p"); est.className = "note";
+    est.textContent = t("gauge.leftNote", { fee: `${etherString(fee)} ${sym}` });
+    kv.after(est);
   }
   const p1 = document.createElement("p"); p1.textContent = t("gauge.fill");
   const pre = document.createElement("pre"); const code = document.createElement("code"); code.textContent = cmd; pre.append(code);

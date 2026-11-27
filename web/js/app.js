@@ -1,11 +1,11 @@
 // Pelita page: loads site settings, chain config and the indexer snapshot, renders the six sections, polls the snapshot.
 import { lamp, fillLamps } from "./lamp.js";
 import { t, load, saved, lang } from "./i18n.js";
-import { duration, ago, count, amount, short, clock } from "./format.js";
+import { duration, ago, count, amount, short, clock, etherString } from "./format.js";
 import { initGauge, renderGauge } from "./gauge.js";
 import { renderFleet, fleetTotals } from "./fleet.js";
 
-const ctx = { site: null, chains: null, snap: null, darkOpen: false, gauge: null };
+const ctx = { site: null, chains: null, snap: null, measured: null, darkOpen: false, gauge: null };
 const $ = (id) => document.getElementById(id);
 const now = () => Date.now() / 1000;
 
@@ -102,6 +102,32 @@ function renderDark() {
   asof.textContent = t("dark.asOf", { b: count(c.to_block), t: clock(c.as_of_ts) });
 }
 
+function renderCost() {
+  // H5 medians from web/measured.json, written by scripts/measure/report.py beside docs/measured.md
+  const dl = $("cost"), pending = $("cost-pending");
+  const r = ctx.measured?.relight || {};
+  dl.replaceChildren();
+  for (const [side, f] of Object.entries(r)) {
+    if (!f.reaction || !ctx.chains.chains[side]) continue;
+    const div = document.createElement("div");
+    const dt = document.createElement("dt"); dt.textContent = t(`cost.${side}`);
+    const dd = document.createElement("dd");
+    const parts = [[f.reaction, "lREACT"]];
+    if (f.callback) parts.push([f.callback, ctx.chains.chains[side].native_symbol]);
+    parts.forEach(([v, unit], i) => {
+      if (i) dd.append(" + ");
+      const n = document.createElement("span"); n.className = "mono"; n.textContent = v;
+      const u = document.createElement("span"); u.className = "unit"; u.textContent = ` ${unit}`;
+      const amt = document.createElement("span"); amt.className = "amt"; amt.append(n, u);
+      dd.append(amt);
+    });
+    const note = document.createElement("dd"); note.className = "note";
+    note.textContent = t(f.callback ? "cost.withCallback" : "cost.reactionOnly", { n: count(f.samples) });
+    div.append(dt, dd, note); dl.append(div);
+  }
+  pending.hidden = dl.children.length > 0;
+}
+
 function renderLinks() {
   const ul = $("links");
   ul.replaceChildren();
@@ -119,6 +145,7 @@ function renderAll() {
   renderFleet($("cards"), ctx.snap, ctx.chains);
   renderTry();
   renderDark();
+  renderCost();
   renderLinks();
   renderGauge(ctx);
 }
@@ -136,6 +163,7 @@ async function main() {
   fillLamps(document);
   ctx.site = await json("site.json", { cache: "no-cache" });
   ctx.chains = await json(ctx.site.chains_url, { cache: "no-cache" });
+  try { ctx.measured = await json(ctx.site.measured_url, { cache: "no-cache" }); } catch (_) { /* cost block shows its pending line */ }
   await load(saved(ctx.site.default_lang, ctx.site.langs));
   $("lang").addEventListener("click", async () => {
     const next = ctx.site.langs[(ctx.site.langs.indexOf(lang()) + 1) % ctx.site.langs.length];

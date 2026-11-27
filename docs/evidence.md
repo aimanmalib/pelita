@@ -30,7 +30,8 @@ copied here. Each one points to the section of [measured.md](measured.md) that h
 | Base Sepolia outages relit through a callback, and how fast | measured.md H2 | [E-005 Base Sepolia](evidence/E-005-series-base-sepolia.json); repeat: `python3 scripts/measure/series.py record --side base-sepolia` |
 | The control ward without Pelita stays dark, with its debt read at the last block | measured.md H3; page fleet ("control: no Pelita") | `controls` in both E-005 files |
 | Beats lost by the guarded Lantern against the control Lantern | measured.md H4 | `demo` in [E-005 Base Sepolia](evidence/E-005-series-base-sepolia.json) |
-| Cost of one relight | measured.md H5 | `reaction_billed_wei` and `callback_fee_wei` in both E-005 files |
+| Cost of one relight | measured.md H5; page "How it works" (Cost) | `reaction_billed_wei` and `callback_fee_wei` in both E-005 files; the page reads [web/measured.json](../web/measured.json), which `scripts/measure/report.py` writes with measured.md (test `test_committed_page_figures_are_current`) |
+| The fuel gauge's "reactions left" is the balance divided by the median Keeper reaction bill on Lasna | page fuel gauge | measured.md H5 (lasna row), `relight.lasna.reaction_wei` in [web/measured.json](../web/measured.json) |
 | How many contracts went dark, how many are still dark | README census table; page dark list | measured.md H8, [E-003](evidence/E-003-census.json); each row names the command that repeats it |
 | The page shows the same census as `scripts/census.py` for the same block range | README census section | `h8_equal` in [E-003](evidence/E-003-census.json) |
 | The page data is refreshed every two minutes | README census section | [ADR 0004](decisions/0004-census-and-indexer.md) (cron schedule), [ops/indexer.py](../ops/indexer.py) |
