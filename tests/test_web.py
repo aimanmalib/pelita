@@ -136,6 +136,15 @@ class LinkPreview(unittest.TestCase):
         self.assertRegex(robots, r"(?m)^User-agent: \*$")
         self.assertNotRegex(robots, r"(?m)^Disallow:\s*/")
 
+    def test_robots_names_each_preview_crawler_in_an_allowed_group(self):
+        groups = [g for g in read(WEB / "robots.txt").split("\n\n") if "User-agent:" in g]
+        preview = next(g for g in groups if "facebookexternalhit" in g)
+        for bot in ("facebookexternalhit", "Facebot", "WhatsApp", "Twitterbot", "LinkedInBot", "TelegramBot",
+                    "Slackbot", "Discordbot"):
+            self.assertRegex(preview, rf"(?m)^User-agent: {bot}$")
+        self.assertRegex(preview, r"(?m)^Allow: /$")
+        self.assertNotIn("Disallow", preview)
+
 
 class SnapshotShape(unittest.TestCase):
     """The page reads fields written by ops/indexer.py; the sample fixture must keep that shape."""

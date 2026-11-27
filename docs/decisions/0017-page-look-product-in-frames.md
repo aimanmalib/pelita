@@ -58,7 +58,22 @@ actions and a live proof line.
   and Malay: no overflow with every answer open or with the menu open after scrolling, touch targets of at least
   44 px, the theme switch, each forced proof state, and a 10 s wait in WebKit.
 
+## Addendum (27 Nov 2026): real product shots, preview card and robots
+
+- **Product shots:** `scripts/product-shots.py` serves this working tree with the live snapshot and shoots the page
+  itself: the Fleet card on WebKit iPhone 13 for the phone frame, the dark list at 1440 px on Chromium for the browser
+  frame, each in light and dark, as WebP under 120 KB. The dark list was chosen over an explorer receipt because it
+  shows Pelita's own reading of the chain, not a third-party page. What to shoot (section, device, viewport, size,
+  file) lives in `site.json shots`, together with the two README page images it also writes.
+- **Shots follow the theme:** each frame is a `<picture>` whose dark `<source>` uses `prefers-color-scheme`; a theme
+  chosen with the switch overrides it from `js/theme.js` (no inline script), so the screens match the page around them.
+- **Preview card:** `scripts/og-card.py` now draws the hero itself (mark, headline, testnet tag, the same CSS browser
+  and phone frames with the light shots), styled from `web/css`, so the card changes when the page does.
+- **robots.txt:** the link-preview crawlers are named in their own allowed group, so previews keep working even if the
+  `*` group is ever narrowed.
+
 ## Rollback
 
 `bash deploy/deploy.sh --rollback` returns the previous image. In the repository, revert the commit that adds this
 record; the previous fonts and `site.css` come back with it.
+The shots, card and robots of the last addendum revert with their own commit.

@@ -1,4 +1,14 @@
-# Pelita site: everything here is public. Link previews (WhatsApp, Facebook, Telegram, X, LinkedIn, Slack, Discord)
-# read the og: tags in index.html, so no crawler is turned away.
+# Pelita site: everything here is public and meant to be found.
+# Link-preview crawlers are named on their own so the og: card keeps showing even if the "*" group below is ever narrowed.
+User-agent: facebookexternalhit
+User-agent: Facebot
+User-agent: WhatsApp
+User-agent: Twitterbot
+User-agent: LinkedInBot
+User-agent: TelegramBot
+User-agent: Slackbot
+User-agent: Discordbot
+Allow: /
+
 User-agent: *
 Allow: /
