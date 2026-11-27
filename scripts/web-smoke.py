@@ -196,7 +196,7 @@ def check(page, url, label, shots, errors):
     if LANG["en"]["gauge.leftPending"] in page.text_content("#gauge-out"):
         problems.append("gauge still says the fee is pending although measured.json has it")
     note_missing(page, "en", problems)
-    page.screenshot(path=str(shots / f"{label}-en.png"), full_page=True)
+    page.screenshot(path=str(shots / f"{label}-en.png"), full_page=True, scale="css")
     en_h1 = page.text_content("h1")
     page.click("#lang")
     page.wait_for_function("h => document.querySelector('h1').textContent !== h", arg=en_h1, timeout=5000)
@@ -219,7 +219,7 @@ def check(page, url, label, shots, errors):
     if LANG["ms"]["dark.colDebt"] != page.text_content("#darktable th:last-child").strip():
         problems.append("dark table debt column not translated")
     overflow(page, "in BM", problems)
-    page.screenshot(path=str(shots / f"{label}-ms.png"), full_page=True)
+    page.screenshot(path=str(shots / f"{label}-ms.png"), full_page=True, scale="css")
     page.click("#lang")
     page.wait_for_function("h => document.querySelector('h1').textContent === h", arg=en_h1, timeout=5000)
     page.evaluate("window.scrollTo({top: 0, behavior: 'instant'})")
