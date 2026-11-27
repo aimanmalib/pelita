@@ -1,0 +1,19 @@
+{
+  "_about": "Keeper top-up before judging (P4c, ADR 0015): two faucet swaps on Base Sepolia (`request(address)` with ETH), then one plain transfer of the bridged lREACT from the deployer to the Keeper on Lasna. Read back with `cast receipt` and `scripts/funds.sh status`, 27 Nov 2026.",
+  "chains": {"lasna": 5318007, "base-sepolia": 84532},
+  "deployer": "0xdCCAB20653AE18226b95A015948E99f919283394",
+  "faucet": "0x2afaFD298b23b62760711756088F75B7409f5967",
+  "keeper": "0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa",
+  "swaps": [
+    {"tx": "0x9cb437c04377ee0b5464684b8464afea23c78e6633ad0007e341c73992566e89", "block": 64313699, "status": 1, "eth": "0.01",
+     "deployer_lreact_before": "1.070148599994561943", "deployer_lreact_after": "2.070148599994561943"},
+    {"tx": "0x3301c4c079972be5b62db8987284da28d32b9f78627ee6fc31d407e4cc8fb68e", "block": 64314153, "status": 1, "eth": "0.015"}
+  ],
+  "transfer": {"tx": "0x25eea5bdb19edb2754b779345067f712fa0fd3e34575c491169d6df327bda07d", "block": 9378327, "status": 1,
+               "lreact": "3.370148599994561943", "kept_by_deployer_for_gas": "0.2"},
+  "keeper_before": "7.0873648",
+  "keeper_after": "10.457513399994561943",
+  "keeper_target": "12",
+  "base_sepolia_deployer_left_eth": "0.007366675289244995",
+  "lreact_per_eth_observed": "100"
+}
