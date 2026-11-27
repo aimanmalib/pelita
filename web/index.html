@@ -76,10 +76,16 @@
       <div class="slab" aria-hidden="true"><span data-lamp="lit"></span></div>
       <figure class="browser">
         <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>pelita.sasateguh.com</span></div>
-        <img src="img/hero-desktop.webp" width="1200" height="790" alt="" data-i18n-attr="alt:hero.shotDesktop" fetchpriority="high">
+        <picture>
+          <source srcset="img/hero-desktop-dark.webp" media="(prefers-color-scheme: dark)" width="1200" height="790" data-shot-dark>
+          <img src="img/hero-desktop.webp" width="1200" height="790" alt="" data-i18n-attr="alt:hero.shotDesktop" fetchpriority="high">
+        </picture>
       </figure>
       <figure class="phone">
-        <img src="img/hero-phone.webp" width="780" height="1328" alt="" data-i18n-attr="alt:hero.shotPhone">
+        <picture>
+          <source srcset="img/hero-phone-dark.webp" media="(prefers-color-scheme: dark)" width="780" height="1328" data-shot-dark>
+          <img src="img/hero-phone.webp" width="780" height="1328" alt="" data-i18n-attr="alt:hero.shotPhone">
+        </picture>
       </figure>
     </div>
     <div class="proof" id="proof" data-status="muat">

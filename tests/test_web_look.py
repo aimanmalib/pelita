@@ -92,9 +92,28 @@ class HeroShots(unittest.TestCase):
             self.assertIn(f'height="{shot["height"]}"', tag[0])
             self.assertNotIn('loading="lazy"', tag[0])
             self.assertRegex(tag[0], r'data-i18n-attr="alt:hero\.\w+"')
-            path = WEB / shot["src"]
-            self.assertEqual(webp_size(path), (shot["width"], shot["height"]))
-            self.assertLessEqual(path.stat().st_size, 120 * 1024, shot["src"])
+            for src in (shot["src"], shot["src_dark"]):
+                path = WEB / src
+                self.assertEqual(webp_size(path), (shot["width"], shot["height"]), src)
+                self.assertLessEqual(path.stat().st_size, 120 * 1024, src)
+
+    def test_each_frame_has_a_dark_shot_that_the_theme_switch_can_choose(self):
+        site = json.loads(read(WEB / "site.json"))
+        html = read(WEB / "index.html")
+        for key in ("desktop", "phone"):
+            shot = site["shots"][key]
+            pic = re.search(rf'<picture>\s*(<source [^>]*>)\s*<img src="{re.escape(shot["src"])}"', html)
+            self.assertIsNotNone(pic, key)
+            self.assertIn(f'srcset="{shot["src_dark"]}"', pic[1])
+            self.assertIn('media="(prefers-color-scheme: dark)"', pic[1])
+            self.assertIn("data-shot-dark", pic[1])
+        self.assertIn("source[data-shot-dark]", read(WEB / "js" / "theme.js"))
+
+    def test_readme_page_images_match_site_settings(self):
+        for shot in json.loads(read(WEB / "site.json"))["shots"]["readme"]:
+            data = (ROOT / shot["src"]).read_bytes()
+            self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
+            self.assertEqual(struct.unpack(">II", data[16:24]), (shot["width"], shot["height"]), shot["src"])
 
 
 class Theme(unittest.TestCase):

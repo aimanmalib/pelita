@@ -21,17 +21,55 @@
   },
   "gauge_fill_wei": "100000000000000000",
   "shots": {
-    "_about": "Product shots in the hero frames. Replaced by scripts/product-shots.py; keep width/height equal to the files.",
+    "_about": "Product shots in the hero frames, light and dark, taken by scripts/product-shots.py from the page itself. 'section' is the part of the page in the shot, 'device' and 'viewport' how it is taken; keep width/height equal to the files.",
     "desktop": {
       "src": "img/hero-desktop.webp",
+      "src_dark": "img/hero-desktop-dark.webp",
       "width": 1200,
-      "height": 790
+      "height": 790,
+      "section": "dark",
+      "device": null,
+      "viewport": [
+        1440,
+        948
+      ]
     },
     "phone": {
       "src": "img/hero-phone.webp",
+      "src_dark": "img/hero-phone-dark.webp",
       "width": 780,
-      "height": 1328
-    }
+      "height": 1328,
+      "section": "fleet",
+      "device": "iPhone 13",
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    "readme": [
+      {
+        "src": "docs/media/page-desktop.png",
+        "theme": "light",
+        "device": null,
+        "viewport": [
+          1366,
+          900
+        ],
+        "width": 1366,
+        "height": 900
+      },
+      {
+        "src": "docs/media/page-phone.png",
+        "theme": "dark",
+        "device": "iPhone 13",
+        "viewport": [
+          390,
+          664
+        ],
+        "width": 1170,
+        "height": 1992
+      }
+    ]
   },
   "pages": {
     "_about": "Fixed pages the Demo section and the footer link to. The Demo button uses links.video once it is set, and this README section until then.",

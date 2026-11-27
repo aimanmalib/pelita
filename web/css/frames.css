@@ -62,7 +62,7 @@
   border-bottom: 1px solid var(--sempadan); font: var(--saiz-desktop-kecil)/1 var(--fon-mono); color: var(--teks-redup); }
 .browser .bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--sempadan); }
 .browser .bar span { margin-left: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.browser img, .phone img { display: block; width: 100%; height: auto; }
+.browser picture, .phone picture, .browser img, .phone img { display: block; width: 100%; height: auto; }
 .phone { margin: 0; padding: 7px; border-radius: 40px; background: var(--bingkai);
   box-shadow: 0 32px 64px -20px var(--bayang), 0 0 0 1.5px var(--sempadan); }
 .phone::before { content: ""; position: absolute; top: 14px; left: 50%; translate: -50% 0; width: 28%; height: 16px;
