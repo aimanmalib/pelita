@@ -19,5 +19,18 @@
     "measured": "https://github.com/aimanmalib/pelita/blob/main/docs/measured.md",
     "video": null
   },
-  "gauge_fill_wei": "100000000000000000"
+  "gauge_fill_wei": "100000000000000000",
+  "shots": {
+    "_about": "Product shots in the hero frames. Replaced by scripts/product-shots.py; keep width/height equal to the files.",
+    "desktop": {
+      "src": "img/hero-desktop.webp",
+      "width": 1200,
+      "height": 790
+    },
+    "phone": {
+      "src": "img/hero-phone.webp",
+      "width": 780,
+      "height": 1328
+    }
+  }
 }

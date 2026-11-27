@@ -1,0 +1,59 @@
+/* DIJANA oleh bina.py dari data/citarasa.json + kandungan.json identiti — jangan sunting tangan. */
+:root {
+  --fon-paparan: Figtree, system-ui, sans-serif;
+  --fon-mono: "Geist Mono", ui-monospace, monospace;
+  --saiz-telefon-h1: 53.2px;
+  --saiz-telefon-h2: 26px;
+  --saiz-telefon-h3: 22px;
+  --saiz-telefon-badan: 16px;
+  --saiz-telefon-kecil: 11px;
+  --saiz-desktop-h1: 96px;
+  --saiz-desktop-h2: 35px;
+  --saiz-desktop-h3: 22px;
+  --saiz-desktop-badan: 17.6px;
+  --saiz-desktop-kecil: 12px;
+  --jarak-unit: 8px;
+  --jarak-bahagian: 65px;
+  --kandungan-maks: 1280px;
+  --jejari: 14px;
+  --terang-latar: #fffcf6;
+  --terang-teks: #181818;
+  --terang-aksen-lembut: #ffdfd4;
+  --terang-sempadan: #e3e1db;
+  --gelap-latar: #0b1010;
+  --gelap-teks: #fafafa;
+  --gelap-aksen-lembut: #2d140e;
+  --gelap-sempadan: #282c2c;
+  --aksen: #F2A93B;
+  --aksen-teks: #181818; /* 8.9:1 */
+  --bingkai: var(--terang-teks);
+  --kertas: var(--terang-latar);
+  --bar-pelayar: var(--terang-sempadan);
+  --bayang: color-mix(in oklab, var(--terang-teks) 42%, transparent);
+  --latar: var(--terang-latar);
+  --teks: var(--terang-teks);
+  --aksen-lembut: color-mix(in oklab, var(--aksen) 16%, var(--latar));
+  --sempadan: var(--terang-sempadan);
+  --teks-redup: color-mix(in oklab, var(--teks) 72%, var(--latar));
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+:root:not([data-tema="terang"]) {
+  --latar: var(--gelap-latar);
+  --teks: var(--gelap-teks);
+  --aksen-lembut: color-mix(in oklab, var(--aksen) 16%, var(--latar));
+  --sempadan: var(--gelap-sempadan);
+  --teks-redup: color-mix(in oklab, var(--teks) 72%, var(--latar));
+  color-scheme: dark;
+  --bayang: color-mix(in oklab, black 70%, transparent);
+}
+}
+:root[data-tema="gelap"] {
+  --latar: var(--gelap-latar);
+  --teks: var(--gelap-teks);
+  --aksen-lembut: color-mix(in oklab, var(--aksen) 16%, var(--latar));
+  --sempadan: var(--gelap-sempadan);
+  --teks-redup: color-mix(in oklab, var(--teks) 72%, var(--latar));
+  color-scheme: dark;
+  --bayang: color-mix(in oklab, black 70%, transparent);
+}

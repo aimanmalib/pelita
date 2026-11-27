@@ -11,7 +11,7 @@
   "lang.switchLabel": "Baca dalam Bahasa Melayu",
   "hero.tag": "Testnet · Reactive Lasna and Base Sepolia",
   "hero.title": "Keeps reactive contracts lit.",
-  "hero.lede": "Pelita refuels a reactive contract the moment it runs dry.",
+  "hero.lede": "For owners of reactive contracts on Reactive Network: when one runs dry, Pelita refuels it from one tank. While nothing goes dark it does nothing, and nothing is billed.",
   "stat.lit": "lit",
   "stat.dark": "dark",
   "stat.last": "last relight",
@@ -115,5 +115,14 @@
   "unit.min": "{n} min",
   "unit.h": "{n} h",
   "unit.d": "{n} d",
-  "unit.ago": "{t} ago"
+  "unit.ago": "{t} ago",
+  "nav.label": "Sections",
+  "theme.toDark": "Switch to dark theme",
+  "theme.toLight": "Switch to light theme",
+  "hero.ctaTry": "Try it yourself",
+  "hero.ctaCode": "Read the code",
+  "hero.shotDesktop": "The live Pelita page in a desktop browser",
+  "hero.shotPhone": "The live Pelita page on a phone",
+  "stat.loading": "Reading the chain…",
+  "stat.empty": "No contracts are being watched yet."
 }

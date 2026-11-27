@@ -18,6 +18,10 @@ def langs():
     return {p.stem: json.loads(read(p)) for p in sorted((WEB / "lang").glob("*.json"))}
 
 
+def stylesheets():
+    return {p.name: read(p) for p in sorted((WEB / "css").glob("*.css"))}
+
+
 def js_sources():
     return {p.name: read(p) for p in sorted((WEB / "js").glob("*.js"))}
 
@@ -80,22 +84,23 @@ class NoThirdParty(unittest.TestCase):
     def test_no_remote_scripts_styles_or_fonts(self):
         html = read(WEB / "index.html")
         self.assertIsNone(re.search(r'<(script|link)[^>]+(src|href)="(https?:)?//', html))
-        css = read(WEB / "css" / "site.css")
-        self.assertIsNone(re.search(r"url\(\s*[\"']?(https?:)?//", css))
+        for css in stylesheets().values():
+            self.assertIsNone(re.search(r"url\(\s*[\"']?(https?:)?//", css))
         for name, src in js_sources().items():
             self.assertIsNone(re.search(r"\bimport\b[^;]*['\"](https?:)?//", src), name)
             self.assertNotIn("document.cookie", src, name)
 
     def test_no_backdrop_filter_or_blur(self):
-        css = re.sub(r"/\*.*?\*/", "", read(WEB / "css" / "site.css"), flags=re.S)
-        self.assertFalse("backdrop-filter" in css, "backdrop-filter in site.css")
-        self.assertFalse(re.search(r"filter\s*:\s*blur", css), "filter: blur in site.css")
+        for name, src in stylesheets().items():
+            css = re.sub(r"/\*.*?\*/", "", src, flags=re.S)
+            self.assertFalse("backdrop-filter" in css, f"backdrop-filter in {name}")
+            self.assertFalse(re.search(r"filter\s*:\s*blur", css), f"filter: blur in {name}")
 
     def test_stylesheet_comments_are_closed(self):
-        css = read(WEB / "css" / "site.css")
-        self.assertEqual(css.count("/*"), css.count("*/"))
-        live = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
-        for needed in ("@font-face", "--amber:", ".glyph.is-dark"):
+        for name, css in stylesheets().items():
+            self.assertEqual(css.count("/*"), css.count("*/"), name)
+        live = re.sub(r"/\*.*?\*/", "", read(WEB / "css" / "site.css"), flags=re.S)
+        for needed in ("@font-face", "var(--aksen)", ".glyph.is-dark"):
             self.assertIn(needed, live)
 
     def test_local_assets_exist(self):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Prepare a clean build context for the site image (called by deploy/deploy.sh).
 
-1. Version the assets: web/index.html loads css/, js/, fonts/ and brand/ with ?v=<version> (CSS url() too), and every relative import between the
+1. Version the assets: web/index.html loads css/, js/, fonts/, img/ and brand/ with ?v=<version> (CSS url() too), and every relative import between the
    ES modules carries the same ?v=. All of them, or none: a module loaded under two URLs runs twice (two copies of
    the language state). Cloudflare keeps .css/.js for hours whatever the origin says, so a new URL is the only
    reliable way to ship a change.
@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 from urllib.parse import urlsplit
 
-PAGE_ASSET = re.compile(r'((?:src|href)=")((?:css|js|fonts|brand)/[^"?#]+\.(?:css|js|woff2|png|svg))(")')
+PAGE_ASSET = re.compile(r'((?:src|href)=")((?:css|js|fonts|brand|img)/[^"?#]+\.(?:css|js|woff2|png|svg|webp))(")')
 CSS_URL = re.compile(r'(url\(\s*)(["\']?)(\.\./[^"\')?#]+)\2(\s*\))')
 MODULE_SPEC = re.compile(r'((?:\bfrom|\bimport)\s*\(?\s*)(["\'])(\.{1,2}/[^"\'?#]+\.js)\2')
 ANY_RELATIVE_JS = re.compile(r'(["\'])(\.{1,2}/[^"\']+\.js[^"\']*)\1')

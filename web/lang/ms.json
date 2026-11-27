@@ -11,7 +11,7 @@
   "lang.switchLabel": "Read in English",
   "hero.tag": "Testnet · Reactive Lasna dan Base Sepolia",
   "hero.title": "Memastikan kontrak reaktif terus menyala.",
-  "hero.lede": "Pelita mengisi semula kontrak reaktif sebaik sahaja minyaknya habis.",
+  "hero.lede": "Untuk pemilik kontrak reaktif di Reactive Network: bila satu kehabisan minyak, Pelita mengisinya semula dari satu tangki. Selagi tiada yang padam, ia tidak berbuat apa-apa dan tiada bayaran dikenakan.",
   "stat.lit": "menyala",
   "stat.dark": "padam",
   "stat.last": "nyala semula terakhir",
@@ -115,5 +115,14 @@
   "unit.min": "{n} min",
   "unit.h": "{n} j",
   "unit.d": "{n} h",
-  "unit.ago": "{t} lalu"
+  "unit.ago": "{t} lalu",
+  "nav.label": "Bahagian",
+  "theme.toDark": "Tukar ke tema gelap",
+  "theme.toLight": "Tukar ke tema terang",
+  "hero.ctaTry": "Cuba sendiri",
+  "hero.ctaCode": "Baca kod",
+  "hero.shotDesktop": "Halaman Pelita yang hidup dalam pelayar desktop",
+  "hero.shotPhone": "Halaman Pelita yang hidup pada telefon",
+  "stat.loading": "Membaca rantaian…",
+  "stat.empty": "Belum ada kontrak yang dijaga."
 }

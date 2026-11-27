@@ -5,7 +5,9 @@ import { duration, ago, count, amount, short, clock, etherString } from "./forma
 import { initGauge, renderGauge } from "./gauge.js";
 import { renderFleet, fleetTotals } from "./fleet.js";
 
-const ctx = { site: null, chains: null, snap: null, measured: null, darkOpen: false, gauge: null };
+const ctx = { site: null, chains: null, snap: null, snapFailed: false, measured: null, darkOpen: false, gauge: null };
+// ?keadaan=muat|kosong|ralat forces one state of the live proof row, so each designed state can be checked.
+const FORCED = ["muat", "kosong", "ralat"].find((k) => k === new URLSearchParams(location.search).get("keadaan"));
 const $ = (id) => document.getElementById(id);
 const now = () => Date.now() / 1000;
 
@@ -15,12 +17,22 @@ async function json(url, opts) {
   return res.json();
 }
 
+function headState(tot) {
+  if (FORCED) return FORCED;
+  if (!ctx.snap) return ctx.snapFailed ? "ralat" : "muat";
+  return tot.wards ? "ada" : "kosong";
+}
+
 function renderHead() {
-  const s = ctx.snap;
+  const s = FORCED === "muat" || FORCED === "ralat" ? null : ctx.snap;
   const fresh = $("fresh");
+  const tot = s ? fleetTotals(s, ctx.chains) : null;
+  const state = headState(tot);
+  $("proof").dataset.status = state;
   fresh.classList.remove("warn");
-  if (!s) { fresh.textContent = t("stat.offline", { n: ctx.site.poll_seconds }); return; }
-  const tot = fleetTotals(s, ctx.chains);
+  if (state === "muat") { fresh.textContent = t("stat.loading"); return; }
+  if (state === "ralat") { fresh.textContent = t("stat.offline", { n: ctx.site.poll_seconds }); return; }
+  if (state === "kosong") { fresh.textContent = t("stat.empty"); return; }
   const set = (k, v) => { document.querySelector(`#stats [data-k="${k}"]`).textContent = v; };
   set("lit", tot.wards ? count(tot.lit) : "–");
   set("dark", tot.wards ? count(tot.dark) : "–");
@@ -153,7 +165,9 @@ function renderAll() {
 async function poll() {
   try {
     ctx.snap = await json(ctx.site.snapshot_url, { cache: "no-store" });
+    ctx.snapFailed = false;
   } catch (_) {
+    ctx.snapFailed = true;
     // keep the last snapshot on screen; the freshness line tells the reader
   }
   renderAll();
@@ -164,6 +178,7 @@ async function main() {
   ctx.site = await json("site.json", { cache: "no-cache" });
   ctx.chains = await json(ctx.site.chains_url, { cache: "no-cache" });
   try { ctx.measured = await json(ctx.site.measured_url, { cache: "no-cache" }); } catch (_) { /* cost block shows its pending line */ }
+  $("cta-repo").href = ctx.site.links.repo;
   await load(saved(ctx.site.default_lang, ctx.site.langs));
   $("lang").addEventListener("click", async () => {
     const next = ctx.site.langs[(ctx.site.langs.indexOf(lang()) + 1) % ctx.site.langs.length];

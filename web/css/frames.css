@@ -1,0 +1,104 @@
+/* Pelita: header, hero, device frames and the live proof row. Colours, type and spacing come from token.css
+   (generated from the shared entry design tokens) and the aliases in site.css. No glass, no animated blur. */
+
+/* header: brand mark + short nav + theme and language switches. Not sticky, no glass. */
+.top { display: flex; align-items: center; gap: calc(var(--jarak-unit) * 2); width: min(100% - 2 * var(--gutter), var(--kandungan-maks));
+  margin: 0 auto; padding-block: calc(var(--jarak-unit) * 2); }
+.brand { display: inline-flex; align-items: center; gap: var(--jarak-unit); color: var(--teks); text-decoration: none;
+  font-weight: 750; font-size: 1.3rem; letter-spacing: -0.03em; min-height: 44px; }
+.brand .glyph { width: 1.75rem; height: 1.75rem; }
+.nav { display: flex; gap: calc(var(--jarak-unit) * 3); margin-left: auto; font-size: 0.95rem; }
+.nav a { color: var(--teks-redup); text-decoration: none; white-space: nowrap; min-height: 44px; display: inline-flex; align-items: center; }
+.nav a:hover { color: var(--teks); text-decoration: underline; text-decoration-color: var(--aksen); text-decoration-thickness: 2px; }
+.switches { display: flex; gap: var(--jarak-unit); align-items: center; }
+.lang, .theme { font: 650 0.85rem/1 var(--fon-paparan); color: var(--teks); background: transparent; border: 1px solid var(--sempadan);
+  border-radius: 100vmax; min-height: 44px; min-width: 44px; padding: 0 calc(var(--jarak-unit) * 1.5); cursor: pointer;
+  display: inline-grid; place-items: center; }
+.theme { padding: 0; }
+.lang:hover, .theme:hover { border-color: var(--teks); }
+.theme svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.theme .sun, .theme .to-light { display: none; }
+:root[data-tema="gelap"] .theme .moon, :root[data-tema="gelap"] .theme .to-dark { display: none; }
+:root[data-tema="gelap"] .theme .sun, :root[data-tema="gelap"] .theme .to-light { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="terang"]) .theme .moon, :root:not([data-tema="terang"]) .theme .to-dark { display: none; }
+  :root:not([data-tema="terang"]) .theme .sun, :root:not([data-tema="terang"]) .theme .to-light { display: block; }
+}
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 899px) { .nav { display: none; } .switches { margin-left: auto; } }
+
+/* hero: text left, the real product right (browser + phone on an amber slab), live proof row under both. */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--jarak-unit) * 5);
+  padding: calc(var(--jarak-unit) * 3) 0 var(--jarak-bahagian); grid-template-areas: "text" "stage" "proof"; }
+.hero-text { grid-area: text; }
+.stage { grid-area: stage; }
+.proof { grid-area: proof; }
+.tag { display: inline-flex; align-items: center; gap: var(--jarak-unit); font-size: 0.9rem; color: var(--teks-redup);
+  border: 1px solid var(--sempadan); border-radius: 100vmax; padding: calc(var(--jarak-unit) * .5) calc(var(--jarak-unit) * 1.5); }
+.tag::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--aksen); flex: none; }
+.hero h1 { font-size: clamp(calc(var(--saiz-telefon-h1) * .8), 6.2vw, var(--saiz-desktop-h1)); line-height: .98; letter-spacing: -0.04em;
+  font-weight: 800; margin-top: calc(var(--jarak-unit) * 3); max-width: 10ch; }
+.lede { font-size: clamp(1.1rem, 1rem + .45vw, 1.3rem); line-height: 1.5; color: var(--teks-redup); margin-top: calc(var(--jarak-unit) * 3); max-width: 40ch; }
+.cta { display: flex; flex-wrap: wrap; gap: calc(var(--jarak-unit) * 1.5); margin-top: calc(var(--jarak-unit) * 4); }
+.cta .btn { min-height: 48px; padding-inline: calc(var(--jarak-unit) * 3); border-radius: 100vmax; text-decoration: none;
+  display: inline-flex; align-items: center; font-size: 1rem; }
+.cta .btn.ghost { border-color: currentColor; }
+
+/* stage: the slab carries the big lamp as a quiet mark; the product sits on top. */
+.stage { position: relative; isolation: isolate; padding: 0 0 18% 14%; }
+.slab { position: absolute; inset: 8% calc(-1 * var(--gutter)) -3% 4%; z-index: -1; border-radius: calc(var(--jejari) * 2);
+  background: var(--aksen-lembut); overflow: hidden; }
+.slab .glyph { position: absolute; right: -6%; bottom: -14%; width: 62%; height: auto; }
+.slab .glyph .lamp-body { fill: color-mix(in oklab, var(--aksen) 26%, var(--latar)); }
+.slab .glyph .lamp-flame path { fill: color-mix(in oklab, var(--aksen) 55%, var(--latar)); }
+.stage .browser { animation: enter .9s cubic-bezier(.16, 1, .3, 1) backwards; }
+.stage .phone { position: absolute; left: 0; bottom: 0; width: 34%; min-width: 120px; animation: enter .9s .18s cubic-bezier(.16, 1, .3, 1) backwards; }
+@keyframes enter { from { transform: translateY(32px); opacity: .35; } }
+
+/* device frames, drawn in CSS: the screen is the <img> itself, no card inside a card */
+.browser { margin: 0; border-radius: var(--jejari); overflow: hidden; background: var(--latar);
+  box-shadow: 0 40px 80px -32px var(--bayang), 0 0 0 1px var(--sempadan); }
+.browser .bar { display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; background: var(--surface);
+  border-bottom: 1px solid var(--sempadan); font: var(--saiz-desktop-kecil)/1 var(--fon-mono); color: var(--teks-redup); }
+.browser .bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--sempadan); }
+.browser .bar span { margin-left: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.browser img, .phone img { display: block; width: 100%; height: auto; }
+.phone { margin: 0; padding: 7px; border-radius: 40px; background: var(--bingkai);
+  box-shadow: 0 32px 64px -20px var(--bayang), 0 0 0 1.5px var(--sempadan); }
+.phone::before { content: ""; position: absolute; top: 14px; left: 50%; translate: -50% 0; width: 28%; height: 16px;
+  border-radius: 100vmax; background: var(--bingkai); z-index: 1; }
+.phone img { border-radius: 33px; }
+
+/* live proof row: the chain's own numbers, with designed loading, empty and error states */
+.proof { border-top: 1.5px solid var(--teks); padding-top: calc(var(--jarak-unit) * 2.5); }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--jarak-unit) * 2.5) calc(var(--jarak-unit) * 3); margin: 0; }
+.stat { min-width: 0; display: flex; flex-direction: column; }
+.stat dt { order: 2; font-size: 0.9rem; color: var(--teks-redup); margin-top: 4px; }
+.stat dd { margin: 0; font-weight: 750; font-size: clamp(1.7rem, 1.2rem + 1.5vw, 2.6rem); line-height: 1; letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums; transition: opacity .3s; }
+.stat dd .unit, .agg dd .unit { font-size: 0.45em; font-weight: 600; color: var(--teks-redup); letter-spacing: 0; }
+.stat-lit dd { display: flex; align-items: center; gap: 10px; }
+.stat-lit dd::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--aksen); flex: none; }
+.stat:last-child { grid-column: 1 / -1; }
+.fresh { margin-top: calc(var(--jarak-unit) * 2); font-size: 0.9rem; color: var(--teks-redup); min-height: 1.4em;
+  display: flex; align-items: center; gap: var(--jarak-unit); }
+.fresh::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ash); flex: none; }
+.proof[data-status="ada"] .fresh::before { background: var(--aksen); }
+.proof[data-status="ada"] .fresh.warn::before, .proof[data-status="ralat"] .fresh::before { background: var(--teks); }
+.fresh.warn, .proof[data-status="ralat"] .fresh { color: var(--teks); font-weight: 600; }
+.proof[data-status="muat"] .stat dd { opacity: .35; animation: reading 1.4s ease-in-out infinite alternate; }
+.proof[data-status="kosong"] .stat dd, .proof[data-status="ralat"] .stat dd { opacity: .45; }
+@keyframes reading { to { opacity: .15; } }
+@media (min-width: 760px) {
+  .stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .stat:last-child { grid-column: auto; }
+}
+@media (min-width: 980px) {
+  .hero { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "text stage" "proof proof";
+    column-gap: calc(var(--jarak-unit) * 8); row-gap: calc(var(--jarak-unit) * 6); align-items: center;
+    padding: calc(var(--jarak-unit) * 6) 0 calc(var(--jarak-bahagian) * 1.2); }
+  .slab { right: calc(-1 * max(var(--gutter), (100vw - var(--kandungan-maks)) / 2)); border-top-right-radius: 0; border-bottom-right-radius: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage .browser, .stage .phone, .proof .stat dd { animation: none; }
+}
