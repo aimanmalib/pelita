@@ -1,0 +1,90 @@
+{
+ "enjin": "pakej-juri",
+ "versi": "e30d642d4b43",
+ "masa": "2026-11-27T14:42:53Z",
+ "mp4": "video/demo.mp4",
+ "sha256_mp4": "1636874d92c5dcb9a0eca7c623f5114702991a27bcef0723fbe135832ce870a8",
+ "bait_mp4": 18027306,
+ "ukur": {
+  "fail": "video/demo.mp4",
+  "tempoh_video": 80.0,
+  "tempoh_audio": 80.0,
+  "lufs": -16.5,
+  "puncak_dbtp": -2.2,
+  "lebar": 1920,
+  "tinggi": 1080,
+  "semak": {
+   "V3": true,
+   "V4": true,
+   "V5": true
+  },
+  "lulus": true
+ },
+ "sebelum": {
+  "lufs": -15.3,
+  "puncak_dbtp": -0.7
+ },
+ "suara": {
+  "penjana": "vp",
+  "id": "Ote1SdIQw1HEueVQdGnX",
+  "model": "eleven_v3",
+  "bahasa": "en",
+  "baris": [
+   {
+    "id": "hook",
+    "sha256": "dfbd0ad464647651efc2b5e1cc7584edfc65456898156f7ab75f432266d584fa"
+   },
+   {
+    "id": "masalah",
+    "sha256": "d28f2e2eabf4780c58afc21d91f40923f5925a0d0328115ca0494210e318c95b"
+   },
+   {
+    "id": "pelita",
+    "sha256": "5e55c01d56847dba9187e6c19ce514b31d41c6730d3061d23634eb13ed720a85"
+   },
+   {
+    "id": "gelung",
+    "sha256": "9dc031b8b6e845e6b5b66f88e258825a81b49e27c1220539609b69b45924d064"
+   },
+   {
+    "id": "base",
+    "sha256": "350bb1f7e5e244ffa819957fb1ac29eecab190e0251b8fcc58c9efab0e50a0d2"
+   },
+   {
+    "id": "bukti",
+    "sha256": "6b9ade70eedc4f0f053bcebd2d457ed1b3a1a2884736bbe68f22dc9f090e4c6d"
+   },
+   {
+    "id": "laman",
+    "sha256": "03c162cf6d5319a0fb6a822357cd107bb1aa45523292e357c12fe2b643e3e8cc"
+   },
+   {
+    "id": "kos",
+    "sha256": "fcbeb4751fd142ec0513bfbfe28465b06fb20fa717d37868e8153f383c1f3a50"
+   },
+   {
+    "id": "tutup",
+    "sha256": "ce73b04d450af5a3e004c90d597765a9620f001bd59b00b74d8009bcebe0c110"
+   }
+  ]
+ },
+ "hyperframes": "0.9.52",
+ "filem": {
+  "fail": "video/filem.json",
+  "sha256": "bf4427a57a9a18383857df721875531a2b861ef45c0342188946c28b9f057878"
+ },
+ "tema": {
+  "fail": [],
+  "token": {
+   "latar": "sandaran",
+   "dakwat": "sandaran",
+   "aksen": "sandaran",
+   "lembut": "sandaran",
+   "garis": "sandaran",
+   "fon_teks": "sandaran",
+   "fon_paparan": "sandaran",
+   "fon_mono": "sandaran"
+  },
+  "fon_dibuang": []
+ }
+}

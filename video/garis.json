@@ -1,0 +1,13 @@
+{
+ "_nota": "Dijana `pakej video init` — suara = klon pemilik (vp). Jangan tukar id suara (V2 piawai pemilik).",
+ "video": {
+  "nama": "pelita",
+  "awalan_filedrop": "pelita-",
+  "suara": {
+   "id": "Ote1SdIQw1HEueVQdGnX",
+   "model": "eleven_v3",
+   "bahasa": "en"
+  }
+ },
+ "suara": {}
+}

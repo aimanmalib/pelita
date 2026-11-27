@@ -1,0 +1,102 @@
+{
+ "_nota": "Pelita demo film (80 s, nine scenes). The picture is the v1 render of the real page and explorers (docs/media/video, ADR 0016); this pipeline voices it (vp, cached lines) and finishes it with `pakej video akhir --masuk`. Scene windows and voice starts are the ones the picture was cut to.",
+ "tempoh": 80.0,
+ "sari": {
+  "maks_perkataan": 6,
+  "tanpa": [
+   "tutup"
+  ]
+ },
+ "babak": [
+  {
+   "id": "hook",
+   "dari": 0,
+   "hingga": 9
+  },
+  {
+   "id": "masalah",
+   "dari": 9,
+   "hingga": 14.2
+  },
+  {
+   "id": "pelita",
+   "dari": 14.2,
+   "hingga": 23.4
+  },
+  {
+   "id": "gelung",
+   "dari": 23.4,
+   "hingga": 36.2
+  },
+  {
+   "id": "base",
+   "dari": 36.2,
+   "hingga": 47
+  },
+  {
+   "id": "bukti",
+   "dari": 47,
+   "hingga": 59
+  },
+  {
+   "id": "laman",
+   "dari": 59,
+   "hingga": 67
+  },
+  {
+   "id": "kos",
+   "dari": 67,
+   "hingga": 73.4
+  },
+  {
+   "id": "tutup",
+   "dari": 73.4,
+   "hingga": 80
+  }
+ ],
+ "suara": [
+  {
+   "id": "hook",
+   "mula": 0.4
+  },
+  {
+   "id": "masalah",
+   "mula": 9.4
+  },
+  {
+   "id": "pelita",
+   "mula": 14.6
+  },
+  {
+   "id": "gelung",
+   "mula": 24.0
+  },
+  {
+   "id": "base",
+   "mula": 37.0
+  },
+  {
+   "id": "bukti",
+   "mula": 47.6
+  },
+  {
+   "id": "laman",
+   "mula": 59.6
+  },
+  {
+   "id": "kos",
+   "mula": 67.8
+  },
+  {
+   "id": "tutup",
+   "mula": 74.4
+  }
+ ],
+ "teks": {
+  "tajuk": "Pelita",
+  "slogan": "Keep it lit.",
+  "url": "pelita.sasateguh.com",
+  "label_ai": "Narration: AI clone of my own voice.",
+  "muzik": "Music: Sascha Ende, ende.app (CC BY 4.0)"
+ }
+}

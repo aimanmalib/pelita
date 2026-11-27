@@ -1,0 +1,54 @@
+<!doctype html>
+<!-- SUMBER (index.tmpl, kaedah v2 pakej juri). index.html DIJANA: python3 -P -E ~/hackathon/pakej video bina <repo>. Token rupa = token dek entri. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <!--TOKEN-->
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--latar); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--latar); color: var(--dakwat); font-family: var(--fon-teks); }
+      .scene { position: absolute; inset: 0; overflow: hidden; background: var(--latar); display: flex; flex-direction: column; justify-content: center; padding: 0 160px; }
+      .tajuk { font: 900 140px/1 var(--fon-paparan); letter-spacing: -0.02em; }
+      .slogan { font: 600 52px/1.2 var(--fon-teks); color: var(--lembut); margin-top: 32px; max-width: 1400px; }
+      .url { font: 500 40px/1 var(--fon-mono); color: var(--aksen); margin-top: 48px; }
+      .halus { position: absolute; left: 160px; bottom: 72px; font: 500 30px/1.3 var(--fon-mono); color: var(--lembut); }
+      .garis-aksen { width: 160px; height: 10px; background: var(--aksen); margin-bottom: 40px; }
+      .cap { position: absolute; left: 0; right: 0; bottom: 64px; text-align: center; z-index: 50; }
+      .cap span { display: inline-block; font: 600 40px/1.25 var(--fon-teks); color: #fff; background: rgba(10,12,15,.80); padding: 8px 22px 10px; border-radius: 10px; max-width: 1600px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{{tempoh}}" data-width="1920" data-height="1080">
+      <div id="s-buka" class="clip scene" data-start="0" data-duration="4.2" data-track-index="1" data-track-kind="graphics">
+        <div class="garis-aksen"></div>
+        <div id="buka-slogan" class="tajuk">{{slogan}}</div>
+      </div>
+      <div id="s-tutup" class="clip scene" data-start="4.2" data-duration="3.8" data-track-index="1" data-track-kind="graphics">
+        <div id="tutup-tajuk" class="tajuk">{{tajuk}}</div>
+        <div id="tutup-url" class="url">{{url}}</div>
+        <div class="halus">{{label_ai}}</div>
+      </div>
+      <div id="captions" data-track-kind="captions">
+        <!--SARI-->
+      </div>
+      <!--SUARA-->
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#buka-slogan", { y: 24 }, { y: 0, duration: 0.6, ease: "expo.out" }, 0);  // bingkai 0 = kandungan (lakaran pemain sosial)
+      tl.fromTo("#tutup-tajuk", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "power3.out" }, 4.3);
+      tl.fromTo("#tutup-url", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 4.9);
+      document.querySelectorAll(".cap span").forEach((s) => {
+        const c = s.parentElement, st = +c.dataset.start, du = +c.dataset.duration;
+        tl.fromTo(s, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, st);
+        tl.to(s, { opacity: 0, duration: 0.1, ease: "power2.in" }, st + du - 0.1);
+      });
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
