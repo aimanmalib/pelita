@@ -7,7 +7,7 @@
 <p align="center"><b>Keeps reactive contracts lit.</b> · <i>Memastikan kontrak reaktif terus menyala.</i><br>
 <a href="https://pelita.sasateguh.com">live page</a> · <a href="#verify-without-trusting-this-readme">verify</a> · <a href="docs/measured.md">measured results</a> · <a href="#run-it-your-own-pelita">run your own</a> · <a href="#documentation">documentation</a> · <a href="CHANGELOG.md">changelog</a> · <a href="README.ms.md">Bahasa Melayu</a> · Built in Malaysia by Aiman Malib · Sasa Teguh</p>
 
-<p align="center"><img src="docs/media/page-desktop.png" width="838" alt="The top of the live Pelita page: a lamp glyph, the line Keeps reactive contracts lit, and the fleet status row, empty until the contracts are deployed"></p>
+<p align="center"><img src="docs/media/page-desktop.png" width="838" alt="The top of the live Pelita page: a lamp glyph, the line Keeps reactive contracts lit, and the fleet status row read from the chain"></p>
 
 A reactive contract pays for every reaction. When its reserves and balance run out, Reactive Network records a debt,
 emits `BlacklistContract`, and stops calling it. There is no alert. The contract stays dark until someone notices, and
@@ -26,8 +26,10 @@ the event.
 ### Execution
 
 - The contracts are [`src/PelitaKeeper.sol`](src/PelitaKeeper.sol) (Lasna) and [`src/PelitaTank.sol`](src/PelitaTank.sol)
-  (destination). Their testnet addresses and full-loop transaction hashes are added to this README and to
-  `deployments/` as the deployment lands; until then this section names what to check, not a result.
+  (destination). They are deployed and source-verified on both testnets; the addresses and one full loop of each path,
+  with every transaction hash, are in [Deployment and full loops](#deployment-and-full-loops).
+- On Lasna the Keeper relit 52 of 52 outages of its guarded contract, and on Base Sepolia 17 of 17, with a median of
+  1 s from outage to relit by block timestamps ([Measured results](#measured-results)).
 - [`scripts/verify.sh`](scripts/verify.sh) reads every recorded contract back from the chain with plain `cast` calls.
 - [docs/measured.md](docs/measured.md) is written by a script from evidence files only. A target that was missed says so.
 
@@ -85,22 +87,53 @@ invariant tests that check them: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Deployment and full loops
 
-The deployment is in progress. The Keeper and one guarded demo pair are on chain, and the first Lasna loop has run:
-the Keeper heard the outage and paid the debt, with `WhitelistContract` in its own refuel transaction.
-Its hashes, read back from the chains, are in [docs/evidence/E-002-spike.json](docs/evidence/E-002-spike.json)
-(decision record: [docs/decisions/0002-spike-lasna-loop.md](docs/decisions/0002-spike-lasna-loop.md)). The demo loop
-has run once too: a public `poke()` on Base Sepolia, the `Flicker` reaction on Lasna and the `Lit` callback in the
-`Lantern` ([docs/evidence/E-004-demo-loop.json](docs/evidence/E-004-demo-loop.json)). The first demo pair asked for
-too little callback gas, and the Base Sepolia proxy refused every delivery to it, so the pair was replaced
-([docs/decisions/0008-callback-gas-floor.md](docs/decisions/0008-callback-gas-floor.md)). When the
-deployment is complete, this section lists each address with its source verification link (Sourcify on Lasna,
-Blockscout on Base Sepolia), and three loops with every transaction hash:
+Addresses are read from [`deployments/`](deployments/); `scripts/verify.sh` reads each one back from the chain.
 
-- **Lasna:** the outage transaction (`BlacklistContract`) and the Keeper's reaction (`Refueled` and
-  `WhitelistContract` in the same transaction).
-- **Base Sepolia:** the outage on the callback proxy, the Keeper's reaction on Lasna (`RefuelRequested`), the `refuel`
-  callback on Base Sepolia and the `Relit` event.
-- **Demo:** a `Beat` from `Beacon`, the reaction in `Flicker`, and the `Lit` callback in `Lantern`.
+| Contract | Chain | Address | Source |
+|---|---|---|---|
+| PelitaKeeper | Reactive Lasna | [`0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa`](https://lasna.reactscan.net/address/0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa) | [Sourcify](https://repo.sourcify.dev/5318007/0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa) |
+| PelitaTank | Base Sepolia | [`0xeDF0239e5661097228a570B8Ad05707562886bCf`](https://base-sepolia.blockscout.com/address/0xeDF0239e5661097228a570B8Ad05707562886bCf) | [Sourcify](https://repo.sourcify.dev/84532/0xeDF0239e5661097228a570B8Ad05707562886bCf) |
+| Flicker, guarded | Reactive Lasna | [`0xa4c7BDDbA75955C915FC38753037e82c32d240B2`](https://lasna.reactscan.net/address/0xa4c7BDDbA75955C915FC38753037e82c32d240B2) | [Sourcify](https://repo.sourcify.dev/5318007/0xa4c7BDDbA75955C915FC38753037e82c32d240B2) |
+| Flicker, control (no Pelita) | Reactive Lasna | [`0x42CdFE8C54c2395eaca20ba5cdaFfFbDf6061458`](https://lasna.reactscan.net/address/0x42CdFE8C54c2395eaca20ba5cdaFfFbDf6061458) | [Sourcify](https://repo.sourcify.dev/5318007/0x42CdFE8C54c2395eaca20ba5cdaFfFbDf6061458) |
+| Beacon | Base Sepolia | [`0x90832735001E807Dde8CD0f5181F07b85BEDb7a4`](https://base-sepolia.blockscout.com/address/0x90832735001E807Dde8CD0f5181F07b85BEDb7a4) | [Blockscout](https://base-sepolia.blockscout.com/address/0x90832735001E807Dde8CD0f5181F07b85BEDb7a4?tab=contract) |
+| Lantern, guarded | Base Sepolia | [`0xF5f37156f2C3414735E6085aAeCC9940e6C77904`](https://base-sepolia.blockscout.com/address/0xF5f37156f2C3414735E6085aAeCC9940e6C77904) | [Blockscout](https://base-sepolia.blockscout.com/address/0xF5f37156f2C3414735E6085aAeCC9940e6C77904?tab=contract) |
+| Lantern, control (no Pelita) | Base Sepolia | [`0xc8F9A1F1922e734ab3a4f86DAbF7788A0A9EE95b`](https://base-sepolia.blockscout.com/address/0xc8F9A1F1922e734ab3a4f86DAbF7788A0A9EE95b) | [Blockscout](https://base-sepolia.blockscout.com/address/0xc8F9A1F1922e734ab3a4f86DAbF7788A0A9EE95b?tab=contract) |
+
+The first full loop of each path, taken from the chain reads in
+[E-004 first loops](docs/evidence/E-004-first-loops.json). The Keeper's reaction carries the outage transaction as its
+`refTx`.
+
+- **Lasna:** the guarded `Flicker` goes dark, [`0x07de1f4f`](https://lasna.reactscan.net/tx/0x07de1f4ff24a5eb8c58e982dadcfcab67905b1eed0c3cfd0fcfc4be5eca6d656)
+  (`BlacklistContract`). The Keeper reacts in [`0xac7d0ec7`](https://lasna.reactscan.net/tx/0xac7d0ec7db5a217fb92db3628e5e670427e873305c9974c9b0227325937212c6):
+  `Refueled` and `WhitelistContract` in the same transaction.
+- **Base Sepolia:** the guarded `Lantern` goes dark on the callback proxy,
+  [`0x43881c5c`](https://base-sepolia.blockscout.com/tx/0x43881c5c15012332a5e6604cb39a698e640cb18e880a646d6aa0da2dbd692729). The Keeper reacts on Lasna,
+  [`0x239574bc`](https://lasna.reactscan.net/tx/0x239574bc45f48d8c0326f0bc08ed05966e16cf4112ecfb09010293711bc562f8) (`RefuelRequested`), and the Tank's
+  `refuel` callback pays the debt in [`0x602cdda5`](https://base-sepolia.blockscout.com/tx/0x602cdda51c889be52834b6b638ad46b5939ebc84cf62d324e36480564cfce1fb)
+  (`Refueled` and `WhitelistContract`).
+- **Demo:** a `poke()` makes `Beacon` emit a `Beat`, [`0xb001f0f3`](https://base-sepolia.blockscout.com/tx/0xb001f0f3d765a6f01ef6fbf28e46c5fb2df346c89c69528750df614fe07c48ef);
+  `Flicker` reacts on Lasna, [`0x597fc396`](https://lasna.reactscan.net/tx/0x597fc3964da8c294efa1301f2a1dabf7e20c3aba9f0f37f67bfe9315aff43293); the `Lit`
+  callback lands in `Lantern`, [`0x70f8bd06`](https://base-sepolia.blockscout.com/tx/0x70f8bd06b89fa6093a952e8f4a260aa77d98e766026de266d950446fc941bece).
+
+Every later outage and relight, with its hashes, is listed in [docs/measured.md](docs/measured.md). The first demo pair
+asked for too little callback gas, and the Base Sepolia proxy refused every delivery to it, so the pair was replaced
+([ADR 0008](docs/decisions/0008-callback-gas-floor.md)); the retired addresses stay in `deployments/`.
+
+## Measured results
+
+From [docs/measured.md](docs/measured.md), which `scripts/measure/report.py` writes from the evidence files. Times are
+block timestamps.
+
+| | Target | Measured |
+|---|---|---|
+| H1. Lasna outages of the guarded `Flicker` relit by the Keeper | at least 30, 100%, median at most 5 s | 52 of 52, median 1 s, slowest 2 s |
+| H2. Base Sepolia outages of the guarded `Lantern` relit through a callback | at least 15, 100%, median at most 10 s | 17 of 17, median 1 s, slowest 2 s |
+| H3. The control `Flicker` on Lasna, without Pelita | dark for at least 24 h with `debt()` above 0 | dark 32.1 h, `debt()` 0.0131257 `lREACT` |
+| H4. Beats from the same `Beacon` | | guarded `Lantern` received 462 of 462; control received 4 of 462 |
+| H5. Fee Pelita pays per relight (median) | | see [Cost](#cost) |
+
+The control `Lantern` on Base Sepolia never went dark: it lost its beats upstream, because the control `Flicker` that
+forwards them stayed dark (H4).
 
 ## Verify without trusting this README
 
@@ -119,11 +152,13 @@ The demo pair is built to run dry. `Beacon` on Base Sepolia emits a beat when an
 pays for a reaction to every beat. It is funded with very little on purpose, so a few beats put it into debt:
 
 ```sh
-cast send <Beacon> "poke()" --rpc-url https://sepolia.base.org --account <your-keystore>
+cast send 0x90832735001E807Dde8CD0f5181F07b85BEDb7a4 "poke()" \
+  --rpc-url https://sepolia.base.org --account <your-keystore>
 ```
 
 Pokes are limited to one per cooldown and a fixed number a day, both read from the contract. The page shows the
-cooldown left and the next steps; the `Beacon` address appears there and in `deployments/` once deployed.
+cooldown left and the next steps. Then watch both Lanterns: the guarded one lights up, and the control one stays dark,
+because its `Flicker` has no Pelita (H4 in [Measured results](#measured-results)).
 
 ## How often contracts go dark
 
@@ -135,8 +170,7 @@ From [docs/measured.md](docs/measured.md), counted by [`scripts/census.py`](scri
 | Reactive Lasna | 154 | 116 | 97 |
 | Base Sepolia | 21 | 21 | 17 |
 
-The page shows the same census, refreshed every two minutes by [`ops/indexer.py`](ops/indexer.py). The relight times,
-the control pair and the cost per relight land in the same file once the series has run on chain.
+The page shows the same census, refreshed every two minutes by [`ops/indexer.py`](ops/indexer.py).
 
 ## What already exists
 
@@ -154,8 +188,16 @@ itself can run dry. Pelita has no Cron subscription.
 ## Cost
 
 Each relight costs the protected contract's debt plus the `refill` its owner chose, paid from the tank, plus the
-Keeper's own reaction fee. On a destination chain the callback is paid by the Tank. The measured cost per relight, in
-`lREACT` and in ETH, will be in [docs/measured.md](docs/measured.md) with the hash of every transaction behind it.
+Keeper's own reaction fee. On a destination chain the callback is paid by the Tank. The debt and the refill go to the
+protected contract; the fees are what Pelita itself costs. Medians from [docs/measured.md](docs/measured.md) (H5):
+
+| Path | Keeper reaction, billed on Lasna | Callback on Base Sepolia | Relights measured |
+|---|---|---|---|
+| Lasna | 0.017684 `lREACT` | none | 52 |
+| Base Sepolia | 0.0150344 `lREACT` | 0.000000695094 ETH | 17 |
+
+A reactive receipt shows no fee, so the reaction figure is what Lasna took from the Keeper's balance in the reaction's
+block, less what it sent to the protected contract. While nothing goes dark, nothing is billed.
 
 ## Limits
 

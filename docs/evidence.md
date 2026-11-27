@@ -26,11 +26,11 @@ copied here. Each one points to the section of [measured.md](measured.md) that h
 
 | Claim | Where | Source |
 |---|---|---|
-| Lasna outages of the guarded ward, how many were relit, and how fast | measured.md H1 | [E-005 Lasna](evidence/E-005-series-lasna.json); repeat: `python3 scripts/measure/series.py record --side lasna` |
-| Base Sepolia outages relit through a callback, and how fast | measured.md H2 | [E-005 Base Sepolia](evidence/E-005-series-base-sepolia.json); repeat: `python3 scripts/measure/series.py record --side base-sepolia` |
-| The control ward without Pelita stays dark, with its debt read at the last block | measured.md H3; page fleet ("control: no Pelita") | `controls` in both E-005 files |
-| Beats lost by the guarded Lantern against the control Lantern | measured.md H4 | `demo` in [E-005 Base Sepolia](evidence/E-005-series-base-sepolia.json) |
-| Cost of one relight | measured.md H5; page "How it works" (Cost) | `reaction_billed_wei` and `callback_fee_wei` in both E-005 files; the page reads [web/measured.json](../web/measured.json), which `scripts/measure/report.py` writes with measured.md (test `test_committed_page_figures_are_current`) |
+| Lasna outages of the guarded ward, how many were relit, and how fast | measured.md H1; README Execution and Measured results | [E-005 Lasna](evidence/E-005-series-lasna.json); repeat: `python3 scripts/measure/series.py record --side lasna` |
+| Base Sepolia outages relit through a callback, and how fast | measured.md H2; README Execution and Measured results | [E-005 Base Sepolia](evidence/E-005-series-base-sepolia.json); repeat: `python3 scripts/measure/series.py record --side base-sepolia` |
+| The control ward without Pelita stays dark, with its debt read at the last block | measured.md H3; README Measured results; page fleet ("control: no Pelita") | `controls` in both E-005 files |
+| Beats lost by the guarded Lantern against the control Lantern | measured.md H4; README Measured results | `demo` in [E-005 Base Sepolia](evidence/E-005-series-base-sepolia.json) |
+| Cost of one relight | measured.md H5; README Cost and README.ms.md; page "How it works" (Cost) | `reaction_billed_wei` and `callback_fee_wei` in both E-005 files; the page reads [web/measured.json](../web/measured.json), which `scripts/measure/report.py` writes with measured.md (test `test_committed_page_figures_are_current`) |
 | The fuel gauge's "reactions left" is the balance divided by the median Keeper reaction bill on Lasna | page fuel gauge | measured.md H5 (lasna row), `relight.lasna.reaction_wei` in [web/measured.json](../web/measured.json) |
 | How many contracts went dark, how many are still dark | README census table; page dark list | measured.md H8, [E-003](evidence/E-003-census.json); each row names the command that repeats it |
 | The page shows the same census as `scripts/census.py` for the same block range | README census section | `h8_equal` in [E-003](evidence/E-003-census.json) |
@@ -41,6 +41,7 @@ copied here. Each one points to the section of [measured.md](measured.md) that h
 | Claim | Where | Source |
 |---|---|---|
 | The first Lasna loop: outage, then `Refueled` and `WhitelistContract` in one transaction | README Deployment | [E-002](evidence/E-002-spike.json), [ADR 0002](decisions/0002-spike-lasna-loop.md) |
+| Each contract's address and its source verification link | README Deployment | [deployments/lasna.json](../deployments/lasna.json), [deployments/base-sepolia.json](../deployments/base-sepolia.json) (`verified`, `source`); read back by [scripts/verify.sh](../scripts/verify.sh) |
 | One full loop on each path, with every hash and `refTx` | README Deployment | [E-004 first loops](evidence/E-004-first-loops.json) |
 | The demo loop: `poke()` on Base Sepolia, `Flicker` on Lasna, `Lit` in `Lantern` | README Deployment | [E-004 demo loop](evidence/E-004-demo-loop.json) |
 | The first demo pair asked for too little callback gas and the proxy refused every delivery | README Deployment | [E-004 refused](evidence/E-004-demo-loop-gas-refused.json), [ADR 0008](decisions/0008-callback-gas-floor.md) |

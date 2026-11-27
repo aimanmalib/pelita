@@ -20,6 +20,19 @@ ia tidak berbuat apa-apa dan tidak dibil.
 
 Dibina untuk **Reactive Omni Buildathon**, trek Set It and Forget It, sepanjang tempoh acara.
 
+## Hasil diukur
+
+Dari [docs/measured.md](docs/measured.md), ditulis skrip daripada bacaan rantaian. Masa ikut cap masa blok.
+
+| | Sasaran | Diukur |
+|---|---|---|
+| H1. Lasna: padam `Flicker` dijaga dinyalakan semula oleh Keeper | sekurang-kurangnya 30, 100%, median paling lama 5 s | 52 daripada 52, median 1 s |
+| H2. Base Sepolia: padam `Lantern` dijaga dinyalakan melalui callback | sekurang-kurangnya 15, 100%, median paling lama 10 s | 17 daripada 17, median 1 s |
+| H3. `Flicker` kawalan di Lasna, tanpa Pelita | padam sekurang-kurangnya 24 j, `debt()` melebihi 0 | padam 32.1 j, `debt()` 0.0131257 `lREACT` |
+| H5. Yuran reaksi Keeper (median) | | 0.017684 `lREACT` (Lasna); 0.0150344 `lREACT` + callback 0.000000695094 ETH (Base Sepolia) |
+
+Alamat kontrak dan hash setiap transaksi gelung pertama: [README.md](README.md#deployment-and-full-loops).
+
 ## Berapa kerap kontrak padam
 
 Dari [docs/measured.md](docs/measured.md), dikira oleh [`scripts/census.py`](scripts/census.py) sejak
