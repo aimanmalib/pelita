@@ -1,0 +1,14 @@
+{
+  "_about": "G4 hand-over check (P4c), 27 Nov 2026 18:05 UTC: the submission-kit checker run against this entry, the form and plain-language notes compared byte for byte with the copies handed to the owner, and the Keeper balance read back with `scripts/funds.sh status`.",
+  "submission_check": {"exit_code": 0, "fail": 0, "warn": 7, "skip": 0, "pass": 43,
+    "warnings": ["youtube link not recorded yet (owner uploads the video)", "project url not recorded yet (set on submit)",
+                 "video:youtube (same as above)", "form copy age not comparable (form is kept out of git)",
+                 "notes copy age not comparable (notes are kept out of git)", "no canonical figures list in the entry record",
+                 "no fresh look-and-feel comparison (not required yet)"]},
+  "handover_copies": {"form_sha256_prefix": "c8d374f49d654fa2", "notes_sha256_prefix": "b2b47b1237de2623",
+                      "video_sha256_prefix": "1636874d92c5", "captions_sha256_prefix": "c96351755d7a", "identical_to_source": true},
+  "keeper": {"address": "0xfD15ABB7DeFb73B10942BB1207B1e24cCfA138Fa", "chain": 5318007,
+             "balance_lreact": "10.457513399994561943", "target_lreact": "12", "short_lreact": "1.54",
+             "note": "Short of target; the owner was told in the hand-over message how to top it up (about 0.016 test ETH at the faucet). Not blocking."},
+  "owner_message": {"sent": true, "exit_code": 0, "level": "warn"}
+}
