@@ -38,10 +38,14 @@ Alamat kontrak dan hash setiap transaksi gelung pertama: [README.md](README.md#d
 Dari [docs/measured.md](docs/measured.md), dikira oleh [`scripts/census.py`](scripts/census.py) sejak
 2026-11-04T04:18:00Z:
 
-| Rantaian | Padam | Kontrak | Masih padam |
-|---|---|---|---|
-| Reactive Lasna | 154 | 116 | 97 |
-| Base Sepolia | 21 | 21 | 17 |
+| Rantaian | Dikira hingga | Padam | Kontrak | Masih padam |
+|---|---|---|---|---|
+| Reactive Lasna | 2026-11-27 | 570 | 369 | 277 |
+| Base Sepolia | 2026-11-16 | 21 | 21 | 17 |
+
+Kiraan ini termasuk kontrak demo dan kawalan saya sendiri. Kiraan Base Sepolia berhenti lebih awal kerana julat
+panjangnya dibaca melalui API Blockscout, yang menolak hos ini pada 2026-11-27. Video demo memetik banci Lasna hingga
+2026-11-16 (116 kontrak, 97 masih padam); setiap banci ada dalam measured.md.
 
 ## Cara menjalankan
 

@@ -162,13 +162,17 @@ because its `Flicker` has no Pelita (H4 in [Measured results](#measured-results)
 
 ## How often contracts go dark
 
-From [docs/measured.md](docs/measured.md), counted by [`scripts/census.py`](scripts/census.py) since
+From [docs/measured.md](docs/measured.md), counted by [`scripts/census.py`](scripts/census.py) from
 2026-11-04T04:18:00Z:
 
-| Chain | Outages | Contracts | Still dark |
-|---|---|---|---|
-| Reactive Lasna | 154 | 116 | 97 |
-| Base Sepolia | 21 | 21 | 17 |
+| Chain | Counted to | Outages | Contracts | Still dark |
+|---|---|---|---|---|
+| Reactive Lasna | 2026-11-27 | 570 | 369 | 277 |
+| Base Sepolia | 2026-11-16 | 21 | 21 | 17 |
+
+The counts include my own demo and control contracts. The Base Sepolia count stops earlier because its long range is
+read through the Blockscout API, which refused this host on 2026-11-27. The demo video quotes the Lasna census to
+2026-11-16 (116 contracts, 97 still dark); every census is in measured.md.
 
 The page shows the same census, refreshed every two minutes by [`ops/indexer.py`](ops/indexer.py).
 

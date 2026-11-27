@@ -35,8 +35,8 @@ contract that pays the callback proxy.
 I am not a developer. I build with AI coding tools and I run several projects at once. I cannot watch a dashboard. I
 want to fill one tank and forget it.
 
-I measured the problem on chain first. Since November 4, 2026, my census counted 116 contracts on Lasna that went dark
-this way, 154 outages in all. 97 of them were still dark at the end of the counted range.
+I measured the problem on chain first. From November 4 to November 27, 2026, my census counted 369 contracts on
+Lasna that went dark this way, 570 outages in all. 277 of them were still dark at the end of the counted range.
 
 ## What you can check
 

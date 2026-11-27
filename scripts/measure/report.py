@@ -9,6 +9,7 @@ import argparse
 import json
 import statistics
 import sys
+from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
 
@@ -150,17 +151,31 @@ def site_figures(evidence):
     return out
 
 
-def census_section(census):
+CENSUS_FILES = ("E-003-census.json", "E-006-census.json")  # oldest first; a later census repeats the earlier range
+
+
+def census_end(census):
+    return max(c.get("as_of_ts", 0) for c in census["chains"].values())
+
+
+def census_section(censuses):
+    """H8 rows for every census file, newest first. The older rows stay because the video and older text cite them."""
     lines = ["## H8. Census of dark contracts (no key)", ""]
-    if not census:
+    censuses = sorted((c for c in censuses if c), key=census_end, reverse=True)
+    if not censuses:
         return lines + [tbd("H8", "python3 scripts/census.py"), ""]
-    lines += [f"Since {census['since_utc']}. Same numbers as the page snapshot for the same block range: "
-              f"{'yes' if all(census['h8_equal'].values()) else '**no**'}.", "", "| Chain | Outages | Contracts | Still dark | Repeat |",
-              "|---|---|---|---|---|"]
-    for name, c in census["chains"].items():
-        t = c.get("totals", c)
-        lines.append(f"| {name} | {t.get('outages', '?')} | {t.get('contracts', '?')} | {t.get('still_dark', '?')} | "
-                     f"`{census['repeat'][name]}` |")
+    lines += [f"Since {censuses[0]['since_utc']}. Each census counts from that date to the last block of its range, so a "
+              "newer census includes the older one. \"Same as page\" = the page snapshot gave the same numbers for the "
+              "same block range.", "",
+              "| Counted up to (UTC) | Chain | Outages | Contracts | Still dark | Same as page | Repeat |",
+              "|---|---|---|---|---|---|---|"]
+    for census in censuses:
+        for name, c in census["chains"].items():
+            t = c.get("totals", c)
+            end = datetime.fromtimestamp(c["as_of_ts"], timezone.utc).strftime("%Y-%m-%d %H:%M") if "as_of_ts" in c else "?"
+            same = "yes" if census["h8_equal"].get(name) else "**no**"
+            lines.append(f"| {end} | {name} | {t.get('outages', '?')} | {t.get('contracts', '?')} | "
+                         f"{t.get('still_dark', '?')} | {same} | `{census['repeat'][name]}` |")
     return lines + [""]
 
 
@@ -183,7 +198,7 @@ def render(evidence, cfg, chains):
     lines += control_section({"lasna": lasna, "base-sepolia": base}, ser["control_dark_hours"])
     lines += beats_section(base, "base-sepolia")
     lines += cost_section({"lasna": lasna, "base-sepolia": base}, chains)
-    lines += census_section(load(evidence, "E-003-census.json"))
+    lines += census_section([load(evidence, f) for f in CENSUS_FILES])
     return "\n".join(lines).rstrip() + "\n"
 
 

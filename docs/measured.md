@@ -134,9 +134,10 @@ Keeper are left out.
 
 ## H8. Census of dark contracts (no key)
 
-Since 2026-11-04T04:18:00Z. Same numbers as the page snapshot for the same block range: yes.
+Since 2026-11-04T04:18:00Z. Each census counts from that date to the last block of its range, so a newer census includes the older one. "Same as page" = the page snapshot gave the same numbers for the same block range.
 
-| Chain | Outages | Contracts | Still dark | Repeat |
-|---|---|---|---|---|
-| lasna | 154 | 116 | 97 | `python3 scripts/census.py --chain lasna --from-block 7487143 --to-block 8524855` |
-| base-sepolia | 21 | 21 | 17 | `python3 scripts/census.py --chain base-sepolia --from-block 54220056 --to-block 59740702` |
+| Counted up to (UTC) | Chain | Outages | Contracts | Still dark | Same as page | Repeat |
+|---|---|---|---|---|---|---|
+| 2026-11-27 09:08 | lasna | 570 | 369 | 277 | yes | `python3 scripts/census.py --chain lasna --from-block 7487143 --to-block 9365208` |
+| 2026-11-16 23:00 | lasna | 154 | 116 | 97 | yes | `python3 scripts/census.py --chain lasna --from-block 7487143 --to-block 8524855` |
+| 2026-11-16 23:00 | base-sepolia | 21 | 21 | 17 | yes | `python3 scripts/census.py --chain base-sepolia --from-block 54220056 --to-block 59740702` |

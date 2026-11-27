@@ -1,0 +1,2288 @@
+{
+  "evidence": "E-006",
+  "what": "Census of contracts that went dark for unpaid debt (BlacklistContract) and were lit again (WhitelistContract), read without a key, repeated before submission over a longer range than E-003. Lasna only: the Base Sepolia backfill goes through the Blockscout logs API, which answered HTTP 429 to every request from this host for 30 minutes on 27 Nov, so the Base Sepolia row stays in E-003.",
+  "measured_at_utc": "2026-11-27T09:11:00Z",
+  "repeat": {
+    "lasna": "python3 scripts/census.py --chain lasna --from-block 7487143 --to-block 9365208"
+  },
+  "h8_check": "The indexer snapshot (state/public/snapshot.json, census.lasna) was copied first; scripts/census.py over the same block range produced output equal to that snapshot entry (compared as parsed JSON).",
+  "h8_equal": {
+    "lasna": true
+  },
+  "since_utc": "2026-11-04T04:18:00Z",
+  "chains": {
+    "lasna": {
+      "chain_id": 5318007,
+      "source": "eth_getLogs",
+      "address": "0x8888888888888888888888888888888888888888",
+      "from_block": 7487143,
+      "to_block": 9365208,
+      "as_of_ts": 1795770482,
+      "outages": 570,
+      "contracts": 369,
+      "contracts_dark_twice_or_more": 85,
+      "recovered": 293,
+      "lit_without_dark_in_range": 0,
+      "still_dark": 277,
+      "recovery_seconds": {
+        "count": 293,
+        "min": 1,
+        "median": 379,
+        "max": 895886
+      },
+      "dark_age_seconds": {
+        "count": 277,
+        "min": 11065,
+        "median": 632145,
+        "max": 1744976
+      },
+      "dark_per_day": {
+        "2026-11-07": 3,
+        "2026-11-08": 6,
+        "2026-11-09": 8,
+        "2026-11-10": 9,
+        "2026-11-11": 24,
+        "2026-11-12": 16,
+        "2026-11-13": 4,
+        "2026-11-14": 27,
+        "2026-11-15": 35,
+        "2026-11-16": 22,
+        "2026-11-17": 31,
+        "2026-11-18": 31,
+        "2026-11-19": 29,
+        "2026-11-20": 65,
+        "2026-11-21": 30,
+        "2026-11-22": 32,
+        "2026-11-23": 27,
+        "2026-11-24": 31,
+        "2026-11-25": 98,
+        "2026-11-26": 33,
+        "2026-11-27": 9
+      },
+      "dark": [
+        {
+          "address": "0xb91dcb220556b7fd3c55558860400b2b0a7044fc",
+          "since_block": 7730002,
+          "since_ts": 1794025506,
+          "dark_seconds": 1744976,
+          "outages": 1,
+          "debt_wei": "14535700000000000"
+        },
+        {
+          "address": "0x7689b19793f167fcb68e9acdc6bc2f658d673243",
+          "since_block": 7743001,
+          "since_ts": 1794039300,
+          "dark_seconds": 1731182,
+          "outages": 1,
+          "debt_wei": "11419900000000000"
+        },
+        {
+          "address": "0x94dd282755e5583253df2eba9557dcad78de451b",
+          "since_block": 7850001,
+          "since_ts": 1794152631,
+          "dark_seconds": 1617851,
+          "outages": 1,
+          "debt_wei": "10851600000000000"
+        },
+        {
+          "address": "0xe4a0bf147c9c8390ea4e7c915e7801606c171909",
+          "since_block": 7854287,
+          "since_ts": 1794157161,
+          "dark_seconds": 1613321,
+          "outages": 1,
+          "debt_wei": "11602700000000000"
+        },
+        {
+          "address": "0x6818e87ee5ac613f90848ad54a31bbec825647c9",
+          "since_block": 7856076,
+          "since_ts": 1794159062,
+          "dark_seconds": 1611420,
+          "outages": 1,
+          "debt_wei": "13352200000000000"
+        },
+        {
+          "address": "0xb899f2e139c227b78b10d09b70d10b7a63bb4b8a",
+          "since_block": 7928248,
+          "since_ts": 1794235506,
+          "dark_seconds": 1534976,
+          "outages": 1,
+          "debt_wei": "17122000000000000"
+        },
+        {
+          "address": "0x46a5b6cd612787afa02424b73d02dfa6641863a5",
+          "since_block": 7929105,
+          "since_ts": 1794236429,
+          "dark_seconds": 1534053,
+          "outages": 1,
+          "debt_wei": "14518200000000000"
+        },
+        {
+          "address": "0xc2a97f743ab0a9ceadc576f89a3575ffc1926503",
+          "since_block": 7929340,
+          "since_ts": 1794236679,
+          "dark_seconds": 1533803,
+          "outages": 1,
+          "debt_wei": "11971700000000000"
+        },
+        {
+          "address": "0x8ceba647e643ee72c9fc378245affc56cd901b25",
+          "since_block": 7935155,
+          "since_ts": 1794242825,
+          "dark_seconds": 1527657,
+          "outages": 1,
+          "debt_wei": "14518200000000000"
+        },
+        {
+          "address": "0xe5213387beb36e4d75020689c5694bc449122f16",
+          "since_block": 7938966,
+          "since_ts": 1794246849,
+          "dark_seconds": 1523633,
+          "outages": 2,
+          "debt_wei": "11677800000000000"
+        },
+        {
+          "address": "0xca4ca86bef02a7d3244119f7788a170fa4c58746",
+          "since_block": 7980472,
+          "since_ts": 1794290874,
+          "dark_seconds": 1479608,
+          "outages": 1,
+          "debt_wei": "12272800000000000"
+        },
+        {
+          "address": "0x2f48c06cfea23bc3ec702691d0d3af01a06aa4cd",
+          "since_block": 7997827,
+          "since_ts": 1794309380,
+          "dark_seconds": 1461102,
+          "outages": 1,
+          "debt_wei": "16755700000000000"
+        },
+        {
+          "address": "0xb66459ce2711987c07048ac9570fcbc8aec73820",
+          "since_block": 7998740,
+          "since_ts": 1794310355,
+          "dark_seconds": 1460127,
+          "outages": 1,
+          "debt_wei": "18296900000000000"
+        },
+        {
+          "address": "0x675a63b8c8e56edf2e4d4b796d6296f485ee8707",
+          "since_block": 8001283,
+          "since_ts": 1794313059,
+          "dark_seconds": 1457423,
+          "outages": 1,
+          "debt_wei": "18526300000000000"
+        },
+        {
+          "address": "0x3f6a1d1f9782cf24b106e7839f0ca420cdf7f5c2",
+          "since_block": 8004340,
+          "since_ts": 1794316295,
+          "dark_seconds": 1454187,
+          "outages": 1,
+          "debt_wei": "22790300000000000"
+        },
+        {
+          "address": "0x1ea6b4babcf4964e5e0004209b0b94bf89bf2c74",
+          "since_block": 8007480,
+          "since_ts": 1794319631,
+          "dark_seconds": 1450851,
+          "outages": 1,
+          "debt_wei": "13293600000000000"
+        },
+        {
+          "address": "0xf7b321a7b453ed399e0845cbb8cb76c06b2f2807",
+          "since_block": 8013769,
+          "since_ts": 1794326353,
+          "dark_seconds": 1444129,
+          "outages": 1,
+          "debt_wei": "12425200000000000"
+        },
+        {
+          "address": "0x77be935e39274963e18e32567e980387aaaae6b8",
+          "since_block": 8015819,
+          "since_ts": 1794328567,
+          "dark_seconds": 1441915,
+          "outages": 1,
+          "debt_wei": "26158100000000000"
+        },
+        {
+          "address": "0xb7336850b04ffec251d5a6c00cfd37bc50e99fc0",
+          "since_block": 8043136,
+          "since_ts": 1794357619,
+          "dark_seconds": 1412863,
+          "outages": 1,
+          "debt_wei": "13054000000000000"
+        },
+        {
+          "address": "0x1dc6e2ee4aaa58f6f52a9cd28bc78e506a5eafea",
+          "since_block": 8050133,
+          "since_ts": 1794365034,
+          "dark_seconds": 1405448,
+          "outages": 1,
+          "debt_wei": "13016900000000000"
+        },
+        {
+          "address": "0x5a3c11170de808df89319bc00abbb5729e708b8e",
+          "since_block": 8060001,
+          "since_ts": 1794375504,
+          "dark_seconds": 1394978,
+          "outages": 1,
+          "debt_wei": "9636100000000000"
+        },
+        {
+          "address": "0xc69ce40839d589b5ccca09d9d5d1828e32e52df1",
+          "since_block": 8070002,
+          "since_ts": 1794386134,
+          "dark_seconds": 1384348,
+          "outages": 1,
+          "debt_wei": "5139000000000000"
+        },
+        {
+          "address": "0xaf3f54df5cd9874ef9afec72e43812487241db3a",
+          "since_block": 8070166,
+          "since_ts": 1794386308,
+          "dark_seconds": 1384174,
+          "outages": 1,
+          "debt_wei": "12739600000000000"
+        },
+        {
+          "address": "0xbc18ffc65562ae24be55f2a3f8eae78f72e47c39",
+          "since_block": 8071481,
+          "since_ts": 1794387699,
+          "dark_seconds": 1382783,
+          "outages": 1,
+          "debt_wei": "12959400000000000"
+        },
+        {
+          "address": "0x77ac7e395910da2681373346b7beb44d60c1f5eb",
+          "since_block": 8080001,
+          "since_ts": 1794396741,
+          "dark_seconds": 1373741,
+          "outages": 1,
+          "debt_wei": "9626700000000000"
+        },
+        {
+          "address": "0x742b11be7b23d57134f50c4f34b167e01527a05d",
+          "since_block": 8085399,
+          "since_ts": 1794402516,
+          "dark_seconds": 1367966,
+          "outages": 1,
+          "debt_wei": "12750200000000000"
+        },
+        {
+          "address": "0x566303736b53eb46928f3bbaab51a5ad4f96367b",
+          "since_block": 8088690,
+          "since_ts": 1794406043,
+          "dark_seconds": 1364439,
+          "outages": 1,
+          "debt_wei": "12272800000000000"
+        },
+        {
+          "address": "0x41ce76e7095f0de9df0d44ef10264822ebae39d8",
+          "since_block": 8092395,
+          "since_ts": 1794410016,
+          "dark_seconds": 1360466,
+          "outages": 1,
+          "debt_wei": "9200600000000000"
+        },
+        {
+          "address": "0x566c1da9725e0b667825f08b8d3f67019049ba58",
+          "since_block": 8094543,
+          "since_ts": 1794412308,
+          "dark_seconds": 1358174,
+          "outages": 1,
+          "debt_wei": "12272800000000000"
+        },
+        {
+          "address": "0xafd8ed98dfb5952bf6ff90e93108b43ed53364d3",
+          "since_block": 8094915,
+          "since_ts": 1794412705,
+          "dark_seconds": 1357777,
+          "outages": 1,
+          "debt_wei": "12582900000000000"
+        },
+        {
+          "address": "0x5fa52de23aa1a37b14a1232cd32aecc801e4fac6",
+          "since_block": 8112801,
+          "since_ts": 1794431736,
+          "dark_seconds": 1338746,
+          "outages": 1,
+          "debt_wei": "11857900000000000"
+        },
+        {
+          "address": "0xc4b7ee9ff37906b519ed2b7dcf3a1399806c6dd5",
+          "since_block": 8114301,
+          "since_ts": 1794433336,
+          "dark_seconds": 1337146,
+          "outages": 1,
+          "debt_wei": "12275300000000000"
+        },
+        {
+          "address": "0x50491aeb35b82531f3b93de363c0568fedc212c2",
+          "since_block": 8121201,
+          "since_ts": 1794440653,
+          "dark_seconds": 1329829,
+          "outages": 2,
+          "debt_wei": "11228500000000000"
+        },
+        {
+          "address": "0x2b9705c7c4d065b73ba27bcdcacac7cf2de97bd9",
+          "since_block": 8135701,
+          "since_ts": 1794455992,
+          "dark_seconds": 1314490,
+          "outages": 1,
+          "debt_wei": "11238600000000000"
+        },
+        {
+          "address": "0xe1d13bfd8cccd433d708f1982ae39935873fd627",
+          "since_block": 8150001,
+          "since_ts": 1794471161,
+          "dark_seconds": 1299321,
+          "outages": 1,
+          "debt_wei": "11912200000000000"
+        },
+        {
+          "address": "0x0804f3b9ff9c0e676d784ce69a6939ad37d434e8",
+          "since_block": 8151001,
+          "since_ts": 1794472216,
+          "dark_seconds": 1298266,
+          "outages": 1,
+          "debt_wei": "12285300000000000"
+        },
+        {
+          "address": "0xa2e6f1d03e43193085f4d986f3c786e8029ad109",
+          "since_block": 8152001,
+          "since_ts": 1794473279,
+          "dark_seconds": 1297203,
+          "outages": 2,
+          "debt_wei": "12053400000000000"
+        },
+        {
+          "address": "0x97fcd301f901f130c9e8aa77b92cc8c1be091949",
+          "since_block": 8153401,
+          "since_ts": 1794474755,
+          "dark_seconds": 1295727,
+          "outages": 2,
+          "debt_wei": "12275300000000000"
+        },
+        {
+          "address": "0x325b2cdff5f39f8dda79fd5c2465706c620d64e8",
+          "since_block": 8159801,
+          "since_ts": 1794481594,
+          "dark_seconds": 1288888,
+          "outages": 1,
+          "debt_wei": "11984400000000000"
+        },
+        {
+          "address": "0x3bf03269659d207d0a372649c9f44fc55f28d2c7",
+          "since_block": 8167001,
+          "since_ts": 1794489248,
+          "dark_seconds": 1281234,
+          "outages": 1,
+          "debt_wei": "10708400000000000"
+        },
+        {
+          "address": "0xa6a01b55237edaa4da353f2411cbb9a2b45f61fb",
+          "since_block": 8177001,
+          "since_ts": 1794500033,
+          "dark_seconds": 1270449,
+          "outages": 1,
+          "debt_wei": "7895500000000000"
+        },
+        {
+          "address": "0xf922ee47ee224134a10347597adec29fbc517bc4",
+          "since_block": 8178001,
+          "since_ts": 1794501096,
+          "dark_seconds": 1269386,
+          "outages": 1,
+          "debt_wei": "7895500000000000"
+        },
+        {
+          "address": "0x4fd4bdf962b60723e4716625005b110f4efbbb30",
+          "since_block": 8192901,
+          "since_ts": 1794517036,
+          "dark_seconds": 1253446,
+          "outages": 1,
+          "debt_wei": "7080200000000000"
+        },
+        {
+          "address": "0xceef48496eaf65c5f650747fed32cefa4b981f25",
+          "since_block": 8210001,
+          "since_ts": 1794535173,
+          "dark_seconds": 1235309,
+          "outages": 2,
+          "debt_wei": "12257600000000000"
+        },
+        {
+          "address": "0xe833e4f2c26239c3eb213e711323efde6f503547",
+          "since_block": 8270001,
+          "since_ts": 1794599064,
+          "dark_seconds": 1171418,
+          "outages": 1,
+          "debt_wei": "15437000000000000"
+        },
+        {
+          "address": "0xf818d158b2b95f6dbe1b627eff678ab6931e8123",
+          "since_block": 8270001,
+          "since_ts": 1794599064,
+          "dark_seconds": 1171418,
+          "outages": 1,
+          "debt_wei": "15265600000000000"
+        },
+        {
+          "address": "0x5172abc70e6944703b88902134d4d4ef1b81ff2f",
+          "since_block": 8300701,
+          "since_ts": 1794631639,
+          "dark_seconds": 1138843,
+          "outages": 1,
+          "debt_wei": "3538000000000000"
+        },
+        {
+          "address": "0x3e78d91c042e9b08e726e8069f9f05099f5efe9a",
+          "since_block": 8313336,
+          "since_ts": 1794645001,
+          "dark_seconds": 1125481,
+          "outages": 1,
+          "debt_wei": "25694200000000000"
+        },
+        {
+          "address": "0xf49e2017ac86aa9ef3e59f3b5946ba06211bb293",
+          "since_block": 8317001,
+          "since_ts": 1794648889,
+          "dark_seconds": 1121593,
+          "outages": 2,
+          "debt_wei": "14387000000000000"
+        },
+        {
+          "address": "0x7031551cbd111edf0d077378c6aeff147abeef38",
+          "since_block": 8326901,
+          "since_ts": 1794659419,
+          "dark_seconds": 1111063,
+          "outages": 1,
+          "debt_wei": "11449000000000000"
+        },
+        {
+          "address": "0xe9393939bca7d559077c8f8835f600b38e959747",
+          "since_block": 8330002,
+          "since_ts": 1794662716,
+          "dark_seconds": 1107766,
+          "outages": 1,
+          "debt_wei": "11519700000000000"
+        },
+        {
+          "address": "0xe981ae5051b0e9b25b650b72ec1864b289f6f3ec",
+          "since_block": 8341201,
+          "since_ts": 1794674612,
+          "dark_seconds": 1095870,
+          "outages": 2,
+          "debt_wei": "12409200000000000"
+        },
+        {
+          "address": "0x9b65abf5db625ca365cdce686ada38cab2dec5c4",
+          "since_block": 8343871,
+          "since_ts": 1794677457,
+          "dark_seconds": 1093025,
+          "outages": 3,
+          "debt_wei": "5590700000000000"
+        },
+        {
+          "address": "0x6576a88a50ac8594f236a928b1eb79eb80bf2228",
+          "since_block": 8346201,
+          "since_ts": 1794679940,
+          "dark_seconds": 1090542,
+          "outages": 1,
+          "debt_wei": "12926600000000000"
+        },
+        {
+          "address": "0x8b5ce36db58cddb43f65fdb249a2ed33ecb46437",
+          "since_block": 8350001,
+          "since_ts": 1794683971,
+          "dark_seconds": 1086511,
+          "outages": 1,
+          "debt_wei": "14596900000000000"
+        },
+        {
+          "address": "0xb78d73defcccd42f3a6bbca4e05af9149320c3c9",
+          "since_block": 8378674,
+          "since_ts": 1794714326,
+          "dark_seconds": 1056156,
+          "outages": 5,
+          "debt_wei": "9166400000000000"
+        },
+        {
+          "address": "0xcc0c0837dabbbfcf4138073aa46feaf092c0a031",
+          "since_block": 8379340,
+          "since_ts": 1794715030,
+          "dark_seconds": 1055452,
+          "outages": 1,
+          "debt_wei": "14395500000000000"
+        },
+        {
+          "address": "0xa72942db7adfd8d9125f6925f1c68783408eef63",
+          "since_block": 8379377,
+          "since_ts": 1794715068,
+          "dark_seconds": 1055414,
+          "outages": 1,
+          "debt_wei": "16043700000000000"
+        },
+        {
+          "address": "0x137b672ef4db83d1d42a01bc6c55cbc4d5ec2b4c",
+          "since_block": 8383001,
+          "since_ts": 1794718918,
+          "dark_seconds": 1051564,
+          "outages": 1,
+          "debt_wei": "13925600000000000"
+        },
+        {
+          "address": "0xdb1b1f290dc129af5d2d5d01de0eebf5a60babbd",
+          "since_block": 8384001,
+          "since_ts": 1794719981,
+          "dark_seconds": 1050501,
+          "outages": 2,
+          "debt_wei": "11939000000000000"
+        },
+        {
+          "address": "0x079dedbfda9b15f20f001913d549900aafa9d82f",
+          "since_block": 8384101,
+          "since_ts": 1794720087,
+          "dark_seconds": 1050395,
+          "outages": 1,
+          "debt_wei": "11713300000000000"
+        },
+        {
+          "address": "0xc49a351d8a3685d989a75ebdc2046f2613ce9f5a",
+          "since_block": 8384201,
+          "since_ts": 1794720193,
+          "dark_seconds": 1050289,
+          "outages": 2,
+          "debt_wei": "15397500000000000"
+        },
+        {
+          "address": "0xe86a5e5d1bcc4c1bf68aecaa8d3763bf475e8ae0",
+          "since_block": 8384428,
+          "since_ts": 1794720435,
+          "dark_seconds": 1050047,
+          "outages": 7,
+          "debt_wei": "9260500000000000"
+        },
+        {
+          "address": "0x5b6a6de5a62fd49934cf8f401ba35c28f3e09ab4",
+          "since_block": 8390001,
+          "since_ts": 1794726380,
+          "dark_seconds": 1044102,
+          "outages": 1,
+          "debt_wei": "11348400000000000"
+        },
+        {
+          "address": "0x14d5bcdd6d00398ab5c26a8f88507db149669992",
+          "since_block": 8392525,
+          "since_ts": 1794729065,
+          "dark_seconds": 1041417,
+          "outages": 1,
+          "debt_wei": "15103400000000000"
+        },
+        {
+          "address": "0x57af7934a2f3be503ef7b3c9a0ced26d95205f77",
+          "since_block": 8392601,
+          "since_ts": 1794729145,
+          "dark_seconds": 1041337,
+          "outages": 1,
+          "debt_wei": "11348400000000000"
+        },
+        {
+          "address": "0x48f51bceb964e4dda2c76dcd3a3adf73e1c2cdaa",
+          "since_block": 8393949,
+          "since_ts": 1794730579,
+          "dark_seconds": 1039903,
+          "outages": 1,
+          "debt_wei": "12290700000000000"
+        },
+        {
+          "address": "0xcadf0dba082241bd9385241203788ccc19da3eaf",
+          "since_block": 8394001,
+          "since_ts": 1794730634,
+          "dark_seconds": 1039848,
+          "outages": 2,
+          "debt_wei": "11348400000000000"
+        },
+        {
+          "address": "0x5a9f48a2686245eb7418b5a15af2d4a431251d02",
+          "since_block": 8404471,
+          "since_ts": 1794741767,
+          "dark_seconds": 1028715,
+          "outages": 1,
+          "debt_wei": "11805500000000000"
+        },
+        {
+          "address": "0x4d09cdd490c1ce48bcb6da5c1a6bf41e2f5e853d",
+          "since_block": 8408840,
+          "since_ts": 1794746415,
+          "dark_seconds": 1024067,
+          "outages": 1,
+          "debt_wei": "33805200000000000"
+        },
+        {
+          "address": "0x4f93f4e22f90f1f66c4e56db10d8a2990035a09e",
+          "since_block": 8420754,
+          "since_ts": 1794759060,
+          "dark_seconds": 1011422,
+          "outages": 1,
+          "debt_wei": "12314400000000000"
+        },
+        {
+          "address": "0xba3d68460d1ebbfa7e236aca1a7cd0bfe398b436",
+          "since_block": 8432838,
+          "since_ts": 1794771900,
+          "dark_seconds": 998582,
+          "outages": 1,
+          "debt_wei": "13828900000000000"
+        },
+        {
+          "address": "0x1ad42b72f76be45be36daa04292d5e1397e902b7",
+          "since_block": 8442701,
+          "since_ts": 1794782359,
+          "dark_seconds": 988123,
+          "outages": 1,
+          "debt_wei": "11456100000000000"
+        },
+        {
+          "address": "0x773e81e5fd38fc53d8d65d489dc7d6851ef9882b",
+          "since_block": 8446043,
+          "since_ts": 1794785909,
+          "dark_seconds": 984573,
+          "outages": 1,
+          "debt_wei": "13335000000000000"
+        },
+        {
+          "address": "0x5586542be6d66c03c9afd1da274ee7c710a7db45",
+          "since_block": 8462199,
+          "since_ts": 1794803059,
+          "dark_seconds": 967423,
+          "outages": 1,
+          "debt_wei": "12515700000000000"
+        },
+        {
+          "address": "0x80e7c5958626daae7e5be8a99f2e30b2226c7f74",
+          "since_block": 8499001,
+          "since_ts": 1794842469,
+          "dark_seconds": 928013,
+          "outages": 1,
+          "debt_wei": "11460400000000000"
+        },
+        {
+          "address": "0xc56bffdc6d87222128e60d617221aec584e9f643",
+          "since_block": 8499039,
+          "since_ts": 1794842508,
+          "dark_seconds": 927974,
+          "outages": 1,
+          "debt_wei": "14594400000000000"
+        },
+        {
+          "address": "0x62165175d37017b5470f00ade1c48ab691a9dc84",
+          "since_block": 8501125,
+          "since_ts": 1794844738,
+          "dark_seconds": 925744,
+          "outages": 1,
+          "debt_wei": "20108100000000000"
+        },
+        {
+          "address": "0x482c1d07d6525ba86dcfe2f62faea9801aa11f0d",
+          "since_block": 8501288,
+          "since_ts": 1794844911,
+          "dark_seconds": 925571,
+          "outages": 1,
+          "debt_wei": "14846700000000000"
+        },
+        {
+          "address": "0xe7a2eee0791f80681993ae250901e5baec2d8568",
+          "since_block": 8501311,
+          "since_ts": 1794844936,
+          "dark_seconds": 925546,
+          "outages": 1,
+          "debt_wei": "23608700000000000"
+        },
+        {
+          "address": "0x00d5d6ed946f34598aee4180f3f1f50840e9e633",
+          "since_block": 8501735,
+          "since_ts": 1794845394,
+          "dark_seconds": 925088,
+          "outages": 1,
+          "debt_wei": "13684600000000000"
+        },
+        {
+          "address": "0x3d7cb286ddf3d1c20da45dd9d20efb5c35725da9",
+          "since_block": 8501735,
+          "since_ts": 1794845394,
+          "dark_seconds": 925088,
+          "outages": 1,
+          "debt_wei": "13686800000000000"
+        },
+        {
+          "address": "0x239e5c5042ce8520502ebb00c6d9991134de58c4",
+          "since_block": 8503422,
+          "since_ts": 1794847205,
+          "dark_seconds": 923277,
+          "outages": 1,
+          "debt_wei": "22627300000000000"
+        },
+        {
+          "address": "0x74797ad794c71d7f58d0a0109192fc83aab5fe3a",
+          "since_block": 8504201,
+          "since_ts": 1794848049,
+          "dark_seconds": 922433,
+          "outages": 2,
+          "debt_wei": "13659300000000000"
+        },
+        {
+          "address": "0x035570bddb0fac4cb065e6900ea800aae5174a7a",
+          "since_block": 8505471,
+          "since_ts": 1794849402,
+          "dark_seconds": 921080,
+          "outages": 1,
+          "debt_wei": "12577300000000000"
+        },
+        {
+          "address": "0x7924ec9a5805d8ecd79f9fe6f4e7510a9bf2685b",
+          "since_block": 8509978,
+          "since_ts": 1794854205,
+          "dark_seconds": 916277,
+          "outages": 1,
+          "debt_wei": "11996200000000000"
+        },
+        {
+          "address": "0x780f37d9b634936e26e3c5610ddaaaedfebcb998",
+          "since_block": 8518031,
+          "since_ts": 1794862777,
+          "dark_seconds": 907705,
+          "outages": 1,
+          "debt_wei": "13526100000000000"
+        },
+        {
+          "address": "0x90104e9200e95d46e85c2bdb14d223a60ec5d31a",
+          "since_block": 8520001,
+          "since_ts": 1794864868,
+          "dark_seconds": 905614,
+          "outages": 1,
+          "debt_wei": "11460400000000000"
+        },
+        {
+          "address": "0x56ec8ee8c1693508dec7a08876831f1ccd2e0286",
+          "since_block": 8521339,
+          "since_ts": 1794866282,
+          "dark_seconds": 904200,
+          "outages": 1,
+          "debt_wei": "11568200000000000"
+        },
+        {
+          "address": "0x923d57a0763f90a91a1ef23e096711eb278932ff",
+          "since_block": 8521701,
+          "since_ts": 1794866669,
+          "dark_seconds": 903813,
+          "outages": 2,
+          "debt_wei": "11348400000000000"
+        },
+        {
+          "address": "0x11a3ec11f98b45d7e88eab9d7621ab422b22f8f7",
+          "since_block": 8522191,
+          "since_ts": 1794867189,
+          "dark_seconds": 903293,
+          "outages": 1,
+          "debt_wei": "13526100000000000"
+        },
+        {
+          "address": "0xb503dc7dfb27741f8f0a2fc77adaebd4e6d25285",
+          "since_block": 8538701,
+          "since_ts": 1794884672,
+          "dark_seconds": 885810,
+          "outages": 2,
+          "debt_wei": "11348400000000000"
+        },
+        {
+          "address": "0x96e9530cc78599b115a0e5e5873a2e88f661a977",
+          "since_block": 8543253,
+          "since_ts": 1794889496,
+          "dark_seconds": 880986,
+          "outages": 1,
+          "debt_wei": "18170500000000000"
+        },
+        {
+          "address": "0xd961a25e6661d32faa51f09f4b21ce81a2081279",
+          "since_block": 8548298,
+          "since_ts": 1794894868,
+          "dark_seconds": 875614,
+          "outages": 1,
+          "debt_wei": "30135500000000000"
+        },
+        {
+          "address": "0xd1a301e0eff56551ed813d7bd60ffa063b2182e5",
+          "since_block": 8555991,
+          "since_ts": 1794903059,
+          "dark_seconds": 867423,
+          "outages": 1,
+          "debt_wei": "2301500000000000"
+        },
+        {
+          "address": "0x9079e2f3716d2184c41488a5fc81028e75b26a33",
+          "since_block": 8557103,
+          "since_ts": 1794904239,
+          "dark_seconds": 866243,
+          "outages": 1,
+          "debt_wei": "4136200000000000"
+        },
+        {
+          "address": "0x0af42a25922a05db33064c60cb74e41f8ee34c6a",
+          "since_block": 8561001,
+          "since_ts": 1794908409,
+          "dark_seconds": 862073,
+          "outages": 2,
+          "debt_wei": "12206600000000000"
+        },
+        {
+          "address": "0x914c40a644493b47336de847b0404e729e06c68d",
+          "since_block": 8561527,
+          "since_ts": 1794908966,
+          "dark_seconds": 861516,
+          "outages": 1,
+          "debt_wei": "12304100000000000"
+        },
+        {
+          "address": "0xd79e19805f12c55dfc08263e6e0d91fc0f62c16e",
+          "since_block": 8561801,
+          "since_ts": 1794909258,
+          "dark_seconds": 861224,
+          "outages": 1,
+          "debt_wei": "13561700000000000"
+        },
+        {
+          "address": "0x7f603259b25c2559aec0df539f2b6d546a6db5a3",
+          "since_block": 8565433,
+          "since_ts": 1794913162,
+          "dark_seconds": 857320,
+          "outages": 2,
+          "debt_wei": "11032100000000000"
+        },
+        {
+          "address": "0xbb8420fc9f981e01c183b1b5ca59c2a9ba43c98c",
+          "since_block": 8566942,
+          "since_ts": 1794914770,
+          "dark_seconds": 855712,
+          "outages": 1,
+          "debt_wei": "11451000000000000"
+        },
+        {
+          "address": "0x365996c4260e27582848a9edf206ae9e3fa0d514",
+          "since_block": 8571208,
+          "since_ts": 1794919319,
+          "dark_seconds": 851163,
+          "outages": 1,
+          "debt_wei": "11781300000000000"
+        },
+        {
+          "address": "0x477a48e84ccb62dce1481bd4283aa50f1d9d6cc2",
+          "since_block": 8576878,
+          "since_ts": 1794925369,
+          "dark_seconds": 845113,
+          "outages": 1,
+          "debt_wei": "11747300000000000"
+        },
+        {
+          "address": "0xcf74df603dfb23d30529de215fdac18f8704a8d1",
+          "since_block": 8583301,
+          "since_ts": 1794932216,
+          "dark_seconds": 838266,
+          "outages": 1,
+          "debt_wei": "12548800000000000"
+        },
+        {
+          "address": "0xccf304db9ab8607b379b0f7f87cbb4d269a1de73",
+          "since_block": 8584201,
+          "since_ts": 1794933167,
+          "dark_seconds": 837315,
+          "outages": 1,
+          "debt_wei": "11611400000000000"
+        },
+        {
+          "address": "0x157bec21b87522fe706b073053370575f9820aa7",
+          "since_block": 8590001,
+          "since_ts": 1794939381,
+          "dark_seconds": 831101,
+          "outages": 1,
+          "debt_wei": "16803600000000000"
+        },
+        {
+          "address": "0xb539e20da1a2fded98774c69b7ac59945df4884e",
+          "since_block": 8597924,
+          "since_ts": 1794947815,
+          "dark_seconds": 822667,
+          "outages": 1,
+          "debt_wei": "13228700000000000"
+        },
+        {
+          "address": "0x2ee80f8764e2c389daf9bc8fd84b70d1eb003506",
+          "since_block": 8607861,
+          "since_ts": 1794958330,
+          "dark_seconds": 812152,
+          "outages": 1,
+          "debt_wei": "14627800000000000"
+        },
+        {
+          "address": "0x37bb02d6ff0080e85ecceee881a068a4b2be81e1",
+          "since_block": 8610290,
+          "since_ts": 1794960902,
+          "dark_seconds": 809580,
+          "outages": 2,
+          "debt_wei": "12230700000000000"
+        },
+        {
+          "address": "0x1a3237f58ee9629c9bf8c15b7605f3967257154e",
+          "since_block": 8632721,
+          "since_ts": 1794984588,
+          "dark_seconds": 785894,
+          "outages": 1,
+          "debt_wei": "12340800000000000"
+        },
+        {
+          "address": "0x6ecfc31ef5199d82bad83a469f7434785858d7dd",
+          "since_block": 8633150,
+          "since_ts": 1794985044,
+          "dark_seconds": 785438,
+          "outages": 1,
+          "debt_wei": "12340800000000000"
+        },
+        {
+          "address": "0x2afeec24f2a810d726db47caea3a76aaf6a7d50e",
+          "since_block": 8636643,
+          "since_ts": 1794988746,
+          "dark_seconds": 781736,
+          "outages": 1,
+          "debt_wei": "12368400000000000"
+        },
+        {
+          "address": "0x364d0c8281b382a18eddd125098338153194c29b",
+          "since_block": 8637001,
+          "since_ts": 1794989125,
+          "dark_seconds": 781357,
+          "outages": 2,
+          "debt_wei": "9346000000000000"
+        },
+        {
+          "address": "0x64a62b3e357a39c4376615feeb7cb9c66c16ccb6",
+          "since_block": 8639101,
+          "since_ts": 1794991342,
+          "dark_seconds": 779140,
+          "outages": 1,
+          "debt_wei": "12222200000000000"
+        },
+        {
+          "address": "0xed2f9c6be45d8287515428b5fa60e0f2fceb2e51",
+          "since_block": 8641561,
+          "since_ts": 1794993965,
+          "dark_seconds": 776517,
+          "outages": 1,
+          "debt_wei": "11285600000000000"
+        },
+        {
+          "address": "0x5dbb03284479064f143c85e8c370c8e4134b34f7",
+          "since_block": 8643566,
+          "since_ts": 1794996085,
+          "dark_seconds": 774397,
+          "outages": 1,
+          "debt_wei": "25200700000000000"
+        },
+        {
+          "address": "0x9d0a9d66506e9d2cce8a79211e06710cf32583a6",
+          "since_block": 8655579,
+          "since_ts": 1795008859,
+          "dark_seconds": 761623,
+          "outages": 1,
+          "debt_wei": "22743099999999999"
+        },
+        {
+          "address": "0xc3a5152bcc7d5c48bbaa83c049ceadf2fc1a262d",
+          "since_block": 8657888,
+          "since_ts": 1795011306,
+          "dark_seconds": 759176,
+          "outages": 1,
+          "debt_wei": "12336700000000000"
+        },
+        {
+          "address": "0x72e3fc00fc682d4ce652523a9582de70a01f6eec",
+          "since_block": 8673037,
+          "since_ts": 1795027360,
+          "dark_seconds": 743122,
+          "outages": 1,
+          "debt_wei": "14499500000000000"
+        },
+        {
+          "address": "0x0171d1c5e89a31d56f576ae4e1a059a324f05704",
+          "since_block": 8676944,
+          "since_ts": 1795031504,
+          "dark_seconds": 738978,
+          "outages": 2,
+          "debt_wei": "7062900000000000"
+        },
+        {
+          "address": "0x0373e2bbcb7d283fa6374134ee90cc41fcf5dbd7",
+          "since_block": 8678503,
+          "since_ts": 1795033152,
+          "dark_seconds": 737330,
+          "outages": 1,
+          "debt_wei": "12340300000000000"
+        },
+        {
+          "address": "0x24f1134538a06a63ae49ed9f3bfa47fabd67c802",
+          "since_block": 8679001,
+          "since_ts": 1795033681,
+          "dark_seconds": 736801,
+          "outages": 1,
+          "debt_wei": "11230200000000000"
+        },
+        {
+          "address": "0x38661a70826bbf26c7e3d50e0952229d0b3ace13",
+          "since_block": 8679077,
+          "since_ts": 1795033761,
+          "dark_seconds": 736721,
+          "outages": 3,
+          "debt_wei": "13472600000000000"
+        },
+        {
+          "address": "0xd51327726a0119138fa9ecb7f50e88f0ed2d4116",
+          "since_block": 8679211,
+          "since_ts": 1795033908,
+          "dark_seconds": 736574,
+          "outages": 2,
+          "debt_wei": "9162600000000000"
+        },
+        {
+          "address": "0xff548c03b910bf69eeb026b10cf195a9925f9719",
+          "since_block": 8681198,
+          "since_ts": 1795036018,
+          "dark_seconds": 734464,
+          "outages": 1,
+          "debt_wei": "13461900000000000"
+        },
+        {
+          "address": "0x5d8508fb91f6f7cf5b8934115ad2b873e44d5372",
+          "since_block": 8687892,
+          "since_ts": 1795043080,
+          "dark_seconds": 727402,
+          "outages": 1,
+          "debt_wei": "12310300000000000"
+        },
+        {
+          "address": "0x09f73b2a778d834fd9d6c2077c0143cef280c576",
+          "since_block": 8720901,
+          "since_ts": 1795078015,
+          "dark_seconds": 692467,
+          "outages": 3,
+          "debt_wei": "16713800000000000"
+        },
+        {
+          "address": "0x79eeb46ed8e433f6e4a04b2a80f7e36ad39249f4",
+          "since_block": 8733609,
+          "since_ts": 1795091549,
+          "dark_seconds": 678933,
+          "outages": 1,
+          "debt_wei": "9436300000000000"
+        },
+        {
+          "address": "0x65c6e1aad1cc95b7c232bb2216c9bbc4762cf61f",
+          "since_block": 8734173,
+          "since_ts": 1795092150,
+          "dark_seconds": 678332,
+          "outages": 1,
+          "debt_wei": "11366100000000000"
+        },
+        {
+          "address": "0x298902e4ec5c6c1fc596c73699f70f02ee96fe95",
+          "since_block": 8734201,
+          "since_ts": 1795092181,
+          "dark_seconds": 678301,
+          "outages": 1,
+          "debt_wei": "11300400000000000"
+        },
+        {
+          "address": "0x9873b01c39ad40213fc9140fddf428240dfc90be",
+          "since_block": 8734998,
+          "since_ts": 1795093026,
+          "dark_seconds": 677456,
+          "outages": 1,
+          "debt_wei": "17454000000000000"
+        },
+        {
+          "address": "0xc358ffaa2bcc6be005ab4063fb7dfcc2ef4f56fe",
+          "since_block": 8745753,
+          "since_ts": 1795104531,
+          "dark_seconds": 665951,
+          "outages": 1,
+          "debt_wei": "11882400000000000"
+        },
+        {
+          "address": "0x7668ac28f434b622f352ed281fa6eca1f1227bcc",
+          "since_block": 8746403,
+          "since_ts": 1795105225,
+          "dark_seconds": 665257,
+          "outages": 1,
+          "debt_wei": "9996300000000000"
+        },
+        {
+          "address": "0x7bb0f92ff9f77a4895a7326f8c30367cdc1d48b8",
+          "since_block": 8747085,
+          "since_ts": 1795105964,
+          "dark_seconds": 664518,
+          "outages": 1,
+          "debt_wei": "6359200000000000"
+        },
+        {
+          "address": "0x262a38b0521c0cc6cda40f4d590192643d82db0d",
+          "since_block": 8750101,
+          "since_ts": 1795109191,
+          "dark_seconds": 661291,
+          "outages": 1,
+          "debt_wei": "11706700000000000"
+        },
+        {
+          "address": "0xdcf6cccd1d6ec0f071409f6e09989ae637cc501f",
+          "since_block": 8755700,
+          "since_ts": 1795115537,
+          "dark_seconds": 654945,
+          "outages": 4,
+          "debt_wei": "14935600000000000"
+        },
+        {
+          "address": "0xde1e7fc014a7f4459effa42e808055a773d4bc89",
+          "since_block": 8756391,
+          "since_ts": 1795117368,
+          "dark_seconds": 653114,
+          "outages": 1,
+          "debt_wei": "14206700000000000"
+        },
+        {
+          "address": "0x6a0c98b0fa9516cce64a96f14aa05363fc7c810a",
+          "since_block": 8773401,
+          "since_ts": 1795137497,
+          "dark_seconds": 632985,
+          "outages": 1,
+          "debt_wei": "11535700000000000"
+        },
+        {
+          "address": "0x4342e76468e45e757e30c5f2b32b961fadde77a0",
+          "since_block": 8774201,
+          "since_ts": 1795138337,
+          "dark_seconds": 632145,
+          "outages": 1,
+          "debt_wei": "12283700000000000"
+        },
+        {
+          "address": "0x8500f9e37e9a17fa47f52b6bb68fe0fa12d0e0c9",
+          "since_block": 8775613,
+          "since_ts": 1795139823,
+          "dark_seconds": 630659,
+          "outages": 1,
+          "debt_wei": "12430900000000000"
+        },
+        {
+          "address": "0xf9066073b06872d417f3ef9fab3e9a57173a9a1b",
+          "since_block": 8778961,
+          "since_ts": 1795143374,
+          "dark_seconds": 627108,
+          "outages": 1,
+          "debt_wei": "13970100000000000"
+        },
+        {
+          "address": "0x4cfca7aedab62c0f13a5a2a83716d6bb43bb69ff",
+          "since_block": 8780680,
+          "since_ts": 1795145193,
+          "dark_seconds": 625289,
+          "outages": 1,
+          "debt_wei": "19148600000000000"
+        },
+        {
+          "address": "0x47f7312f1add64fb3b31315f040a78e77ebdff2d",
+          "since_block": 8780830,
+          "since_ts": 1795145352,
+          "dark_seconds": 625130,
+          "outages": 1,
+          "debt_wei": "12272800000000000"
+        },
+        {
+          "address": "0x41dc17cda6b9f7ea7fa436ab13034fab370d48a6",
+          "since_block": 8782601,
+          "since_ts": 1795147240,
+          "dark_seconds": 623242,
+          "outages": 1,
+          "debt_wei": "13649800000000000"
+        },
+        {
+          "address": "0xd37670aca0a61df9123713d7b21b3af9e15f7466",
+          "since_block": 8782901,
+          "since_ts": 1795147556,
+          "dark_seconds": 622926,
+          "outages": 1,
+          "debt_wei": "13649800000000000"
+        },
+        {
+          "address": "0xc30501f471dcc9ea152f6f9707aca4df9537a27d",
+          "since_block": 8783301,
+          "since_ts": 1795147980,
+          "dark_seconds": 622502,
+          "outages": 1,
+          "debt_wei": "12189500000000000"
+        },
+        {
+          "address": "0x784637c89caafbe41cbff892dcef6d60ab74b36c",
+          "since_block": 8799732,
+          "since_ts": 1795165449,
+          "dark_seconds": 605033,
+          "outages": 1,
+          "debt_wei": "12351200000000000"
+        },
+        {
+          "address": "0xcfc07ac67a31f72bca520a999d701a14642bd01c",
+          "since_block": 8800460,
+          "since_ts": 1795166230,
+          "dark_seconds": 604252,
+          "outages": 1,
+          "debt_wei": "11283900000000000"
+        },
+        {
+          "address": "0xcb581677e8c94e1aef29033d27e57f0597c67e01",
+          "since_block": 8800822,
+          "since_ts": 1795166616,
+          "dark_seconds": 603866,
+          "outages": 2,
+          "debt_wei": "13546800000000000"
+        },
+        {
+          "address": "0x404332b7dff68a4c56e58d4781c75cd81a357432",
+          "since_block": 8802001,
+          "since_ts": 1795167871,
+          "dark_seconds": 602611,
+          "outages": 1,
+          "debt_wei": "13402300000000000"
+        },
+        {
+          "address": "0x61c260e37c7a6366ffc676e19e7a48c6cf169671",
+          "since_block": 8802658,
+          "since_ts": 1795168581,
+          "dark_seconds": 601901,
+          "outages": 1,
+          "debt_wei": "20688900000000000"
+        },
+        {
+          "address": "0x0b5948c756d517d9a297bcd800e695381e4fb87c",
+          "since_block": 8803601,
+          "since_ts": 1795169590,
+          "dark_seconds": 600892,
+          "outages": 1,
+          "debt_wei": "6306800000000000"
+        },
+        {
+          "address": "0x90b9f05f1bd2f71463b2bbf2d433c8ba001beb50",
+          "since_block": 8803801,
+          "since_ts": 1795169810,
+          "dark_seconds": 600672,
+          "outages": 1,
+          "debt_wei": "13649800000000000"
+        },
+        {
+          "address": "0x67c9eed145346ed9bb6337d5bf28cf6e68255757",
+          "since_block": 8804301,
+          "since_ts": 1795170345,
+          "dark_seconds": 600137,
+          "outages": 1,
+          "debt_wei": "13649800000000000"
+        },
+        {
+          "address": "0xe189fac6444ef45b3d3995952b8b5eea8da192db",
+          "since_block": 8805501,
+          "since_ts": 1795171627,
+          "dark_seconds": 598855,
+          "outages": 1,
+          "debt_wei": "13649800000000000"
+        },
+        {
+          "address": "0x7b7b1f236a8a91ea3b2c42a0f58f028918935cfa",
+          "since_block": 8807073,
+          "since_ts": 1795173300,
+          "dark_seconds": 597182,
+          "outages": 1,
+          "debt_wei": "17240900000000000"
+        },
+        {
+          "address": "0x51d8d23d4ccc0020482e359eeb7dc2c2f176cc16",
+          "since_block": 8807086,
+          "since_ts": 1795173314,
+          "dark_seconds": 597168,
+          "outages": 1,
+          "debt_wei": "26584100000000000"
+        },
+        {
+          "address": "0x6af3bf76c0df3cc024cf9f9b84f7409e059504e4",
+          "since_block": 8808801,
+          "since_ts": 1795175129,
+          "dark_seconds": 595353,
+          "outages": 1,
+          "debt_wei": "13649800000000000"
+        },
+        {
+          "address": "0x67af6daa2ce66521d7e14b3a1fdf0e8131a260a0",
+          "since_block": 8810001,
+          "since_ts": 1795176399,
+          "dark_seconds": 594083,
+          "outages": 3,
+          "debt_wei": "14334900000000000"
+        },
+        {
+          "address": "0x6ca822c66a5aad3ffaa89e767fe2c301c722d827",
+          "since_block": 8816401,
+          "since_ts": 1795183230,
+          "dark_seconds": 587252,
+          "outages": 1,
+          "debt_wei": "13122600000000000"
+        },
+        {
+          "address": "0xe571083954b49a5831ae4c48322211bcfa363015",
+          "since_block": 8816501,
+          "since_ts": 1795183336,
+          "dark_seconds": 587146,
+          "outages": 2,
+          "debt_wei": "11706700000000000"
+        },
+        {
+          "address": "0xf9d1e3ca81f6f105d8a913c8bddc932ed7506b38",
+          "since_block": 8817001,
+          "since_ts": 1795183862,
+          "dark_seconds": 586620,
+          "outages": 1,
+          "debt_wei": "11706700000000000"
+        },
+        {
+          "address": "0x16ae7374dcc682959565498be69aeca26549d53a",
+          "since_block": 8818898,
+          "since_ts": 1795185877,
+          "dark_seconds": 584605,
+          "outages": 1,
+          "debt_wei": "13665900000000000"
+        },
+        {
+          "address": "0x8dd9acd11607d7ea83d8bc79ce579ee73eccfb8a",
+          "since_block": 8820827,
+          "since_ts": 1795187940,
+          "dark_seconds": 582542,
+          "outages": 1,
+          "debt_wei": "11729200000000000"
+        },
+        {
+          "address": "0xbac3fa2699d2544bfd9716b0e39a82fbd7753aab",
+          "since_block": 8823801,
+          "since_ts": 1795191109,
+          "dark_seconds": 579373,
+          "outages": 1,
+          "debt_wei": "16505900000000000"
+        },
+        {
+          "address": "0x0809e4e6016ef2c587b1571da6d193993f31bb60",
+          "since_block": 8826001,
+          "since_ts": 1795193451,
+          "dark_seconds": 577031,
+          "outages": 1,
+          "debt_wei": "11216200000000000"
+        },
+        {
+          "address": "0x098ea99fb1a53dad663356a8da8c569661bf060a",
+          "since_block": 8835701,
+          "since_ts": 1795203714,
+          "dark_seconds": 566768,
+          "outages": 1,
+          "debt_wei": "12404600000000000"
+        },
+        {
+          "address": "0x8f52a476ff46d070a4450fb7283cb1de6a886813",
+          "since_block": 8837269,
+          "since_ts": 1795205370,
+          "dark_seconds": 565112,
+          "outages": 7,
+          "debt_wei": "11603100000000000"
+        },
+        {
+          "address": "0xd5bd4f6bd719191b8f83719e4a114e20802accbe",
+          "since_block": 8837861,
+          "since_ts": 1795205991,
+          "dark_seconds": 564491,
+          "outages": 3,
+          "debt_wei": "7810000000000000"
+        },
+        {
+          "address": "0x1dc6bffafa33e216abbb52740c09e7b6b3542d31",
+          "since_block": 8838131,
+          "since_ts": 1795206275,
+          "dark_seconds": 564207,
+          "outages": 2,
+          "debt_wei": "11562000000000000"
+        },
+        {
+          "address": "0x4e335647a1a8ee59b1acd350fe47ecbb7d07389d",
+          "since_block": 8840841,
+          "since_ts": 1795209148,
+          "dark_seconds": 561334,
+          "outages": 5,
+          "debt_wei": "10872800000000000"
+        },
+        {
+          "address": "0xcf1ad587de19631de01d52e0d995f9908aa5e1e8",
+          "since_block": 8841331,
+          "since_ts": 1795209664,
+          "dark_seconds": 560818,
+          "outages": 2,
+          "debt_wei": "9310800000000000"
+        },
+        {
+          "address": "0x04fb8ef646b87c2228b859c6b3947f929c984282",
+          "since_block": 8843641,
+          "since_ts": 1795212118,
+          "dark_seconds": 558364,
+          "outages": 2,
+          "debt_wei": "9922800000000000"
+        },
+        {
+          "address": "0x0bde05dbff1706586f5a499b4aa68a07e301ba0f",
+          "since_block": 8845601,
+          "since_ts": 1795214200,
+          "dark_seconds": 556282,
+          "outages": 1,
+          "debt_wei": "13649800000000000"
+        },
+        {
+          "address": "0xa3123f8eb6cfe6bd342eba424053a6abbf71aca6",
+          "since_block": 8845691,
+          "since_ts": 1795214295,
+          "dark_seconds": 556187,
+          "outages": 3,
+          "debt_wei": "612000000000000"
+        },
+        {
+          "address": "0x1827b78acebb5085cfb7c6dcc474414983348ec9",
+          "since_block": 8847149,
+          "since_ts": 1795215837,
+          "dark_seconds": 554645,
+          "outages": 1,
+          "debt_wei": "23816900000000000"
+        },
+        {
+          "address": "0xf2026c4bd8e9c00e0e3696bd191e02061d953c77",
+          "since_block": 8848132,
+          "since_ts": 1795216883,
+          "dark_seconds": 553599,
+          "outages": 2,
+          "debt_wei": "13436900000000000"
+        },
+        {
+          "address": "0x38977cf2979f5040b5cc660812e1faf802e15adc",
+          "since_block": 8850001,
+          "since_ts": 1795218867,
+          "dark_seconds": 551615,
+          "outages": 1,
+          "debt_wei": "13649800000000000"
+        },
+        {
+          "address": "0x078f94b7a248744a4218e043ad2d7733709bd36c",
+          "since_block": 8854501,
+          "since_ts": 1795223620,
+          "dark_seconds": 546862,
+          "outages": 1,
+          "debt_wei": "9628300000000000"
+        },
+        {
+          "address": "0xad111983240ca21c1f8131d3c55a9d51adbfbe14",
+          "since_block": 8854501,
+          "since_ts": 1795223620,
+          "dark_seconds": 546862,
+          "outages": 1,
+          "debt_wei": "8465900000000000"
+        },
+        {
+          "address": "0xb8de7818441c1cc4ab9be9f1deaff93595b4a752",
+          "since_block": 8854601,
+          "since_ts": 1795223727,
+          "dark_seconds": 546755,
+          "outages": 1,
+          "debt_wei": "5048800000000000"
+        },
+        {
+          "address": "0x2e9674589d61574911adac017ba53bd999cb22d1",
+          "since_block": 8854911,
+          "since_ts": 1795224056,
+          "dark_seconds": 546426,
+          "outages": 2,
+          "debt_wei": "8744000000000000"
+        },
+        {
+          "address": "0xb8110c31abf3ba38bb0128b324ea502498940431",
+          "since_block": 8855101,
+          "since_ts": 1795224257,
+          "dark_seconds": 546225,
+          "outages": 1,
+          "debt_wei": "1110100000000000"
+        },
+        {
+          "address": "0x77fe64cd675f9e8d5d6a823b82cd141d76970447",
+          "since_block": 8856901,
+          "since_ts": 1795226164,
+          "dark_seconds": 544318,
+          "outages": 2,
+          "debt_wei": "5910000000000000"
+        },
+        {
+          "address": "0x78102471419c2bd78ea0130799a9bf4cd9c9910e",
+          "since_block": 8857201,
+          "since_ts": 1795226483,
+          "dark_seconds": 543999,
+          "outages": 1,
+          "debt_wei": "10799500000000000"
+        },
+        {
+          "address": "0x7b8f381783f33fd75cdf9dc3afc1e02fb020e042",
+          "since_block": 8872596,
+          "since_ts": 1795242821,
+          "dark_seconds": 527661,
+          "outages": 1,
+          "debt_wei": "7073600000000000"
+        },
+        {
+          "address": "0x53621f5cb6b0553ca76253e90b6bbbfe311bc7ca",
+          "since_block": 8875001,
+          "since_ts": 1795245371,
+          "dark_seconds": 525111,
+          "outages": 1,
+          "debt_wei": "3185200000000000"
+        },
+        {
+          "address": "0x0a251d994d2dae46ef809ea83f30053bb7f6e8b0",
+          "since_block": 8877783,
+          "since_ts": 1795248321,
+          "dark_seconds": 522161,
+          "outages": 1,
+          "debt_wei": "16245500000000000"
+        },
+        {
+          "address": "0x25b2b386249dc628ff2bd1f176a9b2cfc69c5894",
+          "since_block": 8879001,
+          "since_ts": 1795249609,
+          "dark_seconds": 520873,
+          "outages": 1,
+          "debt_wei": "6309200000000000"
+        },
+        {
+          "address": "0x4ddad9d71bd31bf69e6c12ab103123870bbc3a24",
+          "since_block": 8880042,
+          "since_ts": 1795250708,
+          "dark_seconds": 519774,
+          "outages": 1,
+          "debt_wei": "11781300000000000"
+        },
+        {
+          "address": "0xdf554201dec784f0541fa5fc884240c73113e334",
+          "since_block": 8884245,
+          "since_ts": 1795255161,
+          "dark_seconds": 515321,
+          "outages": 2,
+          "debt_wei": "8183300000000000"
+        },
+        {
+          "address": "0xbc4b72ad784380b5b8898c85761be1d6f45f95ba",
+          "since_block": 8911501,
+          "since_ts": 1795284117,
+          "dark_seconds": 486365,
+          "outages": 1,
+          "debt_wei": "8536600000000000"
+        },
+        {
+          "address": "0x31d25888752ad6f4192469f88657572e93690757",
+          "since_block": 8931001,
+          "since_ts": 1795304815,
+          "dark_seconds": 465667,
+          "outages": 1,
+          "debt_wei": "16083800000000000"
+        },
+        {
+          "address": "0xf47827d1201e07f0feb2c6bad7f499a86668f9bd",
+          "since_block": 8935001,
+          "since_ts": 1795309074,
+          "dark_seconds": 461408,
+          "outages": 2,
+          "debt_wei": "14438800000000000"
+        },
+        {
+          "address": "0x43d8706443739377de7bf4be6b0f96ded91d31f4",
+          "since_block": 8944901,
+          "since_ts": 1795319573,
+          "dark_seconds": 450909,
+          "outages": 1,
+          "debt_wei": "13940200000000000"
+        },
+        {
+          "address": "0x086143eb1a65bdf2754f0b9190f85de6b638cb52",
+          "since_block": 8953501,
+          "since_ts": 1795328671,
+          "dark_seconds": 441811,
+          "outages": 2,
+          "debt_wei": "6807500000000000"
+        },
+        {
+          "address": "0x73a834d8de5fe088cb183132358cd98e5fc3a9b9",
+          "since_block": 8957301,
+          "since_ts": 1795332697,
+          "dark_seconds": 437785,
+          "outages": 1,
+          "debt_wei": "13649800000000000"
+        },
+        {
+          "address": "0xb1b35c042ffc71df87eaf13ca9854008ee0eaf30",
+          "since_block": 8978284,
+          "since_ts": 1795354969,
+          "dark_seconds": 415513,
+          "outages": 1,
+          "debt_wei": "15581500000000000"
+        },
+        {
+          "address": "0x42ec9225f584e4c0684ebe02f98f2e0b5a27705c",
+          "since_block": 8978798,
+          "since_ts": 1795355517,
+          "dark_seconds": 414965,
+          "outages": 3,
+          "debt_wei": "2251400000000000"
+        },
+        {
+          "address": "0x7268e09b61726b74b89f721fc0d649bd3704217d",
+          "since_block": 8978879,
+          "since_ts": 1795355603,
+          "dark_seconds": 414879,
+          "outages": 7,
+          "debt_wei": "10980000000000000"
+        },
+        {
+          "address": "0x234e67f940c690a2fd11fad50da52ccfd8119763",
+          "since_block": 8980326,
+          "since_ts": 1795357141,
+          "dark_seconds": 413341,
+          "outages": 1,
+          "debt_wei": "16462500000000000"
+        },
+        {
+          "address": "0x9934ecb31a427fc3fac22075b6e0198842729825",
+          "since_block": 8981101,
+          "since_ts": 1795357959,
+          "dark_seconds": 412523,
+          "outages": 1,
+          "debt_wei": "6324300000000000"
+        },
+        {
+          "address": "0x45750c2d44889faaecff4a1dd0986aacb972ead7",
+          "since_block": 8983001,
+          "since_ts": 1795359971,
+          "dark_seconds": 410511,
+          "outages": 1,
+          "debt_wei": "18084900000000000"
+        },
+        {
+          "address": "0xc10293d4266024073b579646b435fcebb1a2d20c",
+          "since_block": 8991649,
+          "since_ts": 1795369168,
+          "dark_seconds": 401314,
+          "outages": 1,
+          "debt_wei": "11115700000000000"
+        },
+        {
+          "address": "0x7b8111cdf7001721469c584fa9613369f0e7ac1e",
+          "since_block": 9002002,
+          "since_ts": 1795380221,
+          "dark_seconds": 390261,
+          "outages": 15,
+          "debt_wei": "12096900000000000"
+        },
+        {
+          "address": "0xfd8de2fd9ff6bd09bc623bd1ff79eeb0154ecf55",
+          "since_block": 9008001,
+          "since_ts": 1795386575,
+          "dark_seconds": 383907,
+          "outages": 2,
+          "debt_wei": "11695700000000000"
+        },
+        {
+          "address": "0x7a41a895375394fd47e973e113ec7aa582f4204a",
+          "since_block": 9008101,
+          "since_ts": 1795386682,
+          "dark_seconds": 383800,
+          "outages": 1,
+          "debt_wei": "12338900000000000"
+        },
+        {
+          "address": "0x5b4afb61807c5646109d08124755aa60327c36c3",
+          "since_block": 9025527,
+          "since_ts": 1795405152,
+          "dark_seconds": 365330,
+          "outages": 2,
+          "debt_wei": "5635400000000000"
+        },
+        {
+          "address": "0xf6152129a1cbef7c04f7c92d47b6aa0ac80fa5f9",
+          "since_block": 9051487,
+          "since_ts": 1795432639,
+          "dark_seconds": 337843,
+          "outages": 3,
+          "debt_wei": "10980000000000000"
+        },
+        {
+          "address": "0x367a93ccfaa7d60851e976d07a623a45ba992158",
+          "since_block": 9058392,
+          "since_ts": 1795439898,
+          "dark_seconds": 330584,
+          "outages": 1,
+          "debt_wei": "11115700000000000"
+        },
+        {
+          "address": "0xc4051afecc22690730191724dcb8c3e9cada6335",
+          "since_block": 9058392,
+          "since_ts": 1795439898,
+          "dark_seconds": 330584,
+          "outages": 1,
+          "debt_wei": "11124600000000000"
+        },
+        {
+          "address": "0xc0a2cfa49ba9145c228627674043ed2e4b3cf698",
+          "since_block": 9062671,
+          "since_ts": 1795444523,
+          "dark_seconds": 325959,
+          "outages": 1,
+          "debt_wei": "15534800000000000"
+        },
+        {
+          "address": "0x56f0fea0404b225f9f51ccfbeceeb6ba40b7039a",
+          "since_block": 9070015,
+          "since_ts": 1795452324,
+          "dark_seconds": 318158,
+          "outages": 1,
+          "debt_wei": "11133900000000000"
+        },
+        {
+          "address": "0x08aa546db7c206061f430426a5c08b0a99dd03dd",
+          "since_block": 9070154,
+          "since_ts": 1795452472,
+          "dark_seconds": 318010,
+          "outages": 2,
+          "debt_wei": "9890900000000000"
+        },
+        {
+          "address": "0xe3818074ba24d7c64642d8a9607a86d514b770f1",
+          "since_block": 9084001,
+          "since_ts": 1795467174,
+          "dark_seconds": 303308,
+          "outages": 1,
+          "debt_wei": "11230200000000000"
+        },
+        {
+          "address": "0xafbf77c5587e365712416d6eff9a40fdf2545f95",
+          "since_block": 9086801,
+          "since_ts": 1795470148,
+          "dark_seconds": 300334,
+          "outages": 1,
+          "debt_wei": "11739800000000000"
+        },
+        {
+          "address": "0x4e0e114c6fc74e61bedaefb63d0258e9a7a202fa",
+          "since_block": 9097768,
+          "since_ts": 1795481772,
+          "dark_seconds": 288710,
+          "outages": 1,
+          "debt_wei": "11831000000000000"
+        },
+        {
+          "address": "0xfcfb754ad769409229a9a46472b632490a3b955e",
+          "since_block": 9097791,
+          "since_ts": 1795481796,
+          "dark_seconds": 288686,
+          "outages": 1,
+          "debt_wei": "12745500000000000"
+        },
+        {
+          "address": "0xba34d09ddfb73351201e4410dd9f8475822bc905",
+          "since_block": 9098001,
+          "since_ts": 1795482019,
+          "dark_seconds": 288463,
+          "outages": 1,
+          "debt_wei": "11896000000000000"
+        },
+        {
+          "address": "0x5dc8ca366c2ca6665affde242aaa2b00abe0fd0a",
+          "since_block": 9099701,
+          "since_ts": 1795483814,
+          "dark_seconds": 286668,
+          "outages": 1,
+          "debt_wei": "11736400000000000"
+        },
+        {
+          "address": "0xe14884a4db5c97b3ab8d3c4430d6f3ad085e1346",
+          "since_block": 9113001,
+          "since_ts": 1795497906,
+          "dark_seconds": 272576,
+          "outages": 1,
+          "debt_wei": "15272300000000000"
+        },
+        {
+          "address": "0x6bf114548e7a748c7e8ed736b0e80c07b01291f8",
+          "since_block": 9117701,
+          "since_ts": 1795502894,
+          "dark_seconds": 267588,
+          "outages": 1,
+          "debt_wei": "7975400000000000"
+        },
+        {
+          "address": "0x71b5c04d58b877733056ebf94a8e5e7f06bc7875",
+          "since_block": 9122287,
+          "since_ts": 1795507765,
+          "dark_seconds": 262717,
+          "outages": 1,
+          "debt_wei": "12598700000000000"
+        },
+        {
+          "address": "0x9e2f52fb6bbb5a06d3bf228d529e17f28df41be5",
+          "since_block": 9122790,
+          "since_ts": 1795508300,
+          "dark_seconds": 262182,
+          "outages": 1,
+          "debt_wei": "12598700000000000"
+        },
+        {
+          "address": "0x02813ffb18bc3f994836d3dfc3c223108be17dda",
+          "since_block": 9122851,
+          "since_ts": 1795508364,
+          "dark_seconds": 262118,
+          "outages": 1,
+          "debt_wei": "12944600000000000"
+        },
+        {
+          "address": "0x679790ab23c02ce73e2d2fac001c7db3fbdaf31e",
+          "since_block": 9126238,
+          "since_ts": 1795511963,
+          "dark_seconds": 258519,
+          "outages": 1,
+          "debt_wei": "12903000000000000"
+        },
+        {
+          "address": "0xac154cbf7ece948d46270d8dd4ed727fda65af2a",
+          "since_block": 9132001,
+          "since_ts": 1795518141,
+          "dark_seconds": 252341,
+          "outages": 1,
+          "debt_wei": "5393300000000000"
+        },
+        {
+          "address": "0xacf7a5e9b0e986863579f4e1ba0bd2c54ff7a427",
+          "since_block": 9133015,
+          "since_ts": 1795519229,
+          "dark_seconds": 251253,
+          "outages": 1,
+          "debt_wei": "6380000000000000"
+        },
+        {
+          "address": "0x21580fe99121a1c4ef7365616fe14dab47846ea9",
+          "since_block": 9137941,
+          "since_ts": 1795524428,
+          "dark_seconds": 246054,
+          "outages": 1,
+          "debt_wei": "11727000000000000"
+        },
+        {
+          "address": "0xdd7d918c65e20fb42e778564e3759eccfe44c4f0",
+          "since_block": 9165266,
+          "since_ts": 1795553545,
+          "dark_seconds": 216937,
+          "outages": 2,
+          "debt_wei": "13841300000000000"
+        },
+        {
+          "address": "0x9b181dc854e9670016ab3443446aa80d4435d6dc",
+          "since_block": 9166951,
+          "since_ts": 1795555373,
+          "dark_seconds": 215109,
+          "outages": 1,
+          "debt_wei": "12365400000000000"
+        },
+        {
+          "address": "0xa67b8428a6c02236c1540a31d49cc7ba605945bb",
+          "since_block": 9167201,
+          "since_ts": 1795555646,
+          "dark_seconds": 214836,
+          "outages": 1,
+          "debt_wei": "12310100000000000"
+        },
+        {
+          "address": "0xf98333e03335476b13f967244ce74dd75187d006",
+          "since_block": 9174444,
+          "since_ts": 1795563473,
+          "dark_seconds": 207009,
+          "outages": 1,
+          "debt_wei": "12570200000000000"
+        },
+        {
+          "address": "0xc8bff5cf36a1ae351b60627609adbf4810c38baf",
+          "since_block": 9178701,
+          "since_ts": 1795568102,
+          "dark_seconds": 202380,
+          "outages": 1,
+          "debt_wei": "11519200000000000"
+        },
+        {
+          "address": "0x8a3177e3a87c41b20a65dd28a83b1b133d66c7ad",
+          "since_block": 9178801,
+          "since_ts": 1795568210,
+          "dark_seconds": 202272,
+          "outages": 1,
+          "debt_wei": "12678600000000000"
+        },
+        {
+          "address": "0xdf7afb41ba5c15ae5d3f7a3fa44f352cdc2d3984",
+          "since_block": 9181201,
+          "since_ts": 1795570806,
+          "dark_seconds": 199676,
+          "outages": 1,
+          "debt_wei": "18710300000000000"
+        },
+        {
+          "address": "0x23861830f7bd17c2b7ad718747c72743defc0bde",
+          "since_block": 9184601,
+          "since_ts": 1795574495,
+          "dark_seconds": 195987,
+          "outages": 2,
+          "debt_wei": "9160000000000000"
+        },
+        {
+          "address": "0xf57180fd77b8b273055a9bdee4a8159238fece4e",
+          "since_block": 9184611,
+          "since_ts": 1795574505,
+          "dark_seconds": 195977,
+          "outages": 2,
+          "debt_wei": "9160000000000000"
+        },
+        {
+          "address": "0x849f33fcace3d74a680f8e2f1fe28f2c87240146",
+          "since_block": 9185451,
+          "since_ts": 1795575412,
+          "dark_seconds": 195070,
+          "outages": 2,
+          "debt_wei": "226000000000000"
+        },
+        {
+          "address": "0x76f12acac209c8bd6af60c2ca6655cdef5d27b91",
+          "since_block": 9186501,
+          "since_ts": 1795576548,
+          "dark_seconds": 193934,
+          "outages": 1,
+          "debt_wei": "535200000000000"
+        },
+        {
+          "address": "0xc1c9ffb2c60a99310f73360174775226ca6afb1f",
+          "since_block": 9189801,
+          "since_ts": 1795580123,
+          "dark_seconds": 190359,
+          "outages": 2,
+          "debt_wei": "8955300000000000"
+        },
+        {
+          "address": "0x4e28f2058465131387c5c4c8ef9ec9b0d8dfd888",
+          "since_block": 9189879,
+          "since_ts": 1795580207,
+          "dark_seconds": 190275,
+          "outages": 1,
+          "debt_wei": "26900900000000000"
+        },
+        {
+          "address": "0x16201269c2ce3ee8cdb44ec91e89153bce4902e7",
+          "since_block": 9194001,
+          "since_ts": 1795584690,
+          "dark_seconds": 185792,
+          "outages": 1,
+          "debt_wei": "1667600000000000"
+        },
+        {
+          "address": "0xcf2b8283ab1a9c1b2f5306f4abc27811eefc39cc",
+          "since_block": 9200221,
+          "since_ts": 1795591424,
+          "dark_seconds": 179058,
+          "outages": 5,
+          "debt_wei": "11582800000000000"
+        },
+        {
+          "address": "0xef83140e70a7d7aab3fc4a4c6af6505c67447d75",
+          "since_block": 9202001,
+          "since_ts": 1795593361,
+          "dark_seconds": 177121,
+          "outages": 2,
+          "debt_wei": "700900000000000"
+        },
+        {
+          "address": "0x8b8ff8fcb53a725726e4b38cf2cee597fd2e371a",
+          "since_block": 9206150,
+          "since_ts": 1795597847,
+          "dark_seconds": 172635,
+          "outages": 1,
+          "debt_wei": "6490600000000000"
+        },
+        {
+          "address": "0x70789affdefc198765b0553ef48a9e9c43d97b74",
+          "since_block": 9216341,
+          "since_ts": 1795608940,
+          "dark_seconds": 161542,
+          "outages": 1,
+          "debt_wei": "15527300000000000"
+        },
+        {
+          "address": "0x19bfffd599291be1ffc98b45c6c8f11ad2bcef10",
+          "since_block": 9221001,
+          "since_ts": 1795613954,
+          "dark_seconds": 156528,
+          "outages": 1,
+          "debt_wei": "12276500000000000"
+        },
+        {
+          "address": "0xc8deb0e8547be8aa60d41fbec50c5bbabdbc9dc6",
+          "since_block": 9224474,
+          "since_ts": 1795617721,
+          "dark_seconds": 152761,
+          "outages": 2,
+          "debt_wei": "13125700000000000"
+        },
+        {
+          "address": "0x42cdfe8c54c2395eaca20ba5cdafffbdf6061458",
+          "since_block": 9224554,
+          "since_ts": 1795617807,
+          "dark_seconds": 152675,
+          "outages": 1,
+          "debt_wei": "13125700000000000"
+        },
+        {
+          "address": "0x3f04bd2701541fb3f0b6e924095435715a9f7150",
+          "since_block": 9229757,
+          "since_ts": 1795623444,
+          "dark_seconds": 147038,
+          "outages": 1,
+          "debt_wei": "12323500000000000"
+        },
+        {
+          "address": "0x5f70438876812e62a23ef1ce14a930daf831c254",
+          "since_block": 9236403,
+          "since_ts": 1795630665,
+          "dark_seconds": 139817,
+          "outages": 1,
+          "debt_wei": "6715600000000000"
+        },
+        {
+          "address": "0xdd552b4db4007d4973adc12a46928ef5bc411c5d",
+          "since_block": 9239501,
+          "since_ts": 1795634056,
+          "dark_seconds": 136426,
+          "outages": 4,
+          "debt_wei": "13649800000000000"
+        },
+        {
+          "address": "0x4a87e098771e3f4713c80c7dcd2ac740c0fe9184",
+          "since_block": 9262504,
+          "since_ts": 1795658987,
+          "dark_seconds": 111495,
+          "outages": 1,
+          "debt_wei": "14213100000000000"
+        },
+        {
+          "address": "0x8e4ac618c16ec41a2c00c1432ce54d40c2696fd8",
+          "since_block": 9277101,
+          "since_ts": 1795674782,
+          "dark_seconds": 95700,
+          "outages": 1,
+          "debt_wei": "12503900000000000"
+        },
+        {
+          "address": "0xaa6898e2a18f6f6597b074ed0faf34ed824ce603",
+          "since_block": 9277291,
+          "since_ts": 1795674986,
+          "dark_seconds": 95496,
+          "outages": 1,
+          "debt_wei": "12172000000000000"
+        },
+        {
+          "address": "0x445d27fd71d52341484239e39763193a8940753f",
+          "since_block": 9279161,
+          "since_ts": 1795677035,
+          "dark_seconds": 93447,
+          "outages": 2,
+          "debt_wei": "11214700000000000"
+        },
+        {
+          "address": "0x3950c42479be087260d927fa3ffb8956ec4ac465",
+          "since_block": 9285111,
+          "since_ts": 1795683518,
+          "dark_seconds": 86964,
+          "outages": 1,
+          "debt_wei": "12172000000000000"
+        },
+        {
+          "address": "0xa3451371a45181e4e4cfdca73703a487f4fa41ce",
+          "since_block": 9288604,
+          "since_ts": 1795687306,
+          "dark_seconds": 83176,
+          "outages": 1,
+          "debt_wei": "11282400000000000"
+        },
+        {
+          "address": "0xf7cbd0ca6c7a7360c9792fe3ce94656a4a01070b",
+          "since_block": 9293755,
+          "since_ts": 1795692903,
+          "dark_seconds": 77579,
+          "outages": 1,
+          "debt_wei": "12384000000000000"
+        },
+        {
+          "address": "0xff1e8e50c8895897c00a0c801e73abe2f1337eda",
+          "since_block": 9295468,
+          "since_ts": 1795694768,
+          "dark_seconds": 75714,
+          "outages": 1,
+          "debt_wei": "9397542002137745"
+        },
+        {
+          "address": "0xd46a5d2fe50bf89ee6ad78b18aa0cab5d896ef91",
+          "since_block": 9298497,
+          "since_ts": 1795698177,
+          "dark_seconds": 72305,
+          "outages": 1,
+          "debt_wei": "11568200000000000"
+        },
+        {
+          "address": "0x6d1da6e00066f4b3a16fec64010478165bab34e6",
+          "since_block": 9311271,
+          "since_ts": 1795712001,
+          "dark_seconds": 58481,
+          "outages": 3,
+          "debt_wei": "19839000000000000"
+        },
+        {
+          "address": "0x679d9b730c1eb7b88e1e6cfd501d12113f6f4e2f",
+          "since_block": 9312001,
+          "since_ts": 1795712799,
+          "dark_seconds": 57683,
+          "outages": 1,
+          "debt_wei": "21603000000000000"
+        },
+        {
+          "address": "0xc7a4ab5ada127d683d9d867245e02f279dc59514",
+          "since_block": 9312331,
+          "since_ts": 1795713162,
+          "dark_seconds": 57320,
+          "outages": 1,
+          "debt_wei": "13043000000000000"
+        },
+        {
+          "address": "0x0bce0833e7c6d6ab25ad7fbf0aeb6bb166eeb94f",
+          "since_block": 9314801,
+          "since_ts": 1795715839,
+          "dark_seconds": 54643,
+          "outages": 1,
+          "debt_wei": "11268700000000000"
+        },
+        {
+          "address": "0xe95abe092d49cbd81fac9f5bded954806a14bf09",
+          "since_block": 9319001,
+          "since_ts": 1795720385,
+          "dark_seconds": 50097,
+          "outages": 1,
+          "debt_wei": "18380300000000000"
+        },
+        {
+          "address": "0x13a40cea2156984b54fd337c51b6a5b47d569c2c",
+          "since_block": 9319138,
+          "since_ts": 1795720533,
+          "dark_seconds": 49949,
+          "outages": 1,
+          "debt_wei": "12920800000000000"
+        },
+        {
+          "address": "0x93b1152f710d325154bf7a095c7509da173da25f",
+          "since_block": 9319138,
+          "since_ts": 1795720533,
+          "dark_seconds": 49949,
+          "outages": 1,
+          "debt_wei": "23380100000000000"
+        },
+        {
+          "address": "0xa98f8356e8cfc131c0b74ffbacdc91fb658b9d1b",
+          "since_block": 9320001,
+          "since_ts": 1795721465,
+          "dark_seconds": 49017,
+          "outages": 1,
+          "debt_wei": "2405600000000000"
+        },
+        {
+          "address": "0xd3405a61bd65ac628b9d89af6e59efa70a16bb2c",
+          "since_block": 9324001,
+          "since_ts": 1795725817,
+          "dark_seconds": 44665,
+          "outages": 4,
+          "debt_wei": "12460300000000000"
+        },
+        {
+          "address": "0x69107baf143c38722744a09e3f27c3c076469d5f",
+          "since_block": 9332201,
+          "since_ts": 1795734765,
+          "dark_seconds": 35717,
+          "outages": 3,
+          "debt_wei": "28773200000000000"
+        },
+        {
+          "address": "0xe62076e4854319a78aa44482f913ce1a7041c573",
+          "since_block": 9339001,
+          "since_ts": 1795742100,
+          "dark_seconds": 28382,
+          "outages": 1,
+          "debt_wei": "11674700000000000"
+        },
+        {
+          "address": "0xaa6ee6504295e1d1f918f3ba4aad80370774a3e6",
+          "since_block": 9344195,
+          "since_ts": 1795747716,
+          "dark_seconds": 22766,
+          "outages": 1,
+          "debt_wei": "12336300000000000"
+        },
+        {
+          "address": "0xc9f0b46557980395fc371ae30a0d81597ea651ce",
+          "since_block": 9352401,
+          "since_ts": 1795756601,
+          "dark_seconds": 13881,
+          "outages": 1,
+          "debt_wei": "17203100000000000"
+        },
+        {
+          "address": "0xdbb33964d494e7cabfb90656d682f3b09f42ba9d",
+          "since_block": 9354647,
+          "since_ts": 1795759031,
+          "dark_seconds": 11451,
+          "outages": 1,
+          "debt_wei": "11880000000000000"
+        },
+        {
+          "address": "0xfb5f3b736a5a0b5f244d629d36d876333b3fb646",
+          "since_block": 9355001,
+          "since_ts": 1795759417,
+          "dark_seconds": 11065,
+          "outages": 1,
+          "debt_wei": "9495400000000000"
+        }
+      ],
+      "debt_wei": {
+        "count": 277,
+        "min": "226000000000000",
+        "median": "12275300000000000",
+        "max": "33805200000000000"
+      }
+    }
+  }
+}

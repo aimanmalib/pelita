@@ -171,6 +171,24 @@ class ReportTest(unittest.TestCase):
         self.assertEqual(self.render(3)[0], self.render(3)[0])
 
 
+class CensusSectionTest(unittest.TestCase):
+    @staticmethod
+    def census(ts, outages, still_dark, same=True):
+        chain = {"as_of_ts": ts, "outages": outages, "contracts": outages - 1, "still_dark": still_dark}
+        return {"since_utc": "2026-11-04T04:18:00Z", "chains": {"lasna": chain}, "h8_equal": {"lasna": same},
+                "repeat": {"lasna": f"census --to-block {ts}"}}
+
+    def test_every_census_is_kept_newest_first(self):
+        old, new = self.census(1794870011, 154, 97), self.census(1795770482, 570, 277, same=False)
+        lines = report.census_section([old, None, new])
+        rows = [ln for ln in lines if ln.startswith("| 2026-")]
+        self.assertEqual(rows[0], "| 2026-11-27 09:08 | lasna | 570 | 569 | 277 | **no** | `census --to-block 1795770482` |")
+        self.assertEqual(rows[1], "| 2026-11-16 23:00 | lasna | 154 | 153 | 97 | yes | `census --to-block 1794870011` |")
+
+    def test_no_census_is_an_open_slot(self):
+        self.assertIn("<<TBD H8", "\n".join(report.census_section([None, None])))
+
+
 class BillTest(unittest.TestCase):
     K = "0x" + "b" * 40
     ARG = "0xcebbda8d" + "0" * 24 + "b" * 40
