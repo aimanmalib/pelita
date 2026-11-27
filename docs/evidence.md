@@ -59,3 +59,4 @@ copied here. Each one points to the section of [measured.md](measured.md) that h
 | Claim | Where | Source |
 |---|---|---|
 | Reactivate (2025) targets the previous version of Reactive Network and is tied to its legacy system contract address | README What already exists | Reactivate's public source, read 17 Nov 2026; the Omni system contract address Pelita uses is in [E-001](evidence/E-001-chain-facts.json) |
+| Other entries in this buildathon also listen for the debt event and pay the debt from a budget | README What already exists; form text Limits | GitHub search on 27 Nov 2026, recorded in [ADR 0012](decisions/0012-field-check-g3.md) (no names, PRD red line 3) |

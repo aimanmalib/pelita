@@ -178,6 +178,9 @@ Reactivate, a 2025 winner, solved this problem for the previous version of React
 Its code is tied to the legacy system contract address. Keeper designs that poll on Cron pay on every tick, so the keeper
 itself can run dry. Pelita has no Cron subscription.
 
+Other entries in this buildathon also listen for the debt event and pay the debt from a budget
+([ADR 0012](docs/decisions/0012-field-check-g3.md)). The numbers in this README are for Pelita only.
+
 | | Pelita | A Cron-based keeper |
 |---|---|---|
 | Trigger | the system contract's `BlacklistContract` log, per address | a timer |
