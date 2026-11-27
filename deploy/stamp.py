@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 from urllib.parse import urlsplit
 
-PAGE_ASSET = re.compile(r'((?:src|href)=")((?:css|js|fonts|brand|img)/[^"?#]+\.(?:css|js|woff2|png|svg|webp))(")')
+PAGE_ASSET = re.compile(r'((?:src|srcset|href)=")((?:css|js|fonts|brand|img)/[^"?#]+\.(?:css|js|woff2|png|svg|webp))(")')
 CSS_URL = re.compile(r'(url\(\s*)(["\']?)(\.\./[^"\')?#]+)\2(\s*\))')
 MODULE_SPEC = re.compile(r'((?:\bfrom|\bimport)\s*\(?\s*)(["\'])(\.{1,2}/[^"\'?#]+\.js)\2')
 ANY_RELATIVE_JS = re.compile(r'(["\'])(\.{1,2}/[^"\']+\.js[^"\']*)\1')

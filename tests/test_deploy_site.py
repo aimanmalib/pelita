@@ -34,6 +34,9 @@ class StampTest(unittest.TestCase):
         self.assertIn(f'href="css/site.css?v={V}"', html)
         # fonts and the icon too: the CDN kept them with a wrong Content-Type under the old URL (17 Nov)
         self.assertNotRegex(html, r'(src|href)="(fonts|brand)/[^"?]+"')
+        # the dark hero shots sit in <source srcset>, which must carry the version like every src
+        self.assertIn(f'srcset="img/hero-phone-dark.webp?v={V}"', html)
+        self.assertNotRegex(html, r'(src|srcset|href)="(css|js|fonts|brand|img)/[^"?]+"')
         css = (self.ctx / "web" / "css" / "site.css").read_text(encoding="utf-8")
         urls = re.findall(r"url\(\s*[\"']?(\.\./[^\"')]+)", css)
         self.assertTrue(urls and all(u.endswith(f"?v={V}") for u in urls), urls)
