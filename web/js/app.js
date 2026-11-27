@@ -5,6 +5,7 @@ import { duration, ago, count, amount, short, clock, etherString } from "./forma
 import { initGauge, renderGauge } from "./gauge.js";
 import { renderFleet, fleetTotals } from "./fleet.js";
 import "./theme.js";
+import { initMenu, renderPageLinks } from "./page.js";
 
 const ctx = { site: null, chains: null, snap: null, snapFailed: false, measured: null, darkOpen: false, gauge: null };
 // ?keadaan=muat|kosong|ralat forces one state of the live proof row, so each designed state can be checked.
@@ -154,6 +155,7 @@ function renderLinks() {
 }
 
 function renderAll() {
+  renderPageLinks(ctx.site);
   renderHead();
   renderFleet($("cards"), ctx.snap, ctx.chains);
   renderTry();
@@ -180,6 +182,7 @@ async function main() {
   ctx.chains = await json(ctx.site.chains_url, { cache: "no-cache" });
   try { ctx.measured = await json(ctx.site.measured_url, { cache: "no-cache" }); } catch (_) { /* cost block shows its pending line */ }
   $("cta-repo").href = ctx.site.links.repo;
+  initMenu();
   await load(saved(ctx.site.default_lang, ctx.site.langs));
   $("lang").addEventListener("click", async () => {
     const next = ctx.site.langs[(ctx.site.langs.indexOf(lang()) + 1) % ctx.site.langs.length];

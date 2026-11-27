@@ -32,5 +32,10 @@
       "width": 780,
       "height": 1328
     }
+  },
+  "pages": {
+    "_about": "Fixed pages the Demo section and the footer link to. The Demo button uses links.video once it is set, and this README section until then.",
+    "outage": "https://github.com/aimanmalib/pelita#cause-an-outage-yourself",
+    "license": "https://github.com/aimanmalib/pelita/blob/main/LICENSE"
   }
 }

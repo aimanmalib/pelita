@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Browser smoke test of web/ on Chromium (desktop + 390 px) and WebKit iPhone 13 (+ 320 px).
+"""Browser smoke test of web/ on Chromium 1440 px and WebKit iPhone 13 (+ 320 px), each in light and dark.
 
 Serves the site the way deploy/ will: web/ at /, config/chains.json at /config/, brand/ at /brand/, and a snapshot at
 /data/snapshot.json (default: tests/fixtures/snapshot-sample.json with its times shifted to now). The Lasna RPC is
 answered by a stub so the fuel gauge is tested without the network. Checks: no console errors, no failed requests,
 no horizontal overflow, gauge validates and reads, language toggle swaps every text (the gauge reading too),
-dark table shows debt, cost block and gauge estimate match web/measured.json. Screenshots go to
+dark table shows debt, cost block and gauge estimate match web/measured.json, no overflow with every FAQ answer open
+or with the phone menu open after scrolling, touch targets of at least 44 px, the theme switch, the forced proof
+states (?keadaan=muat|kosong|ralat), and a 10 s wait without a crash. Screenshots go to
 $AUTOPILOT_BUKTI_DIR (or out/web-smoke/).
 
 Host tool (Playwright), not part of the offline gate:
@@ -95,7 +97,77 @@ def note_missing(page, lang, problems):
         problems.append(f"gauge estimate note ({lang}) with fee {fee} is not shown: {notes}")
 
 
-def check(page, label, shots, errors):
+# Controls that must be easy to tap. Inline links inside running text are exempt (WCAG 2.5.8 inline exception).
+TARGETS = ".top a, .top button, .top summary, .mnav-panel a, .cta a, .btn, .faq-list summary, .foot-links a, #theme"
+
+
+def small_targets(page):
+    return page.evaluate("""s => [...document.querySelectorAll(s)].filter(e => {
+        const r = e.getBoundingClientRect();
+        if (e.closest('details:not([open])') && !e.matches('summary')) return false;  // folded away, not tappable
+        return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden' && (r.width < 43.5 || r.height < 43.5);
+      }).map(e => `${e.id || e.className || e.tagName} ${Math.round(e.getBoundingClientRect().width)}x${Math.round(e.getBoundingClientRect().height)}`)""", TARGETS)
+
+
+def chrome(page, label, shots, problems):
+    """FAQ, phone menu (opened after scrolling), touch targets, theme switch: none may overflow the page."""
+    small = small_targets(page)
+    if small:
+        problems.append(f"touch targets under 44 px: {small}")
+    answers = page.eval_on_selector_all(".faq-list details", "els => els.length")
+    if answers < 6:
+        problems.append(f"FAQ has {answers} questions, want at least 6")
+    for summary in page.query_selector_all(".faq-list summary"):
+        summary.click()
+    empty = page.eval_on_selector_all(".faq-list details[open] p", "els => els.filter(e => !e.textContent.trim()).length")
+    if empty or page.eval_on_selector_all(".faq-list details[open]", "els => els.length") != answers:
+        problems.append("FAQ answers do not open or are empty")
+    overflow(page, "with the FAQ open", problems)
+    page.locator("#faq").scroll_into_view_if_needed()
+    page.screenshot(path=str(shots / f"{label}-faq.png"))
+    demo = page.get_attribute("#demo-link", "href") or ""
+    if not demo.startswith("http"):
+        problems.append(f"demo button has no target: {demo!r}")
+    if page.is_visible("#mnav summary"):
+        page.evaluate("window.scrollTo({top: 1600, behavior: 'instant'})")
+        page.wait_for_timeout(150)
+        page.click("#mnav summary")
+        page.wait_for_timeout(150)
+        box = page.evaluate("() => { const r = document.querySelector('.mnav-panel').getBoundingClientRect(); return [r.left, r.right, innerWidth]; }")
+        if not page.is_visible(".mnav-panel a") or box[0] < 0 or box[1] > box[2]:
+            problems.append(f"phone menu panel not shown inside the viewport {box}")
+        overflow(page, "with the phone menu open", problems)
+        page.screenshot(path=str(shots / f"{label}-menu.png"))
+        page.click(".mnav-panel a[href='#faq']")
+        page.wait_for_timeout(300)
+        if page.evaluate("document.getElementById('mnav').open"):
+            problems.append("phone menu stays open after a jump")
+    before = page.evaluate("getComputedStyle(document.body).backgroundColor")
+    page.click("#theme")
+    page.wait_for_timeout(200)
+    if page.evaluate("getComputedStyle(document.body).backgroundColor") == before:
+        problems.append("theme switch does not change the page")
+    overflow(page, "after the theme switch", problems)
+    page.click("#theme")
+    if label.startswith("webkit"):
+        page.wait_for_timeout(10000)  # animated blur crashed WebKit seconds after load on other pages; stay a while
+        if page.evaluate("1 + 1") != 2:
+            problems.append("page died during the 10 s wait")
+
+
+def states(page, url, label, shots, problems):
+    """Each forced state of the live proof row draws its own line, never a raw key."""
+    for state in ("muat", "kosong", "ralat"):
+        page.goto(f"{url}{'&' if '?' in url else '?'}keadaan={state}", wait_until="networkidle")
+        page.wait_for_function("s => document.getElementById('proof').dataset.status === s", arg=state, timeout=8000)
+        line = (page.text_content("#fresh") or "").strip()
+        if not line or line in LANG["en"] and "." in line and " " not in line:
+            problems.append(f"proof state {state} shows {line!r}")
+        overflow(page, f"in state {state}", problems)
+        page.locator("#proof").screenshot(path=str(shots / f"{label}-state-{state}.png"))
+
+
+def check(page, url, label, shots, errors):
     problems = []
     page.wait_for_selector("#cards .card, #cards .empty", timeout=15000)
     page.wait_for_timeout(400)
@@ -153,6 +225,8 @@ def check(page, label, shots, errors):
     page.evaluate("window.scrollTo({top: 0, behavior: 'instant'})")
     page.wait_for_timeout(200)
     page.screenshot(path=str(shots / f"{label}-top.png"))
+    chrome(page, label, shots, problems)
+    states(page, url, label, shots, problems)
     problems += errors
     print(f"{label}: {'OK' if not problems else 'FAIL'} h1 en={en_h1!r} ms={ms_h1!r}")
     for p in problems:
@@ -178,12 +252,13 @@ def main():
     ok = True
     with sync_playwright() as p:
         iphone = p.devices["iPhone 13"]
-        profiles = [
-            ("chromium-desktop", p.chromium, {"viewport": {"width": 1366, "height": 900}}),
-            ("chromium-390", p.chromium, {"viewport": {"width": 390, "height": 844}, "device_scale_factor": 2}),
+        sizes = [
+            ("chromium-1440", p.chromium, {"viewport": {"width": 1440, "height": 900}}),
             ("webkit-iphone13", p.webkit, dict(iphone)),
             ("webkit-320", p.webkit, {**iphone, "viewport": {"width": 320, "height": 640}}),
         ]
+        profiles = [(f"{name}-{scheme}", engine, {**opts, "color_scheme": scheme})
+                    for name, engine, opts in sizes for scheme in ("light", "dark")]
         for label, engine, opts in profiles:
             browser = engine.launch()
             page = browser.new_context(**opts).new_page()
@@ -194,7 +269,7 @@ def main():
             page.on("response", lambda r, e=errors: r.status >= 400 and e.append(f"HTTP {r.status}: {r.url}"))
             page.route(lasna_rpc.rstrip("/") + "*", rpc_stub)
             page.goto(url, wait_until="networkidle")
-            ok = check(page, label, shots, errors) and ok
+            ok = check(page, url, label, shots, errors) and ok
             browser.close()
     if server:
         server.shutdown()

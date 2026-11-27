@@ -1,0 +1,66 @@
+/* Pelita: phone menu, FAQ, Demo and footer. Colours and type come from token.css and the role aliases in site.css.
+   No glass, no blur. The only motion here answers a tap: the menu icon and the FAQ plus turn when opened. */
+
+/* desktop nav: every link at least 44 px wide and tall */
+.nav a { min-width: 44px; justify-content: center; padding-inline: calc(var(--jarak-unit) * .5); }
+
+/* phone menu: a <details> that opens without JS; the panel hangs under the header, inside the page width */
+.top { position: relative; }
+.mnav { display: none; }
+.mnav summary { list-style: none; display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 100vmax;
+  border: 1px solid var(--sempadan); color: var(--teks); cursor: pointer; }
+.mnav summary::-webkit-details-marker { display: none; }
+.mnav summary:hover { border-color: var(--teks); }
+.mnav summary svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.mnav .cross, .mnav[open] .bars { display: none; }
+.mnav[open] .cross { display: inline; }
+.mnav[open] summary { background: var(--teks); color: var(--latar); border-color: var(--teks); }
+.mnav-panel { position: absolute; z-index: 20; top: calc(100% - var(--jarak-unit)); left: 0; right: 0; display: grid;
+  padding: var(--jarak-unit); background: var(--latar); border: 1px solid var(--sempadan); border-radius: var(--jejari);
+  box-shadow: 0 24px 48px -24px var(--bayang); }
+.mnav-panel a { display: flex; align-items: center; min-height: 52px; padding: 0 calc(var(--jarak-unit) * 1.5); font-size: 1.15rem;
+  font-weight: 650; letter-spacing: -0.01em; color: var(--teks); text-decoration: none; border-radius: calc(var(--jejari) * .6); }
+.mnav-panel a + a { border-top: 1px solid var(--line-soft); }
+.mnav-panel a:hover { background: var(--surface); }
+@media (max-width: 899px) { .mnav { display: block; } }
+
+/* FAQ: heading column + answer list, no cards; the rule under each question is the only structure */
+.faq-head .intro { max-width: 32ch; }
+.faq-list { margin-top: calc(var(--jarak-unit) * 4); border-top: 1.5px solid var(--teks); }
+.faq-list details { border-bottom: 1px solid var(--sempadan); }
+.faq-list summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: calc(var(--jarak-unit) * 2);
+  min-height: 44px; padding: calc(var(--jarak-unit) * 2.5) 0; cursor: pointer; font-weight: 650;
+  font-size: clamp(1.1rem, 1rem + .4vw, 1.3rem); line-height: 1.3; letter-spacing: -0.015em; }
+.faq-list summary::-webkit-details-marker { display: none; }
+.faq-list summary svg { width: 22px; height: 22px; flex: none; fill: none; stroke: var(--teks-redup); stroke-width: 1.8; stroke-linecap: round;
+  transition: transform .25s cubic-bezier(.16, 1, .3, 1); }
+.faq-list summary:hover svg { stroke: var(--teks); }
+.faq-list details[open] summary svg { transform: rotate(45deg); stroke: var(--aksen); }
+.faq-list details p { color: var(--teks-redup); max-width: 62ch; padding: 0 calc(var(--jarak-unit) * 5) calc(var(--jarak-unit) * 3) 0; }
+@media (min-width: 980px) {
+  .faq { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); column-gap: calc(var(--jarak-unit) * 8); align-items: start; }
+  .faq-list { margin-top: 0; }
+  .faq-head { position: sticky; top: calc(var(--jarak-unit) * 4); }
+}
+
+/* Demo: the real video poster, framed like the hero screens; the button names where it goes */
+.demo { display: grid; gap: calc(var(--jarak-unit) * 4); align-items: center; }
+.demo-how { margin-top: calc(var(--jarak-unit) * 2); max-width: 46ch; }
+.poster { position: relative; display: block; border-radius: var(--jejari); overflow: hidden; background: var(--bingkai);
+  box-shadow: 0 40px 80px -32px var(--bayang), 0 0 0 1px var(--sempadan); }
+.poster img { display: block; width: 100%; height: auto; }
+.play { position: absolute; right: calc(var(--jarak-unit) * 2.5); bottom: calc(var(--jarak-unit) * 2.5); width: 64px; height: 64px; border-radius: 50%;
+  background: var(--aksen); display: grid; place-items: center; box-shadow: 0 12px 32px -8px var(--bayang);
+  transition: scale .25s cubic-bezier(.16, 1, .3, 1); }
+.play[hidden] { display: none; }
+.play svg { width: 28px; height: 28px; fill: var(--aksen-teks); translate: 2px 0; }
+.poster:hover .play { scale: 1.08; }
+@media (min-width: 980px) { .demo { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: calc(var(--jarak-unit) * 8); } }
+@media (prefers-reduced-motion: reduce) { .play, .faq-list summary svg { transition: none; } }
+
+/* footer: the mark, what this is, and where the code and licence live */
+.foot { flex-wrap: wrap; gap: calc(var(--jarak-unit) * 1.5) calc(var(--jarak-unit) * 3); }
+.foot .brand { font-size: 1.1rem; }
+.foot-text { flex: 1 1 20rem; min-width: 0; }
+.foot-links { list-style: none; margin: 0; padding: 0; display: flex; gap: calc(var(--jarak-unit) * 2.5); }
+.foot-links a { min-height: 44px; display: inline-flex; align-items: center; color: var(--teks); }

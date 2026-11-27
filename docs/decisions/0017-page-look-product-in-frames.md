@@ -41,6 +41,23 @@ actions and a live proof line.
 - One more stylesheet (`frames.css`: header, hero, frames, proof row) keeps `site.css` short.
 - Section order, FAQ and demo come in a later change; this one keeps the existing sections and restyles them.
 
+## Addendum (27 Nov 2026): sections, FAQ, Demo and footer
+
+- **Order** follows the story a visitor needs: hero, how it works, fleet (live proof), try it yourself, fuel gauge,
+  dark list, cost and limits, questions, demo, footer. The cost, limits and reading links moved out of "How it works"
+  into their own section, so the diagram stands alone right under the hero.
+- **Nav:** How it works, Fleet, Try it, FAQ, Demo. On phones the same links sit in a `<details>` menu that opens without
+  JS; `js/page.js` only closes it after a jump, on Escape and on an outside tap. No sticky or glass header.
+- **FAQ:** seven `<details>` questions in English and Malay, answered only from the README and the measured results.
+  Answers carry no figures (the cost block reads them from `measured.json`), so they cannot go stale.
+- **Demo:** the real poster of the demo video, linked to `links.video` once it is set, and to the README section
+  "Cause an outage yourself" (`site.json pages.outage`) until then; the play mark shows only when there is a video.
+  An outbound link, never an iframe (the Content-Security-Policy allows no frames).
+- **Footer:** the mark, the event line, GitHub and the MIT licence, with targets read from `site.json`.
+- `scripts/web-smoke.py` now checks Chromium 1440 and WebKit iPhone 13 and 320 px, each in light and dark, in English
+  and Malay: no overflow with every answer open or with the menu open after scrolling, touch targets of at least
+  44 px, the theme switch, each forced proof state, and a 10 s wait in WebKit.
+
 ## Rollback
 
 `bash deploy/deploy.sh --rollback` returns the previous image. In the repository, revert the commit that adds this

@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="css/token.css">
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="css/frames.css">
+<link rel="stylesheet" href="css/sections.css">
 <script type="module" src="js/app.js"></script>
 </head>
 <body>
@@ -36,8 +37,8 @@
     <a href="#how" data-i18n="nav.how">How it works</a>
     <a href="#fleet" data-i18n="nav.fleet">Fleet</a>
     <a href="#try" data-i18n="nav.try">Try it</a>
-    <a href="#gauge" data-i18n="nav.gauge">Fuel gauge</a>
-    <a href="#dark" data-i18n="nav.dark">Dark list</a>
+    <a href="#faq" data-i18n="nav.faq">FAQ</a>
+    <a href="#demo" data-i18n="nav.demo">Demo</a>
   </nav>
   <div class="switches">
     <button class="theme" type="button" id="theme">
@@ -46,6 +47,16 @@
       <span class="sr to-dark" data-i18n="theme.toDark">Switch to dark theme</span>
       <span class="sr to-light" data-i18n="theme.toLight">Switch to light theme</span>
     </button>
+    <details class="mnav" id="mnav">
+      <summary data-i18n-attr="aria-label:nav.menu" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="bars" d="M4 7h16M4 12h16M4 17h16"/><path class="cross" d="M6 6l12 12M18 6 6 18"/></svg></summary>
+      <nav class="mnav-panel" aria-label="Sections" data-i18n-attr="aria-label:nav.label">
+        <a href="#how" data-i18n="nav.how">How it works</a>
+        <a href="#fleet" data-i18n="nav.fleet">Fleet</a>
+        <a href="#try" data-i18n="nav.try">Try it</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+        <a href="#demo" data-i18n="nav.demo">Demo</a>
+      </nav>
+    </details>
     <button class="lang" type="button" id="lang" data-i18n="lang.switch" data-i18n-attr="aria-label:lang.switchLabel" aria-label="Baca dalam Bahasa Melayu">BM</button>
   </div>
 </header>
@@ -83,12 +94,24 @@
     </div>
   </section>
 
+  <section class="band" id="how" aria-labelledby="how-title">
+    <h2 id="how-title" data-i18n="how.title">How it works</h2>
+    <figure class="diagram">
+      <ol class="flow">
+        <li><span data-lamp="dark"></span><span data-i18n="how.d1">Contract runs dry</span></li>
+        <li><svg class="node-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg><span data-i18n="how.d2">System contract logs it</span></li>
+        <li class="accent"><svg class="node-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg><span data-i18n="how.d3">Keeper reacts</span></li>
+        <li class="accent"><svg class="node-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 4 6 7 6 11a6 6 0 0 1-12 0c0-4 3-7 6-11z"/></svg><span data-i18n="how.d4">Debt paid + refill</span></li>
+        <li><span data-lamp="lit"></span><span data-i18n="how.d5">Lit again</span></li>
+      </ol>
+      <figcaption data-i18n="how.d6">On Base Sepolia: callback to the Tank</figcaption>
+    </figure>
+  </section>
   <section class="band" id="fleet" aria-labelledby="fleet-title">
     <h2 id="fleet-title" data-i18n="fleet.title">Fleet</h2>
     <p class="intro" data-i18n="fleet.lede">Each lamp is a contract Pelita watches.</p>
     <div class="cards" id="cards"></div>
   </section>
-
   <section class="band" id="try" aria-labelledby="try-title">
     <h2 id="try-title" data-i18n="try.title">Try it yourself</h2>
     <p class="intro" data-i18n="try.lede">Put the demo lamp out with one command on Base Sepolia.</p>
@@ -105,7 +128,6 @@
       <li data-i18n="try.s4"></li>
     </ol>
   </section>
-
   <section class="band" id="gauge" aria-labelledby="gauge-title">
     <h2 id="gauge-title" data-i18n="gauge.title">Fuel gauge</h2>
     <p class="intro" data-i18n="gauge.lede">Paste the address of a reactive contract on Lasna.</p>
@@ -119,7 +141,6 @@
     </form>
     <div class="gauge-out" id="gauge-out" hidden></div>
   </section>
-
   <section class="band" id="dark" aria-labelledby="dark-title">
     <h2 id="dark-title" data-i18n="dark.title">The dark list</h2>
     <p class="intro" data-i18n="dark.lede">Reactive contracts on Lasna that ran out of fuel.</p>
@@ -130,19 +151,8 @@
     <button type="button" class="btn ghost" id="dark-more" hidden></button>
     <p class="note" id="dark-asof"></p>
   </section>
-
-  <section class="band" id="how" aria-labelledby="how-title">
-    <h2 id="how-title" data-i18n="how.title">How it works</h2>
-    <figure class="diagram">
-      <ol class="flow">
-        <li><span data-lamp="dark"></span><span data-i18n="how.d1">Contract runs dry</span></li>
-        <li><svg class="node-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg><span data-i18n="how.d2">System contract logs it</span></li>
-        <li class="accent"><svg class="node-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg><span data-i18n="how.d3">Keeper reacts</span></li>
-        <li class="accent"><svg class="node-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 4 6 7 6 11a6 6 0 0 1-12 0c0-4 3-7 6-11z"/></svg><span data-i18n="how.d4">Debt paid + refill</span></li>
-        <li><span data-lamp="lit"></span><span data-i18n="how.d5">Lit again</span></li>
-      </ol>
-      <figcaption data-i18n="how.d6">On Base Sepolia: callback to the Tank</figcaption>
-    </figure>
+  <section class="band" id="cost-limits" aria-labelledby="cost-title">
+    <h2 id="cost-title" data-i18n="cost.title">Cost and limits</h2>
     <div class="cols">
       <div>
         <h3 data-i18n="how.cost">Cost</h3>
@@ -165,11 +175,44 @@
       </div>
     </div>
   </section>
+  <section class="band faq" id="faq" aria-labelledby="faq-title">
+    <div class="faq-head">
+      <h2 id="faq-title" data-i18n="faq.title">Questions</h2>
+      <p class="intro" data-i18n="faq.lede">Answers from the README and the measured results.</p>
+    </div>
+    <div class="faq-list">
+      <details><summary><span data-i18n="faq.q1"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p data-i18n-html="faq.a1"></p></details>
+      <details><summary><span data-i18n="faq.q2"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p data-i18n-html="faq.a2"></p></details>
+      <details><summary><span data-i18n="faq.q3"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p data-i18n-html="faq.a3"></p></details>
+      <details><summary><span data-i18n="faq.q4"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p data-i18n-html="faq.a4"></p></details>
+      <details><summary><span data-i18n="faq.q5"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p data-i18n-html="faq.a5"></p></details>
+      <details><summary><span data-i18n="faq.q6"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p data-i18n-html="faq.a6"></p></details>
+      <details><summary><span data-i18n="faq.q7"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p data-i18n-html="faq.a7"></p></details>
+    </div>
+  </section>
+  <section class="band demo" id="demo" aria-labelledby="demo-title">
+    <div class="demo-text">
+      <h2 id="demo-title" data-i18n="demo.title">Demo</h2>
+      <p class="intro" data-i18n="demo.lede">Watch one outage and its relight, end to end, on the testnets.</p>
+      <p class="demo-how" data-i18n="demo.how">Or cause one yourself: poke Beacon once on Base Sepolia, then watch the guarded lamp relight while the control stays dark.</p>
+      <div class="cta">
+        <a class="btn" id="demo-link" href="https://github.com/aimanmalib/pelita#cause-an-outage-yourself">Cause an outage yourself</a>
+      </div>
+    </div>
+    <a class="poster" id="demo-poster" href="https://github.com/aimanmalib/pelita#cause-an-outage-yourself">
+      <img src="img/demo-poster.webp" width="1280" height="720" alt="" data-i18n-attr="alt:demo.posterAlt" loading="lazy" decoding="async">
+      <span class="play" id="demo-play" aria-hidden="true" hidden><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>
+    </a>
+  </section>
 </main>
 
 <footer class="foot">
-  <span data-lamp="lit"></span>
-  <p><span data-i18n="foot.built">Built during the Reactive Omni Buildathon.</span> <span data-i18n="foot.privacy">No wallet, no cookies, no analytics.</span></p>
+  <a class="brand" href="#main"><span data-lamp="lit"></span><span>Pelita</span></a>
+  <p class="foot-text"><span data-i18n="foot.built">Built during the Reactive Omni Buildathon.</span> <span data-i18n="foot.privacy">No wallet, no cookies, no analytics.</span></p>
+  <ul class="foot-links">
+    <li><a id="foot-repo" href="https://github.com/aimanmalib/pelita" data-i18n="foot.github">GitHub</a></li>
+    <li><a id="foot-license" href="https://github.com/aimanmalib/pelita/blob/main/LICENSE" data-i18n="foot.license">MIT licence</a></li>
+  </ul>
 </footer>
 </body>
 </html>
