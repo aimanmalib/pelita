@@ -255,6 +255,7 @@ the agent.
 
 I built Pelita with Claude Code: the contracts, tests, scripts, page and this README were written with an AI coding
 agent that I directed. The chain measurements are produced by scripts in this repo and can be re-run by anyone.
+Details, including the voice in the video: [docs/AI_USAGE.md](docs/AI_USAGE.md).
 
 ## Documentation
 
@@ -265,6 +266,7 @@ agent that I directed. The chain measurements are produced by scripts in this re
 | [docs/decisions/](docs/decisions/) | Architecture decision records |
 | [docs/test-results.md](docs/test-results.md) | Fork test runs and chain fact checks |
 | [docs/build-log.md](docs/build-log.md) | One line per day of work |
+| [docs/AI_USAGE.md](docs/AI_USAGE.md) | What the AI wrote, and what it did not |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Setting up and testing a change |
 | [SECURITY.md](SECURITY.md) | Reporting a vulnerability |
 

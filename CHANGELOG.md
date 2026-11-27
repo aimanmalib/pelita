@@ -5,6 +5,10 @@ All notable changes to this project are recorded here. The format follows
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-27
+
+The version submitted to the Reactive Omni Buildathon. The repository is public from this release.
+
 ### Added
 
 - `PelitaKeeper` (Reactive Lasna): subscribes to the biller's `BlacklistContract` log for each protected contract and
@@ -18,3 +22,7 @@ All notable changes to this project are recorded here. The format follows
   indexer that writes the page's snapshot every two minutes.
 - The page at https://pelita.sasateguh.com in English and Malay.
 - Community files, CI and an offline README link check.
+- `docs/AI_USAGE.md`: what the AI wrote and what it did not.
+
+[Unreleased]: https://github.com/aimanmalib/pelita/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/aimanmalib/pelita/releases/tag/v1.0.0
