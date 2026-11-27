@@ -83,6 +83,18 @@ def overflow(page, when, problems):
         problems.append(f"horizontal overflow {when} {over}")
 
 
+SITE = json.loads((ROOT / "web" / "site.json").read_text(encoding="utf-8"))
+
+
+def note_missing(page, lang, problems):
+    """The gauge estimate note must be on the page, in this language, carrying the measured fee."""
+    fee = json.loads((ROOT / "web" / "measured.json").read_text())["relight"][SITE["gauge_fee_side"]]["reaction"]
+    before, after = LANG[lang]["gauge.leftNote"].split("{fee}")
+    notes = page.eval_on_selector_all("#gauge-out p.note", "els => els.map(e => e.textContent.trim())")
+    if not any(n.startswith(before) and n.endswith(after) and f"{before}{fee} " in n for n in notes):
+        problems.append(f"gauge estimate note ({lang}) with fee {fee} is not shown: {notes}")
+
+
 def check(page, label, shots, errors):
     problems = []
     page.wait_for_selector("#cards .card, #cards .empty", timeout=15000)
@@ -111,6 +123,7 @@ def check(page, label, shots, errors):
         problems.append(f"cost block shows {cost}, measured.json has {want}")
     if LANG["en"]["gauge.leftPending"] in page.text_content("#gauge-out"):
         problems.append("gauge still says the fee is pending although measured.json has it")
+    note_missing(page, "en", problems)
     page.screenshot(path=str(shots / f"{label}-en.png"), full_page=True)
     en_h1 = page.text_content("h1")
     page.click("#lang")
@@ -130,6 +143,7 @@ def check(page, label, shots, errors):
     missing = [k for k in GAUGE_READING_KEYS if LANG["ms"][k] not in gauge_ms]
     if missing:
         problems.append(f"gauge reading lacks BM text after switching: {missing}")
+    note_missing(page, "ms", problems)
     if LANG["ms"]["dark.colDebt"] != page.text_content("#darktable th:last-child").strip():
         problems.append("dark table debt column not translated")
     overflow(page, "in BM", problems)

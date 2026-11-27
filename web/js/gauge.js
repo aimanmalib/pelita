@@ -94,14 +94,15 @@ function render(out, { addr, chain, debt, reserves, balance, fee, fill }) {
     if (k === "gauge.left" && !fee) dd.className = "soft";
     kv.append(dt, dd);
   }
+  const est = [];
   if (fee) {
-    const est = document.createElement("p"); est.className = "note";
-    est.textContent = t("gauge.leftNote", { fee: `${etherString(fee)} ${sym}` });
-    kv.after(est);
+    const note = document.createElement("p"); note.className = "note";
+    note.textContent = t("gauge.leftNote", { fee: `${etherString(fee)} ${sym}` });
+    est.push(note);
   }
   const p1 = document.createElement("p"); p1.textContent = t("gauge.fill");
   const pre = document.createElement("pre"); const code = document.createElement("code"); code.textContent = cmd; pre.append(code);
   const p2 = document.createElement("p"); p2.textContent = t("gauge.own");
-  out.append(head, kv, p1, pre, p2);
+  out.append(head, kv, ...est, p1, pre, p2);
   out.hidden = false;
 }
