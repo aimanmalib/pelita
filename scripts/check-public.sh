@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Public checks of the deployed site (PRD 4.11 step 4), the way a phone browser sees it through the CDN.
 #   scripts/check-public.sh [base-url]     default: https://<DOMAIN from deploy/site.env>/
-# Checks: the page is 200 and compressed; HTML keeps `no-transform` and a CSP; the only scripts are our own
+# Checks: the page is 200 and compressed; HTML keeps `no-transform` and a CSP; the only scripts are our own (app.js and theme-boot.js)
 # (nothing injected on the way: no analytics beacon); assets, config, brand and live data answer; the snapshot is
 # `no-store` and parses. Exit 0 = all passed.
 set -uo pipefail
@@ -24,7 +24,7 @@ case "$(header page content-type)" in text/html*) pass "HTML served as text/html
 enc=$(header page content-encoding); [ -n "$enc" ] && pass "HTML compressed ($enc)" || bad "HTML not compressed (no content-encoding)"
 case "$(header page cache-control)" in *no-transform*) pass "HTML Cache-Control has no-transform" ;; *) bad "HTML Cache-Control: '$(header page cache-control)'" ;; esac
 [ -n "$(header page content-security-policy)" ] && pass "CSP present" || bad "no Content-Security-Policy"
-foreign=$(grep -oiE '<script[^>]*>' "$tmp/page.b" | grep -viE 'src="js/app\.js\?v=[0-9a-f]+"' || true)
+foreign=$(grep -oiE '<script[^>]*>' "$tmp/page.b" | grep -viE 'src="js/(app|theme-boot)\.js\?v=[0-9a-f]+"' || true)
 [ -z "$foreign" ] && pass "only our own script on the page" || bad "unexpected script tag(s): $foreign"
 grep -qiE 'cloudflareinsights|beacon\.min\.js|googletagmanager|google-analytics|plausible' "$tmp/page.b" \
   && bad "analytics text injected into the page" || pass "no analytics injected"

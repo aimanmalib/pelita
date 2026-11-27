@@ -4,6 +4,7 @@ import { t, load, saved, lang } from "./i18n.js";
 import { duration, ago, count, amount, short, clock, etherString } from "./format.js";
 import { initGauge, renderGauge } from "./gauge.js";
 import { renderFleet, fleetTotals } from "./fleet.js";
+import "./theme.js";
 
 const ctx = { site: null, chains: null, snap: null, snapFailed: false, measured: null, darkOpen: false, gauge: null };
 // ?keadaan=muat|kosong|ralat forces one state of the live proof row, so each designed state can be checked.
