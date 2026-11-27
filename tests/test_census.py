@@ -153,6 +153,33 @@ class DebtTest(unittest.TestCase):
         self.assertFalse(any("debt_wei" in r for r in out["dark"]))
 
 
+class BatchLimitTest(unittest.TestCase):
+    """sepolia.base.org answers -32007 "25/second request limit reached" to one batch of 33 debt() calls
+    (measured 27 Nov): batches follow the chain's rpc_batch_max with rpc_batch_pause_s between them."""
+
+    def test_debt_batches_respect_chain_batch_limit_and_pause(self):
+        net = fakechain.FakeNet()
+        chain = CHAINS["chains"]["base-sepolia"]
+        size, pause = chain["rpc_batch_max"], chain["rpc_batch_pause_s"]
+        slept = []
+        reader = census.ChainReader(client(net), chain, CHAINS["topics"], sleep=slept.append)
+        addresses = [f"0x{i:040x}" for i in range(1, 2 * size + 6)]
+        owed = reader.debts(addresses, 100, CHAINS["selectors"]["debt(address)"])
+        self.assertEqual(len(owed), len(addresses))
+        batches = [r["body"] for r in net.requests if isinstance(r["body"], list)]
+        self.assertEqual([len(b) for b in batches], [size, size, 5])
+        self.assertEqual(slept, [pause, pause])
+
+    def test_timestamp_batches_respect_chain_batch_limit(self):
+        net = fakechain.FakeNet()
+        chain = CHAINS["chains"]["base-sepolia"]
+        reader = census.ChainReader(client(net), chain, CHAINS["topics"], sleep=lambda s: None)
+        last = net.fx["base-sepolia"]["latest"]
+        reader.prefetch_times(range(last - chain["rpc_batch_max"] - 3, last))
+        sizes = [len(r["body"]) for r in net.requests if isinstance(r["body"], list)]
+        self.assertTrue(sizes and max(sizes) <= chain["rpc_batch_max"], sizes)
+
+
 class PrunedHistoryTest(unittest.TestCase):
     def test_block_at_treats_pruned_blocks_as_older(self):
         for message in ("block not found with number {}", "pruned history unavailable: requested {}"):

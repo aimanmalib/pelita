@@ -17,6 +17,7 @@ import argparse
 import json
 import statistics
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -51,12 +52,24 @@ def windows(first, last, max_blocks):
 class ChainReader:
     """Reads one chain for the census. `client` is a pelitarpc.Client."""
 
-    def __init__(self, client, chain, topics):
+    def __init__(self, client, chain, topics, sleep=time.sleep):
         self.client = client
         self.chain = chain
         self.topics = topics
         self.kind_of = {topics[DARK]: "dark", topics[LIT]: "lit"}
         self._ts = {}
+        self._sleep = sleep
+
+    def batched(self, calls):
+        """JSON-RPC batches no larger than the chain's `rpc_batch_max`, `rpc_batch_pause_s` apart (sepolia.base.org
+        refuses a batch of more than 25 calls a second with -32007). Results in call order."""
+        size = int(self.chain.get("rpc_batch_max", 50))
+        out = []
+        for i in range(0, len(calls), size):
+            if i:
+                self._sleep(float(self.chain.get("rpc_batch_pause_s", 0)))
+            out += self.client.batch(self.chain["rpc"], calls[i : i + size])
+        return out
 
     def rpc(self, method, params=None):
         return self.client.call(self.chain["rpc"], method, params)
@@ -65,15 +78,13 @@ class ChainReader:
         """Newest block this reader trusts: the tip minus `index_lag_blocks` (Blockscout indexes behind the RPC)."""
         return _int(self.rpc("eth_blockNumber")) - int(self.chain.get("index_lag_blocks", 0))
 
-    def prefetch_times(self, numbers, chunk=50):
+    def prefetch_times(self, numbers):
         """Reads many block timestamps in JSON-RPC batches (Lasna logs carry no timestamp)."""
         todo = sorted({n for n in numbers if n not in self._ts})
-        for i in range(0, len(todo), chunk):
-            part = todo[i : i + chunk]
-            blocks = self.client.batch(self.chain["rpc"], [("eth_getBlockByNumber", [hex(n), False]) for n in part])
-            for n, block in zip(part, blocks):
-                if block:
-                    self._ts[n] = _int(block["timestamp"])
+        blocks = self.batched([("eth_getBlockByNumber", [hex(n), False]) for n in todo])
+        for n, block in zip(todo, blocks):
+            if block:
+                self._ts[n] = _int(block["timestamp"])
 
     def block_time(self, number):
         if number not in self._ts:
@@ -83,23 +94,17 @@ class ChainReader:
             self._ts[number] = _int(block["timestamp"])
         return self._ts[number]
 
-    def debts(self, addresses, block, selector, chunk=50):
+    def debts(self, addresses, block, selector):
         """biller.debt(address) for each address at `block`, in JSON-RPC batches. {} when the node cannot answer
         (pruned state, no biller method): the census still publishes, the page shows a dash."""
-        out = {}
         todo = sorted(set(addresses))
+        calls = [("eth_call", [{"to": self.chain["biller"], "data": selector + a[2:].rjust(64, "0")}, hex(block)])
+                 for a in todo]
         try:
-            for i in range(0, len(todo), chunk):
-                part = todo[i : i + chunk]
-                calls = [
-                    ("eth_call", [{"to": self.chain["biller"], "data": selector + a[2:].rjust(64, "0")}, hex(block)])
-                    for a in part
-                ]
-                for a, word in zip(part, self.client.batch(self.chain["rpc"], calls)):
-                    out[a] = _int(word if word not in ("0x", "", None) else "0x0")
+            words = self.batched(calls)
         except (pelitarpc.RpcError, ValueError):
             return {}
-        return out
+        return {a: _int(w if w not in ("0x", "", None) else "0x0") for a, w in zip(todo, words)}
 
     def block_at(self, ts, latest):
         """First block whose timestamp is >= ts (binary search, about 25 reads).
