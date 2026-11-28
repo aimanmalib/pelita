@@ -72,6 +72,15 @@ actions and a live proof line.
 - **robots.txt:** the link-preview crawlers are named in their own allowed group, so previews keep working even if the
   `*` group is ever narrowed.
 
+### Addendum: after the side-by-side review
+
+A full-page review of the live page against comparable entries found two layout faults, fixed here:
+
+- **Demo poster:** it was `loading="lazy"`, so captures that never scroll (review screenshots, some preview tools)
+  showed an empty black box. It now loads with the page (27 KB).
+- **Fleet:** the lamps are pairs, a guarded lamp and its control on each chain. The auto-fill grid put three cards in a
+  row and left the fourth alone; two columns on wide screens keep each pair side by side.
+
 ## Rollback
 
 `bash deploy/deploy.sh --rollback` returns the previous image. In the repository, revert the commit that adds this

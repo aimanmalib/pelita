@@ -133,5 +133,19 @@ class Theme(unittest.TestCase):
         self.assertIn('id="theme"', read(WEB / "index.html"))
 
 
+class Sections(unittest.TestCase):
+    def test_demo_poster_loads_without_scrolling(self):
+        """A lazy poster stays a black box in full-page captures (link previews, review screenshots)."""
+        tag = re.search(r'<img src="img/demo-poster\.webp"[^>]*>', read(WEB / "index.html"))
+        self.assertIsNotNone(tag)
+        self.assertNotIn('loading="lazy"', tag[0])
+
+    def test_fleet_pairs_share_a_row_on_wide_screens(self):
+        """Lamps come as guarded + control pairs; a 3-column grid strands the fourth card on its own row."""
+        css = live_css(WEB / "css" / "site.css")
+        self.assertRegex(css, r"@media \(min-width: \d+px\) \{ \.cards \{ grid-template-columns: repeat\(2, minmax\(0, 1fr\)\); \} \}")
+        self.assertNotIn("auto-fill, minmax(min(100%, 26rem)", css)
+
+
 if __name__ == "__main__":
     unittest.main()
