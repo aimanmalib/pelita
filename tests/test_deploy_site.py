@@ -106,6 +106,14 @@ class NginxAndContextTest(unittest.TestCase):
         self.assertIn('"no-store"', data)
         self.assertEqual(conf.count("no-cache, no-transform"), 2)
 
+    def test_robots_txt_has_a_short_cache_life(self):
+        conf = (ROOT / "deploy" / "nginx.conf").read_text(encoding="utf-8")
+        # Same URL on every deploy: a day-long max-age kept the CDN on the old robots.txt for a day (28 Nov).
+        block = re.search(r"location = /robots\.txt \{[^}]*\}", conf)
+        self.assertIsNotNone(block)
+        age = int(re.search(r"max-age=(\d+)", block.group(0)).group(1))
+        self.assertLessEqual(age, 600)
+
     def test_build_context_leaves_out_state_internal_notes_and_env(self):
         lines = (ROOT / ".dockerignore").read_text(encoding="utf-8").splitlines()
         rules = [r.strip() for r in lines if r.strip() and not r.startswith("#")]
